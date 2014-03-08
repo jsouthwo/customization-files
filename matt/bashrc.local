@@ -1,0 +1,92 @@
+# $Id: .bashrc.local,v 1.1 1999/04/16 18:46:39 agriffis Exp $
+
+######################################################################
+# Commands placed in here are executed for all shells.
+# Login shells source .bashrc from .bash_profile.
+######################################################################
+
+# Source .bash_aliases if it exists
+[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
+export CXXDIR=${HOME}/cos121s1321/Extension_Files/cxxtest
+export PATH=${PATH}:${HOME}/cos121s1321/Extension_Files/cxxtest
+export CPLUS_INCLUDE_PATH=${CXXDIR}: 
+export SVN_EDITOR=/usr/bin/vim
+
+
+source ~/.git-completion.bash
+
+alias h=history
+alias ls='ls -hF --color'
+alias l=ls
+alias la='ls -a'
+alias ll='ls -l'
+
+git config --global alias.co checkout
+git config --global alias.br branch
+git config --global alias.ci commit
+git config --global alias.st status
+git config --global alias.unstage 'reset HEAD --'
+git config --global alias.last 'log -1 HEAD'
+git config --global alias.delete 'push origin --delete'
+
+function lalala(){
+    du -sh * | sort -rn | head -n 20
+}
+
+function lala(){
+    du -a . | sort -nr | head -n 10
+}
+
+function myMac(){
+    ssh Justin@justin-southworth.campus.tayloru.edu
+}
+
+function cd(){
+## Set 'cd' to automatically run 'ls'
+    builtin cd "$*"
+    RESULT=$?
+    if [ "$RESULT" -eq 0 ]; then
+        ls
+    else
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+\[$RESET\]\[$RED$BLINK\]::: \[$RESET\]'
+    fi
+}
+
+DEFAULT=$(tput setaf 9)
+BLACK=$(tput setaf 0)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+CYAN=$(tput setaf 6)
+WHITE=$(tput setaf 7)
+
+# DIM doesn't seem to work. Just reset.
+DIM=$(tput dim)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+START_UNDER=$(tput smul)
+END_UNDER=$(tput rmul)
+# reverses fg and bg
+REV=$(tput rev)
+BLINK=$(tput blink)
+
+#export PS1='[\d > \t] $(es=$?; if [ $es -ne 0 ]; then echo $es; fi) \[\e]0;\u@\h: \w\a\]\$'
+export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+\[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BLINK\]::: \[$RESET\]'
+
+<< other_bash_stuff
+^^ that's a comment
+export PS1="\n[\d \t] [command: \#] [jobs: \j] [\u@\h] [\w]
+::: "
+
+
+# \A excludes seconds off of \t
+#export PS1="\n[\d \A] [\!] [jobs: \j] [\u@\h] [\w]
+#::: "
+#export PS1="\n[\d \t] [jobs: \j] [\u@\h] [\w]
+#|:>:~: "
+
+other_bash_stuff
