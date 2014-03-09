@@ -1,0 +1,29 @@
+./master:
+    emacs-init.el
+    git-completion.bash
+    gitignore_global
+    hgignore_global
+    inputrc
+    vimrc
+
+./linux:
+    bash_logout
+    bashrc
+    bashrc.local
+    gitconfig
+
+./mac:
+    bash_profile
+    bashrc
+    gitconfig
+
+./matt:
+    bashrc
+    bashrc.local
+    gitconfig
+
+./vb:
+    bash_aliases
+    bash_logout
+    bashrc
+    gitconfig

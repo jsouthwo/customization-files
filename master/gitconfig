@@ -1,0 +1,27 @@
+[user]
+    name = Justin Southworth
+    email = justin_southworth@taylor.edu
+[core]
+    TODO: Get emacs on linux so this is always good.
+    editor = emacs
+    TODO: Change to proper file location per platform
+    excludesfile = /Users/Justin/.gitignore_global
+[alias]
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    delete = push origin --delete
+    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+[fetch]
+    default = current
+[push]
+    default = current
+[pull]
+    default = current
+[color]
+    ui = true
+[merge]
+    tool = vimdiff
