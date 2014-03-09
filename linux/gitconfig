@@ -1,0 +1,21 @@
+[core]
+    editor = vim
+[user]
+    name = Justin Southworth
+    email = justin_southworth@taylor.edu
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+[fetch]
+    default = current
+[push]
+    default = current
+[pull]
+    default = current
+[merge]
+    tool = vimdiff
