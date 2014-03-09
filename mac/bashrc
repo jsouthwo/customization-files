@@ -1,0 +1,72 @@
+source ~/.git-completion.bash
+
+function cd(){
+## Set 'cd' to automatically run 'ls'
+    if [ $# -eq 0 ]; then
+        builtin cd ~
+    else
+        builtin cd "$*"
+    fi
+    RESULT=$?
+    # Junky
+    if [ $RESULT -eq 0 ]; then
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+\[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
+        ls -GFh
+    else
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+\[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
+    fi
+}
+
+git_prompt () {
+## Outputs git branch if in a repo
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        return 0
+    fi
+
+    git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
+
+    echo "[$git_branch]"
+}
+
+DEFAULT=$(tput setaf 9)
+BLACK=$(tput setaf 0)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+CYAN=$(tput setaf 6)
+WHITE=$(tput setaf 7)
+
+# DIM doesn't seem to work. Just reset.
+DIM=$(tput dim)
+BOLD=$(tput bold)
+RESET=$(tput sgr0)
+START_UNDER=$(tput smul)
+END_UNDER=$(tput rmul)
+# reverses fg and bg
+REV=$(tput rev)
+BLINK=$(tput blink)
+
+# TODO: Fix the hackiness. Also, only make jobs show up if > 1?
+export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+\[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
+
+<< bash_stuff
+^^ that's a comment
+without color
+export PS1="\n[\d \t] [command: \#] [jobs: \j] [\u@\h] [\w]\n::: "
+#export PS1='[\d > \t] $(es=$?; if [ $es -ne 0 ]; then echo $es; fi) \[\e]0;\u@\h: \w\a\]\$'
+# \A excludes seconds off of \t
+bash_stuff
+
+# Some aliases
+alias ls='ls -GFh'
+alias l=ls
+alias la='ls -A'
+alias ll='ls -l'
+
+alias mygrep='grep -nrI --color'
+
