@@ -1,29 +1,28 @@
 ./master:
+    bash_logout
     emacs-init.el
     git-completion.bash
+    gitconfig
     gitignore_global
     hgignore_global
     inputrc
     vimrc
 
+# TODO: Unify the files...
+  Make everything into bash_aliases.bash?
+  Get special indentation stuff from linux
 ./linux:
-    bash_logout
-    bashrc
-    bashrc.local
-    gitconfig
+    bashrc          (Mainly just default stuff)
+    bashrc.local    (The real file, really outdated)
 
 ./mac:
-    bash_profile
-    bashrc
-    gitconfig
+    bash_profile    (All default, except I source my bashrc)
+    bashrc          (The real file, since I created it)
 
 ./matt:
-    bashrc
-    bashrc.local
-    gitconfig
+    bashrc          (Really just their junk)
+    bashrc.local    (The real file)
 
 ./vb:
-    bash_aliases
-    bash_logout
-    bashrc
-    gitconfig
+    bash_aliases    (Copied from matt...)
+    bashrc          (Essentially the same as linux/bashrc)

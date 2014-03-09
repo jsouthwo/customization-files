@@ -1,5 +1,6 @@
 source ~/.git-completion.bash
 
+# TODO: See if there's a workaround to use cd && ls
 function cd(){
 ## Set 'cd' to automatically run 'ls'
     if [ $# -eq 0 ]; then
@@ -51,6 +52,7 @@ REV=$(tput rev)
 BLINK=$(tput blink)
 
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
+# TODO: Do this modularly, like Adam so it can actually be changed...
 export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
 
