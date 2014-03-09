@@ -1,0 +1,21 @@
+[alias]
+	co = checkout
+	br = branch
+	ci = commit
+	st = status
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	delete = push origin --delete
+[user]
+	email = justin_southworth@taylor.edu
+	name = Justin Southworth
+[core]
+	editor = vim
+[fetch]
+	default = current
+[push]
+	default = current
+[pull]
+	default = current
+[merge]
+	tool = vimdiff
