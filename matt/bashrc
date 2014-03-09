@@ -1,0 +1,30 @@
+# /auto/skel/users/.bashrc
+# $Id: .bashrc,v 1.2 1999/04/27 02:37:32 root Exp $
+
+##################################################################
+### DO NOT MODIFY THIS FILE!  THE CSE DEPT IS NOT RESPONSIBLE  ###
+### FOR THE USABILITY OF YOUR ACCOUNT IF YOU CHANGE THIS FILE! ###
+###============================================================###
+### Personalize your setup instead in .bashrc.local            ###
+##################################################################
+
+# We REALLY should have the SKELHOME at this point.  But in the case
+# that we don't...
+SKELHOME=${HOME%/*}/skel
+if [ ! -d "$SKELHOME" ]; then
+    # Last ditch effort for a skel-home
+    SKELHOME=`getent passwd skel | awk -F: '{print $6}'`
+    if [ ! -d "$SKELHOME" ]; then
+        echo "Can't find a suitable SKELHOME."
+    fi
+fi
+export SKELHOME
+
+if [ -f $SKELHOME/bashrc ]; then
+	. $SKELHOME/bashrc
+else
+	echo "MISSING $SKELHOME/bashrc" 2>&1
+fi
+
+[ -f $HOME/.bashrc.local ] && . $HOME/.bashrc.local
+
