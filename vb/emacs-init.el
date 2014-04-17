@@ -5,6 +5,7 @@
 
 ;; Puts line numbers
 (global-linum-mode t)
+(global-column-number-mode t)
 
 ;; Stop splash screen and message
 (setq inhibit-splash-screen t)
@@ -26,6 +27,7 @@
     (abort-recursive-edit)))
 ;; Whenever a mouse click has happened, clear the minibuffer
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+(setq mouse-wheel-progressive-speed nil)
 
 (require 'ansi-color)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)
@@ -41,3 +43,18 @@
 
 ;; Set default directory
 (setq default-directory "~/Documents/software_studio/websurv/")
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(column-number-mode t)
+ '(custom-enabled-themes (quote (deeper-blue)))
+ '(show-paren-mode t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

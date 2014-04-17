@@ -20,6 +20,8 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
+alias vim='emacs'
+
 git config --global alias.co checkout
 git config --global alias.br branch
 git config --global alias.ci commit
@@ -27,7 +29,7 @@ git config --global alias.st status
 git config --global alias.unstage 'reset HEAD --'
 git config --global alias.last 'log -1 HEAD'
 git config --global alias.delete 'push origin --delete'
-git config --global core.editor "vim"
+git config --global color.ui true
 
 function lalala(){
     du -sh * | sort -rn | head -n 20
@@ -80,7 +82,6 @@ export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\[$RESET$BLUE\]\u@\h:\[$RED
 # Because not doing this is lame
 cd ~/Documents/software_studio
 
-alias wd='echo use ww for websurv'
 alias ww='workon websurv'
 alias d='deactivate'
-alias pm='python manage.py'
+alias t='./manage.py test'

@@ -6,11 +6,10 @@
 	unstage = reset HEAD --
 	last = log -1 HEAD
 	delete = push origin --delete
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [user]
 	email = justin_southworth@taylor.edu
 	name = Justin Southworth
-[core]
-	editor = vim
 [fetch]
 	default = current
 [push]
@@ -19,3 +18,5 @@
 	default = current
 [merge]
 	tool = vimdiff
+[color]
+	ui = true
