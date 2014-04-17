@@ -13,13 +13,6 @@
  ;; If there is more than one, they won't work right.
  )
 
-;;; org stuff
-;(require 'org)
-;(define-key global-map "\C-cl" 'org-store-link)
-;(define-key global-map "\C-ca" 'org-agenda)
-;(setq org-log-done 'time)
-;(setq org-log-done 'note)
-
 ;; Clock stuff
 ;(setq org-clock-persist 'history)
 ;(org-clock-persistence-insinuate)
@@ -30,6 +23,7 @@
 
 ;; Puts line numbers
 (global-linum-mode t)
+(global-column-number-mode t)
 
 ;; Stop splash screen and message
 (setq inhibit-splash-screen t)
@@ -51,6 +45,7 @@
     (abort-recursive-edit)))
 ;; Whenever a mouse click has happened, clear the minibuffer
 (add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
+(setq mouse-wheel-progressive-speed nil)
 
 (require 'ansi-color)
 (add-hook 'shell-mode-hook 'ansi-color-for-comint-mode-on)

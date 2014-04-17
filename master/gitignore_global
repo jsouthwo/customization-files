@@ -1,5 +1,18 @@
+# Temp files
 *~
+.#*
+\#*#
+
+# Stupid OS X Finder stuff
 .DS_Store
 ._.DS_Store
+
+# Swap files
 *.swp
 *.swo
+
+# Merge files
+*.orig
+
+# Python junk
+*.pyc
