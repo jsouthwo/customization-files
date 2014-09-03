@@ -1,0 +1,140 @@
+let mapleader=","
+nnoremap \ ,
+
+colo delek
+
+set history=1000
+
+set nu
+set ai
+set sw=4
+set sts=4
+" wildmenu
+set wildmenu
+set wildignore=*.sw*,*.so,*.o,*.kate-swp,*.lo
+set wildmode=list:longest,full
+highlight Pmenu    ctermbg=white ctermfg=black guibg=white guifg=black
+highlight PmenuSel ctermfg=white ctermbg=blue  guifg=white guibg=blue
+
+if has('mouse')
+    set mouse=a
+endif
+set ruler
+set showcmd
+set incsearch
+set backspace=indent,eol,start
+set hlsearch
+
+set list
+set listchars=trail:×,nbsp:⋅,tab:>-,extends:»,precedes:«,eol:¬
+" Tabs
+" http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
+highlight SpecialKey guifg=59 ctermfg=59
+" Non text = extends, precedes, & eol
+highlight NonText guifg=59 ctermfg=59
+hi Special term=bold ctermfg=5 guifg=SlateBlue
+" Special are escaped chars. Ex. \" This is from peachpuff"
+hi Special term=bold ctermfg=5 guifg=SlateBlue
+" hi Special term=bold ctermfg=red guifg=red
+hi Number ctermfg=125 guifg=#af005f
+
+" autochdir isn't working, but next line does the same thing
+" set autochdir
+autocmd BufEnter * silent! lcd %:p:h
+
+set completeopt=longest,menuone
+
+set hidden
+
+set gdefault
+
+imap fj <Esc>
+nnoremap fj :noh<return><esc>
+inoremap <C-U> <C-G>u<C-U>
+nnoremap <tab> gt
+nnoremap <s-tab> gT
+nnoremap n nz.n
+" nnoremap N Nz.n
+nnoremap N Nz.
+nnoremap G Gz.
+
+" Stop Vim's autowrapping feature
+set textwidth=0
+set wrapmargin=0
+
+" keep text highlighted after shifting
+vnoremap < <gv
+vnoremap > >gv
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+      \ | wincmd p | diffthis
+      endif
+
+highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
+au ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
+au BufEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhiteSpace /\s\+$/
+
+" airline...
+set laststatus=2
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+" Adding tab line.
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = '#'
+let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" Testing swapping ; and :
+" nnoremap : ;
+" nnoremap ; :
+" nunmap :
+" nunmap ;
+
+" Upcase a word
+inoremap <C-u> <ESC>hehviwUea
+" nnoremap <C-u> viwUe
+
+" Support for multi-line lines.
+nnoremap j gj
+nnoremap k gk
+inoremap <silent> <Up> <C-o>gk
+inoremap <silent> <Down> <C-o>gj
+
+" left and right motion wraps lines (see help)
+" Only doesn't include ~
+set whichwrap=b,s,h,l,<,>,[,]
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""
+" START leader stuff
+""""""""""""""""""""""""""""""""""""""""""""
+
+" Toggle paste mode
+nnoremap <leader>p :set paste!<CR>:set paste?<CR>
+
+" Toggle wrap
+nnoremap <leader>w :set wrap!<CR>:set wrap?<CR>
+
+" Make session
+nnoremap <leader>m :mks!
+nnoremap <leader>mm :mks! ~/mime.vim<CR>
+nnoremap <leader>ms :mks! ~/sendmail.vim<CR>
+
+" Source my rc
+nnoremap <leader>\ :so ~/.vimrc<CR>
+
+" Comment out ("\\" ) selected area.
+vnoremap <leader>; :s/^/\/\/<CR>:noh<CR>
+
+""""""""""""""""""""""""""""""""""""""""""""
+" END leader stuff
+""""""""""""""""""""""""""""""""""""""""""""
+
