@@ -178,7 +178,8 @@ nnoremap \\ :so ~/.vimrc<CR>
 " Wrap text when needed.
 set wrap
 
-inoremap <C-d> <ESC>ddi
+" Screws up <C-d> as de-tab
+" inoremap <C-d> <ESC>ddi
 
 " Upcase a word
 inoremap <C-u> <ESC>hehviwUea

@@ -68,12 +68,6 @@ set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
 
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
-
-" Don't use Ex mode, use Q for formatting
-"map Q gq
-
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
 inoremap <C-U> <C-G>u<C-U>
@@ -141,7 +135,7 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 
 " A little too crazy for group git development...
-" autocmd FileType c,cpp,java,php,ruby,python,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()"
+autocmd FileType c,cpp,java,php,ruby,python,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()"
 
 " Make Y act like C and D
 nnoremap Y y$
@@ -184,7 +178,8 @@ nnoremap \\ :so ~/.vimrc<CR>
 " Wrap text when needed.
 set wrap
 
-inoremap <C-d> <ESC>ddi
+" Screws up <C-d> as de-tab
+" inoremap <C-d> <ESC>ddi
 
 " Upcase a word
 inoremap <C-u> <ESC>hehviwUea
