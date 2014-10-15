@@ -1,6 +1,3 @@
-"map gC :'a,. s/^/ */^M:. s/\(.*\)/\1^V^V^M **************\//^M:'a s/\(.*\)/\/**************^V^V^M\1/^M
-
-
 "autocmd! BufNewFile * silent! 0r ~/.vim/skel/tmpl.%:e
 
 " set t_Co=88

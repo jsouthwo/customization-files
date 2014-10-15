@@ -1,49 +1,72 @@
-
-"map gC :'a,. s/^/ */^M:. s/\(.*\)/\1^V^V^M **************\//^M:'a s/\(.*\)/\/**************^V^V^M\1/^M
-
-
-"autocmd! BufNewFile * silent! 0r ~/.vim/skel/tmpl.%:e
-
-" set t_Co=88
-
-" An example for a vimrc file.
-"
-" Maintainer:	Bram Moolenaar <Bram@vim.org>
-" Last change:	2008 Dec 17
-"
-" To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"	      for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc
-"	    for OpenVMS:  sys$login:.vimrc
-
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
-endif
-
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
-set nocompatible
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Airline.
+Plugin 'bling/vim-airline'
+
+" ALL THE COLORSCHEMES.
+Plugin 'flazz/vim-colorschemes'
+
+" Git in the sidebar!!!
+Plugin 'airblade/vim-gitgutter'
+
+" Easymotion
+Plugin 'Lokaltog/vim-easymotion'
+
+" Rainbow parens
+" Plugin 'kien/rainbow_parentheses'
+
+""" EXAMPLES """
+" Keep Plugin commands between vundle#begin/end.
+" plugin on GitHub repo
+" Plugin 'tpope/vim-fugitive'
+" plugin from http://vim-scripts.org/vim/scripts.html
+" Plugin 'L9'
+" Git plugin not hosted on GitHub
+" Plugin 'git://git.wincent.com/command-t.git'
+" git repos on your local machine (i.e. when working on your own plugin)
+" Plugin 'file:///home/gmarik/path/to/plugin'
+" The sparkup vim script is in a subdirectory of this repo called vim.
+" Pass the path to set the runtimepath properly.
+" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Avoid a name conflict with L9
+" Plugin 'user/L9', {'name': 'newL9'}
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+" Set 256 color output
+set t_Co=256
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
-else
-  set backup		" keep a backup file
-endif
-set history=50		" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
-
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
-
-" Don't use Ex mode, use Q for formatting
-"map Q gq
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -61,68 +84,32 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
-
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  " Also don't do it when the mark is in the first line, that is the default
-  " position when opening a file.
-  autocmd BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-
-  augroup END
-
-else
-
-  set cindent		" always set autoindenting on
-
-endif " has("autocmd")
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
 
 " My stuff..."
-imap fj <Esc>
+inoremap fj <Esc>
 nnoremap fj :noh<return><esc>
-set wildmode=full
+
+" wildmenu
 set wildmenu
+set wildignore=*.sw*,*.so,*.o,*.kate-swp,*.lo,*.pyc
+set wildmode=list:longest,full
 set smarttab
-" Next line is already in here.
-" set backspace=indent,eol,start
+
 " auto adds g(lobal) to substitutions. Makes it so it auto-changes all
 " occurences in a line rather than just the first.
 set gdefault
 
-" colorscheme peachpuff
-colo default
+" colorscheme Monokai-chris
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set nu
+set number
+set hidden
 
+" Dangerous...
+" set autowrite
 set autochdir
+let python_highlight_all = 1
 
 set list
 "Invisible character colors
@@ -147,21 +134,171 @@ fun! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfun
 
+" A little too crazy for group git development...
 autocmd FileType c,cpp,java,php,ruby,python,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()"
 
-" keep text highlighted after shifting
-vmap < <gv
-vmap > >gv
+" Make Y act like C and D
+nnoremap Y y$
 
-" Allow tab to be used for autocompletion
-imap <Tab> <C-N>
-imap <S-Tab> <C-P>
-" colors
-highlight Pmenu ctermbg=white ctermfg=black guibg=white guifg=black
-highlight PmenuSel ctermfg=white ctermbg=blue guifg=white guibg=blue
+" Tab changes tabs
+nnoremap <TAB> gt
+nnoremap <S-TAB> gT
+
+" colors for autocomplete
+highlight Pmenu    ctermbg=white ctermfg=black guibg=white guifg=black
+highlight PmenuSel ctermfg=white ctermbg=blue  guifg=white guibg=blue
 
 " System Yank: will copy into the system clipboard on OS X
-vmap sy :w !pbcopy<CR><CR>
+vnoremap sy :w !pbcopy<CR><CR>
+
+" Makes the status bar always exist for airline.
+set laststatus=2
+
+" Set autoindent for text files, because notes or hw.
+au BufRead,BufNewFile *.txt     setfiletype text
+autocmd FileType text set ai
+
+" Height of command line. 2 Stops some annoying 'press ENTER...' stuffs.
+set cmdheight=2
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+
+" -------------------------------------------
+"  Stuff for "Learn Vim the Hard Way Tuturial
+" -------------------------------------------
+
+" For my sanity...
+nnoremap \\ :so ~/.vimrc<CR>
+
+" Show line numbers relative to current line
+" set relativenumber
+
+" Wrap text when needed.
+set wrap
+
+inoremap <C-d> <ESC>ddi
+
+" Upcase a word
+inoremap <C-u> <ESC>hehviwUea
+" nnoremap <C-u> viwUe
 
 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LIGHTSYS "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let mapleader=","
+nnoremap \ ,
+
+set history=1000
+
+set list
+set listchars=trail:×,nbsp:⋅,tab:>-,extends:»,precedes:«,eol:¬
+" Tabs
+" http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
+highlight SpecialKey guifg=59 ctermfg=59
+" Non text = extends, precedes, & eol
+highlight NonText guifg=59 ctermfg=59
+hi Special term=bold ctermfg=5 guifg=SlateBlue
+" Special are escaped chars. Ex. \" This is from peachpuff"
+hi Special term=bold ctermfg=5 guifg=SlateBlue
+" hi Special term=bold ctermfg=red guifg=red
+hi Number ctermfg=125 guifg=#af005f
+
+set completeopt=longest,menuone
+
+set hidden
+
+nnoremap fj :noh<return><esc>
+" nnoremap n nz.n
+" nnoremap N Nz.n
+" nnoremap N Nz.
+" nnoremap G Gz.
+
+" Stop Vim's autowrapping feature
+set textwidth=0
+set wrapmargin=0
+
+" keep text highlighted after shifting
+vnoremap < <gv
+vnoremap > >gv
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+      \ | wincmd p | diffthis
+      endif
+
+highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
+au ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
+au BufEnter * match ExtraWhitespace /\s\+$/
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhiteSpace /\s\+$/
+
+" AIRLINE...
+let g:airline_left_sep = ''
+" let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+" let g:airline_right_alt_sep = ''
+" Adding tab line.
+let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#left_sep = '#'
+" let g:airline#extensions#tabline#left_alt_sep = '|'
+
+" GITGUTTER
+let g:gitgutter_realtime=1
+let g:gitgutter_eager=1
+let g:gitgutter_sign_column_always=1
+let g:gitgutter_updatetime=500
+
+" Testing swapping ; and :
+nnoremap : ;
+nnoremap ; :
+" nunmap :
+" nunmap ;
+
+" Support for multi-line lines.
+nnoremap j gj
+nnoremap k gk
+inoremap <silent> <Up> <C-o>gk
+inoremap <silent> <Down> <C-o>gj
+
+" left and right motion wraps lines (see help)
+" Only doesn't include ~
+set whichwrap=b,s,h,l,<,>,[,]
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""
+" START leader stuff
+""""""""""""""""""""""""""""""""""""""""""""
+
+" Toggle paste mode
+nnoremap <leader>p :set paste!<CR>:set paste?<CR>
+
+" Toggle wrap
+nnoremap <leader>w :set wrap!<CR>:set wrap?<CR>
+
+" Make session
+nnoremap <leader>m :mks!
+
+" Source my rc
+nnoremap <leader>\ :so ~/.vimrc<CR>
+
+" Comment out ("\\" ) selected area.
+vnoremap <leader>; :s/^/\/\/<CR>:noh<CR>
+
+" Save from insert mode
+inoremap <leader>w <ESC>:w<CR>a
+
+""""""""""""""""""""""""""""""""""""""""""""
+" END leader stuff
+""""""""""""""""""""""""""""""""""""""""""""
+
+
+:noh
 
