@@ -154,9 +154,9 @@ vnoremap sy :w !pbcopy<CR><CR>
 " Makes the status bar always exist for airline.
 set laststatus=2
 
-" Set autoindent for text files, because notes or hw.
+" Set autoindent and spell check for text files, because notes or hw.
 au BufRead,BufNewFile *.txt     setfiletype text
-autocmd FileType text set ai
+autocmd FileType text set ai spell
 
 " Height of command line. 2 Stops some annoying 'press ENTER...' stuffs.
 set cmdheight=2
