@@ -11,6 +11,8 @@
     unstage = reset HEAD --
     last = log -1 HEAD
     delete = push origin --delete
+    hist = log --graph --decorate=short --date=relative --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad\"
+    hist-old = log --graph --decorate --pretty=oneline --abbrev-commit
 [fetch]
     default = current
 [push]
@@ -19,3 +21,13 @@
     default = current
 [color]
     ui = true
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[help]
+	autocorrect = 8
+[credential]
+	helper = osxkeychain

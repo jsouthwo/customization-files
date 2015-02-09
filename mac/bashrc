@@ -1,6 +1,19 @@
 source ~/.git-completion.bash
 
-# TODO: See if there's a workaround to use cd && ls
+###### HISTORY ######
+# Append to history
+shopt -s histappend
+# Force commands to one line
+shopt -s cmdhist
+HISTFILESIZE=1000000000
+HISTSIZE=1000000000
+# HISTCONTROL=ignoreboth
+HISTCONTROL=ignoredups:erasedups
+HISTIGNORE='bg:fg:history'
+HISTTIMEFORMAT='%F %T '
+
+
+
 function cd(){
 ## Set 'cd' to automatically run 'ls'
     if [ $# -eq 0 ]; then
@@ -52,7 +65,6 @@ REV=$(tput rev)
 BLINK=$(tput blink)
 
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
-# TODO: Do this modularly, like Adam so it can actually be changed...
 export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
 
@@ -72,3 +84,29 @@ alias ll='ls -l'
 
 alias mygrep='grep -nrI --color'
 
+#alias v="vim -c 'source ~/.vimrc.bak' "
+alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
+alias v=vim
+alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
+alias less='less -R'
+
+alias c="cd"
+
+alias s='senior'
+function senior()
+{
+    if [ $# -eq 0 ]; then
+        cd ~/Documents/School/Senior
+    else
+        cd ~/Documents/School/Senior/*$1*
+    fi
+}
+
+alias p='payap'
+function payap()
+{
+    cd ~/Documents/School/1 And Done/4 Senior/COS 333/payap/sil/january2015
+}
+
+# Find rm
+# find . -name "*.orig" -exec rm {} \;

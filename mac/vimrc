@@ -14,6 +14,8 @@ Plugin 'gmarik/Vundle.vim'
 
 " Airline.
 Plugin 'bling/vim-airline'
+" Superior to Airline?
+"Plugin 'itchyny/lightline.vim'
 
 " ALL THE COLORSCHEMES.
 Plugin 'flazz/vim-colorschemes'
@@ -23,6 +25,36 @@ Plugin 'airblade/vim-gitgutter'
 
 " Easymotion
 Plugin 'Lokaltog/vim-easymotion'
+
+" Already exists. Zenburn. Me gusta.
+Plugin 'jnurmine/Zenburn'
+
+" Already exists. Solarized
+Plugin 'altercation/vim-colors-solarized'
+
+" Endwise
+Plugin 'tpope/vim-endwise'
+
+" Completion
+Plugin 'Valloric/YouCompleteMe'
+
+" Indent guides
+Plugin 'nathanaelkane/vim-indent-guides'
+
+" Delimiter completion
+Plugin 'Raimondi/delimitMate'
+
+" SUPER COOL Startup screen
+Plugin 'mhinz/vim-startify'
+
+" Maybe Dash.app will play nice?
+Plugin 'rizzatti/dash.vim'
+
+" Trailing whitespace
+"Plugin 'bronson/vim-trailing-whitespace'
+
+" Multiple cursors
+" Plugin 'terryma/vim-multiple-cursors'
 
 " Rainbow parens
 " Plugin 'kien/rainbow_parentheses'
@@ -49,14 +81,15 @@ filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+
+"""""""""""""" END VUNDLE """"""""""""""
+
+" Load matchit.vim, but only if the user hasn't installed a newer version.
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &rtp) ==# ''
+    runtime! macros/matchit.vim
+endif
 
 " Set 256 color output
 set t_Co=256
@@ -87,7 +120,7 @@ endif
 
 " My stuff..."
 inoremap fj <Esc>
-nnoremap fj :noh<return><esc>
+nnoremap fj :noh<return>
 
 " wildmenu
 set wildmenu
@@ -100,6 +133,8 @@ set smarttab
 set gdefault
 
 " colorscheme Monokai-chris
+" colorscheme solarized
+colorscheme zenburn
 set softtabstop=4
 set shiftwidth=4
 set expandtab
@@ -111,14 +146,13 @@ set hidden
 set autochdir
 let python_highlight_all = 1
 
-set list
+" list breaks this, but oh well.
+set linebreak
 "Invisible character colors
 " eol, extends, preceded
 "highlight NonText guifg=red ctermfg=red
 " nbsp, tab, trail
 highlight SpecialKey guifg=red ctermfg=red
-"set listchars=trail:×,nbsp:⋅,tab:>-,eol:¬
-set listchars=trail:×,nbsp:⋅,tab:>-
 
 highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
 au ColorScheme * highlight ExtraWhitespace ctermbg=white guibg=white ctermfg=red guifg=red
@@ -178,9 +212,6 @@ nnoremap \\ :so ~/.vimrc<CR>
 " Wrap text when needed.
 set wrap
 
-" Screws up <C-d> as de-tab
-" inoremap <C-d> <ESC>ddi
-
 " Upcase a word
 inoremap <C-u> <ESC>hehviwUea
 " nnoremap <C-u> viwUe
@@ -199,20 +230,19 @@ set list
 set listchars=trail:×,nbsp:⋅,tab:>-,extends:»,precedes:«,eol:¬
 " Tabs
 " http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
-highlight SpecialKey guifg=59 ctermfg=59
+highlight SpecialKey guifg=#5f5f5f ctermfg=59
 " Non text = extends, precedes, & eol
-highlight NonText guifg=59 ctermfg=59
-hi Special term=bold ctermfg=5 guifg=SlateBlue
+highlight NonText guifg=#5f5f5f ctermfg=59
+highlight Special term=bold ctermfg=5 guifg=SlateBlue
 " Special are escaped chars. Ex. \" This is from peachpuff"
-hi Special term=bold ctermfg=5 guifg=SlateBlue
-" hi Special term=bold ctermfg=red guifg=red
-hi Number ctermfg=125 guifg=#af005f
+highlight Special term=bold ctermfg=5 guifg=SlateBlue
+" highlight Special term=bold ctermfg=red guifg=red
+highlight Number ctermfg=125 guifg=#af005f
 
 set completeopt=longest,menuone
 
 set hidden
 
-nnoremap fj :noh<return><esc>
 " nnoremap n nz.n
 " nnoremap N Nz.n
 " nnoremap N Nz.
@@ -256,6 +286,11 @@ let g:gitgutter_eager=1
 let g:gitgutter_sign_column_always=1
 let g:gitgutter_updatetime=500
 
+" INDENT GUIDES
+let g:indent_guides_start_level=2
+let g:indent_guides_guide_size=1
+vnoremap <leader>ig :IndentGuidesToggle
+
 " Testing swapping ; and :
 nnoremap : ;
 nnoremap ; :
@@ -282,7 +317,7 @@ set whichwrap=b,s,h,l,<,>,[,]
 nnoremap <leader>p :set paste!<CR>:set paste?<CR>
 
 " Toggle wrap
-nnoremap <leader>w :set wrap!<CR>:set wrap?<CR>
+nnoremap <leader>wr :set wrap!<CR>:set wrap?<CR>
 
 " Make session
 nnoremap <leader>m :mks!
@@ -295,6 +330,15 @@ vnoremap <leader>; :s/^/\/\/<CR>:noh<CR>
 
 " Save from insert mode
 inoremap <leader>w <ESC>:w<CR>a
+
+" Toggle list
+nnoremap <leader>l :set list!<CR>:set list?<CR>
+
+" Toggle spell
+nnoremap <leader>s :set spell!<CR>:set spell?<CR>
+
+" Show word count
+nnoremap <leader>wo :w !wc -w<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""
 " END leader stuff
