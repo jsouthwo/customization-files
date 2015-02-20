@@ -3,7 +3,7 @@
     email = justin_southworth@taylor.edu
 [core]
     TODO: Get emacs on linux so this is always good.
-    editor = emacs
+    editor = vim
     TODO: Change to proper file location per platform
     excludesfile = /Users/Justin/.gitignore_global
 [alias]
@@ -14,7 +14,9 @@
     unstage = reset HEAD --
     last = log -1 HEAD
     delete = push origin --delete
-    hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+    hist = log --graph --decorate=short --date=relative --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad\"
+    hist-old = log --graph --decorate --pretty=oneline --abbrev-commit
+    hist-old-matt = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [fetch]
     default = current
 [push]
@@ -25,3 +27,8 @@
     ui = true
 [merge]
     tool = vimdiff
+[mergetool "sourcetree"]
+    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
+[help]
+    autocorrect = 12
