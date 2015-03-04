@@ -1,4 +1,4 @@
-customization-files
+dotfiles
 ===================
 
-Holds my special config files like .vimrc.
+Holds my dotfiles like .vimrc.
