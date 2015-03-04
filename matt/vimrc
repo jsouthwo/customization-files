@@ -58,15 +58,23 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+"map gC :'a,. s/^/ */^M:. s/\(.*\)/\1^V^V^M **************\//^M:'a s/\(.*\)/\/**************^V^V^M\1/^M
+
 " Set 256 color output
 set t_Co=256
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
+" http://stackoverflow.com/a/607475
+set nobackup nowritebackup
+
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
+
+" Don't use Ex mode, use Q for formatting
+"map Q gq
 
 " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
 " so that you can undo CTRL-U after inserting a line break.
@@ -84,8 +92,50 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set cindent		" always set autoindenting on
+
+endif " has("autocmd")
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
 
 " My stuff..."
+"nnoremap <Esc> <Esc><right>
 inoremap fj <Esc>
 nnoremap fj :noh<return><esc>
 
@@ -99,7 +149,13 @@ set smarttab
 " occurences in a line rather than just the first.
 set gdefault
 
+" For airline
+set laststatus=2
+
+" colorscheme peachpuff
 " colorscheme Monokai-chris
+" colorscheme far
+colorscheme railscasts
 set softtabstop=4
 set shiftwidth=4
 set expandtab
@@ -135,24 +191,27 @@ fun! <SID>StripTrailingWhitespaces()
 endfun
 
 " A little too crazy for group git development...
-autocmd FileType c,cpp,java,php,ruby,python,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()"
+" autocmd FileType c,cpp,java,php,ruby,python,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()"
 
 " Make Y act like C and D
 nnoremap Y y$
+
+" Allow tab to be used for autocompletion
+" imap <TAB> <C-N>
+" imap <S-TAB> <C-P>
+" iunmap <TAB>
+" iunmap <S-TAB>
 
 " Tab changes tabs
 nnoremap <TAB> gt
 nnoremap <S-TAB> gT
 
-" colors for autocomplete
+" colors for autocompletion
 highlight Pmenu    ctermbg=white ctermfg=black guibg=white guifg=black
 highlight PmenuSel ctermfg=white ctermbg=blue  guifg=white guibg=blue
 
 " System Yank: will copy into the system clipboard on OS X
 vnoremap sy :w !pbcopy<CR><CR>
-
-" Makes the status bar always exist for airline.
-set laststatus=2
 
 " Set autoindent for text files, because notes or hw.
 au BufRead,BufNewFile *.txt     setfiletype text
@@ -161,25 +220,8 @@ autocmd FileType text set ai
 " Height of command line. 2 Stops some annoying 'press ENTER...' stuffs.
 set cmdheight=2
 
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-
 " -------------------------------------------
 "  Stuff for "Learn Vim the Hard Way Tuturial
-" -------------------------------------------
-
-" For my sanity...
-nnoremap \\ :so ~/.vimrc<CR>
-
-" Show line numbers relative to current line
-" set relativenumber
-
-" Wrap text when needed.
-set wrap
-
-" Screws up <C-d> as de-tab
-" inoremap <C-d> <ESC>ddi
 
 " Upcase a word
 inoremap <C-u> <ESC>hehviwUea
@@ -257,8 +299,45 @@ let g:gitgutter_sign_column_always=1
 let g:gitgutter_updatetime=500
 
 " Testing swapping ; and :
-nnoremap : ;
+"nnoremap : ;
 nnoremap ; :
+
+" From nvie {{{
+nnoremap <leader>; ;
+vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
+
+" Easy window navigation
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+
+" Complete whole filenames/lines with a quicker shortcut key in insert mode
+inoremap <C-f> <C-x><C-f>
+inoremap <C-l> <C-x><C-l>
+
+" Use ,d (or ,dd or ,dj or 20,dd) to delete a line without adding it to the
+" yanked stack (also, in visual mode)
+nnoremap <silent> <leader>d "_d
+vnoremap <silent> <leader>d "_d
+
+" Extra user or machine specific settings
+" source ~/.vim/user.vim
+
+" TODO: learn iab
+iab lorem Lorem ipsum dolor sit amet, consectetur adipiscing elit
+iab llorem Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam lacus ligula, accumsan id imperdiet rhoncus, dapibus vitae arcu.  Nulla non quam erat, luctus consequat nisi
+iab lllorem Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Etiam lacus ligula, accumsan id imperdiet rhoncus, dapibus vitae arcu.  Nulla non quam erat, luctus consequat nisi.  Integer hendrerit lacus sagittis erat fermentum tincidunt.  Cras vel dui neque.  In sagittis commodo luctus.  Mauris non metus dolor, ut suscipit dui.  Aliquam mauris lacus, laoreet et consequat quis, bibendum id ipsum.  Donec gravida, diam id imperdiet cursus, nunc nisl bibendum sapien, eget tempor neque elit in tortor
+iabbr t@@ justin_southworth@taylor.edu
+iabbr y@@ jrsouth93@yahoo.com
+iabbr g@@ jrsouth93@gmail.com
+iabbr ssig --<cr>Justin Southworth<cr>justin_southworth@taylor.edu
+
+" Switch from block-cursor to vertical-line-cursor when going into/out of insert mode
+"let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" }}}
+
 " nunmap :
 " nunmap ;
 
@@ -267,6 +346,26 @@ nnoremap j gj
 nnoremap k gk
 inoremap <silent> <Up> <C-o>gk
 inoremap <silent> <Down> <C-o>gj
+
+" Command line movement
+" start of line
+cnoremap <C-A>		<Home>
+" back one character
+cnoremap <C-B>		<Left>
+" delete character under cursor
+cnoremap <C-D>		<Del>
+" end of line
+cnoremap <C-E>		<End>
+" forward one character
+cnoremap <C-F>		<Right>
+" recall newer command-line
+cnoremap <C-N>		<Down>
+" recall previous (older) command-line
+cnoremap <C-P>		<Up>
+" back one word
+cnoremap <Esc>b 	<S-Left>
+" forward one word
+cnoremap <Esc>f 	<S-Right>
 
 " left and right motion wraps lines (see help)
 " Only doesn't include ~
@@ -288,9 +387,10 @@ nnoremap <leader>w :set wrap!<CR>:set wrap?<CR>
 nnoremap <leader>m :mks!
 
 " Source my rc
-nnoremap <leader>\ :so ~/.vimrc<CR>
+nnoremap <silent> <leader>ev :e ~/.vimrc<CR>
+nnoremap <silent> <leader>sv :so ~/.vimrc<CR>
 
-" Comment out ("\\" ) selected area.
+" Comment out ("//" ) selected area.
 vnoremap <leader>; :s/^/\/\/<CR>:noh<CR>
 
 " Save from insert mode
@@ -299,7 +399,4 @@ inoremap <leader>w <ESC>:w<CR>a
 """"""""""""""""""""""""""""""""""""""""""""
 " END leader stuff
 """"""""""""""""""""""""""""""""""""""""""""
-
-
-:noh
 

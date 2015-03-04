@@ -1,4 +1,4 @@
-# $Id: .bashrc.local,v 1.1 1999/04/16 18:46:39 agriffis Exp $
+/* vim: set filetype=sh : */ ~
 
 ######################################################################
 # Commands placed in here are executed for all shells.
@@ -9,41 +9,68 @@
 [ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
 export CXXDIR=${HOME}/cos121s1321/Extension_Files/cxxtest
 export PATH=${PATH}:${HOME}/cos121s1321/Extension_Files/cxxtest
-export CPLUS_INCLUDE_PATH=${CXXDIR}: 
+export CPLUS_INCLUDE_PATH=${CXXDIR}:
 export SVN_EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim
 
 
 source ~/.git-completion.bash
+source ~/.git-flow-completion.bash
+source /etc/bash_completion
+
+# Some aliases
+alias ls='ls -GFh --color=auto'
+alias la='ls -A'
+alias ll='ls -l'
+alias l=ls
+
+alias mygrep='grep -nrI --color'
 
 alias h=history
-alias ls='ls -hF --color'
-alias l=ls
-alias la='ls -a'
-alias ll='ls -l'
+alias c=cd
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
 
-function lalala(){
-    du -sh * | sort -rn | head -n 20
-}
+alias wd='workon dream'
+alias d='deactivate'
 
-function lala(){
-    du -a . | sort -nr | head -n 10
-}
 
-function myMac(){
-    ssh Justin@justin-southworth.campus.tayloru.edu
-}
+alias v=vim
+alias vless='vim -u /usr/share/vim/vim74/macros/less.vim'
+alias less='less -R'
+
+###### HISTORY ######
+# Append to history
+shopt -s histappend
+# Force commands to one line
+shopt -s cmdhist
+HISTFILESIZE=1000000000
+HISTSIZE=1000000000
+# HISTCONTROL=ignoreboth
+HISTCONTROL=ignoredups:erasedups
+HISTIGNORE='bg:fg:history'
+HISTTIMEFORMAT='%F %T '
+
+
 
 function cd(){
 ## Set 'cd' to automatically run 'ls'
-    builtin cd "$*"
+    if [ $# -eq 0 ]; then
+        builtin cd ~
+    else
+        builtin cd "$*"
+    fi
     RESULT=$?
-    if [ "$RESULT" -eq 0 ]; then
+    # Junky
+    if [ $RESULT -eq 0 ]; then
         export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
         export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
-\[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
+\[$RESET\]\[$RED$BLINK\]::: \[$RESET\]'
     fi
 }
 
@@ -54,7 +81,6 @@ git_prompt () {
     fi
 
     git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
-
     echo "[$git_branch]"
 }
 
@@ -82,18 +108,32 @@ BLINK=$(tput blink)
 export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
 
-# Some aliases
-alias ls='ls -GFh'
-alias l=ls
-alias la='ls -A'
-alias ll='ls -l'
 
 alias mygrep='grep -nrI --color'
 
+#alias v="vim -c 'source ~/.vimrc.bak' "
+alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
 alias v=vim
+alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
 alias less='less -R'
 
 alias c="cd"
+
+alias s='senior'
+function senior()
+{
+    if [ $# -eq 0 ]; then
+        cd ~/Documents/School/Senior
+    else
+        cd ~/Documents/School/Senior/*$1*
+    fi
+}
+
+alias p='payap'
+function payap()
+{
+    cd ~/Documents/School/1 And Done/4 Senior/COS 333/payap/sil/january2015
+}
 
 # Find rm
 # find . -name "*.orig" -exec rm {} \;
