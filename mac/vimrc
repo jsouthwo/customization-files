@@ -64,6 +64,8 @@ set hidden
 " Dangerous...
 " set autowrite
 set autochdir
+" autocmd BufEnter * silent! lcd %:p:h " Does same as sutochdir.
+
 let python_highlight_all = 1
 
 " list breaks this, but oh well.

@@ -1,4 +1,4 @@
 dotfiles
 ===================
 
-Holds my dotfiles like .vimrc.
+Holds my dotfiles.

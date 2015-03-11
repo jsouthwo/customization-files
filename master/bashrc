@@ -135,5 +135,28 @@ function payap()
     cd ~/Documents/School/1 And Done/4 Senior/COS 333/payap/sil/january2015
 }
 
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
 # Find rm
 # find . -name "*.orig" -exec rm {} \;
+
+function fanspeed() {
+## MANUALLY SET THE MINIMUM FAN SPEED
+    if [ $# == 0 ]
+    then
+        # -f does Fahrenheit
+        # sensors -f
+        cat /sys/devices/platform/applesmc.768/fan1_min
+    else
+        if [ $1 -ge 2000 ]
+        then
+            echo "This will change the minimum fan speed to" $1 "RPM."
+            echo $1 | sudo tee /sys/devices/platform/applesmc.768/fan1_min
+        else
+            echo "Must be at least 2000"
+        fi
+    fi
+}
+

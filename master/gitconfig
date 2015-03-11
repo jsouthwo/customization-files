@@ -2,7 +2,6 @@
     name = Justin Southworth
     email = justin_southworth@taylor.edu
 [core]
-    TODO: Get emacs on linux so this is always good.
     editor = vim
     TODO: Change to proper file location per platform
     excludesfile = /Users/Justin/.gitignore_global
