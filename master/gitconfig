@@ -3,7 +3,7 @@
     email = justin_southworth@taylor.edu
 [core]
     editor = vim
-    TODO: Change to proper file location per platform
+    # TODO: Change to proper file location per platform
     excludesfile = /Users/Justin/.gitignore_global
 [alias]
     co = checkout
@@ -26,8 +26,5 @@
     ui = true
 [merge]
     tool = vimdiff
-[mergetool "sourcetree"]
-    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-    trustExitCode = true
 [help]
-    autocorrect = 12
+    autocorrect = 8

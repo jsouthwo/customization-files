@@ -1,19 +1,30 @@
 [user]
     name = Justin Southworth
     email = justin_southworth@taylor.edu
+[core]
+    editor = vim
+    # TODO: Change to proper file location per platform
+    # excludesfile = /Users/Justin/.gitignore_global
 [alias]
-	co = checkout
-	br = branch
-	ci = commit
-	st = status
-	unstage = reset HEAD --
-	last = log -1 HEAD
-	delete = push origin --delete
+    co = checkout
+    br = branch
+    ci = commit
+    st = status
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    delete = push origin --delete
+    hist = log --graph --decorate=short --date=relative --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad\"
+    hist-old = log --graph --decorate --pretty=oneline --abbrev-commit
+    hist-old-matt = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [fetch]
     default = current
 [push]
     default = current
 [pull]
     default = current
+[color]
+    ui = true
 [merge]
     tool = vimdiff
+[help]
+    autocorrect = 8

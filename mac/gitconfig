@@ -2,8 +2,8 @@
     name = Justin Southworth
     email = justin_southworth@taylor.edu
 [core]
-    excludesfile = /Users/Justin/.gitignore_global
     editor = /Applications/MacVim.app/Contents/MacOS/Vim
+    excludesfile = /Users/Justin/.gitignore_global
 [alias]
     co = checkout
     br = branch
@@ -14,6 +14,7 @@
     delete = push origin --delete
     hist = log --graph --decorate=short --date=relative --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad\"
     hist-old = log --graph --decorate --pretty=oneline --abbrev-commit
+    hist-old-matt = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
 [fetch]
     default = current
 [push]
