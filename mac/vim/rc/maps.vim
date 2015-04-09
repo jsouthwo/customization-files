@@ -5,8 +5,9 @@ inoremap <C-U> <C-G>u<C-U>
 
 " My stuff..."
 inoremap fj <Esc>
-inoremap <C-j> <Esc>
 nnoremap fj :noh<return>
+inoremap <C-j> <Esc>
+nnoremap <C-j> :noh<return>
 
 " Make Y act like C and D
 nnoremap Y y$
@@ -59,6 +60,11 @@ nnoremap g^ ^
 vnoremap g^ ^
 nnoremap g$ $
 vnoremap g$ $
+
+nnoremap <C-e> 2<C-e>
+vnoremap <C-e> 2<C-e>
+nnoremap <C-y> 2<C-y>
+vnoremap <C-y> 2<C-y>
 
 """"""""""""""""""""""""""""""""""""""""""""
 " START leader stuff

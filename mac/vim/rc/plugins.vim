@@ -12,15 +12,17 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'                      " let Vundle manage Vundle, required
 Plugin 'bling/vim-airline'                      " Airline.
+Plugin 'powerline/fonts'                        " Powerline fonts for Airline
 " Plugin 'itchyny/lightline.vim'                " Superior to Airline?
-Plugin 'flazz/vim-colorschemes'                   " ALL THE COLORSCHEMES.
+" Plugin 'flazz/vim-colorschemes'               " ALL THE COLORSCHEMES.
 Plugin 'airblade/vim-gitgutter'                 " Git in the sidebar!!!
 Plugin 'Lokaltog/vim-easymotion'                " Easymotion
 " Plugin 'jnurmine/Zenburn'                     " Already exists. Zenburn. Me gusta.
-" Plugin 'altercation/vim-colors-solarized'     " Already exists. Solarized
+Plugin 'altercation/vim-colors-solarized'       " Already exists. Solarized
 Plugin 'tpope/vim-endwise'                      " ?
+Plugin 'tpope/vim-surround'
 " Completion
-Plugin 'Valloric/YouCompleteMe'                 " Completion
+" Plugin 'Valloric/YouCompleteMe'                 " Completion
 " https://github.com/garbas/vim-snipmate
 " https://github.com/SirVer/ultisnips
 " https://github.com/honza/vim-snippets
@@ -72,9 +74,10 @@ endif
 
 
 " AIRLINE...
-let g:airline_left_sep = ''
-let g:airline_right_sep = ''
+"let g:airline_left_sep = ''
+"let g:airline_right_sep = ''
 let g:airline#extensions#tabline#enabled = 1            " Adding tab line.
+let g:airline_powerline_fonts=1                         " Be powerful?
 set laststatus=2 " Makes the status bar always exist for airline.
 
 

@@ -15,9 +15,6 @@ nnoremap Y y$
 nnoremap <TAB> gt
 nnoremap <S-TAB> gT
 
-" System Yank: will copy into the system clipboard on OS X
-vnoremap sy :w !pbcopy<CR><CR>
-
 " Toggle relativenumber and number
 nnoremap <C-n> :call NumberToggle()<cr>
 

@@ -24,11 +24,11 @@ function cd(){
     RESULT=$?
     # Junky
     if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
     fi
 }
@@ -41,7 +41,7 @@ git_prompt () {
 
     git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
 
-    echo "[$git_branch]"
+    echo "[$git_branch] "
 }
 
 DEFAULT=$(tput setaf 9)
@@ -65,16 +65,8 @@ REV=$(tput rev)
 BLINK=$(tput blink)
 
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
-export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
-
-<< bash_stuff
-^^ that's a comment
-without color
-export PS1="\n[\d \t] [command: \#] [jobs: \j] [\u@\h] [\w]\n::: "
-#export PS1='[\d > \t] $(es=$?; if [ $es -ne 0 ]; then echo $es; fi) \[\e]0;\u@\h: \w\a\]\$'
-# \A excludes seconds off of \t
-bash_stuff
 
 # Some aliases
 alias ls='ls -GFh'
@@ -94,11 +86,20 @@ alias hist=history
 alias h=history
 
 alias c="cd"
+alias c..='cd ..'
 alias cd..='cd ..'
 alias ..='cd ..'
+alias .1='cd ..'
+alias ..1='cd ..'
 alias ...='cd ../..'
+alias .2='cd ../..'
+alias ..2='cd ../..'
 alias ....='cd ../../..'
+alias .3='cd ../../..'
+alias ..3='cd ../../..'
 alias .....='cd ../../../..'
+alias .4='cd ../../../..'
+alias ..4='cd ../../../..'
 
 alias s='senior'
 function senior()
@@ -118,3 +119,8 @@ function payap()
 
 # Find rm
 # find . -name "*.orig" -exec rm {} \;
+
+# Cribbage
+# rm -r  ~/Library/Saved\ Application\ State/com.grassgames.CribbageLite.savedState/
+# rm -r ~/Library/Containers/com.grassgames.CribbageLite/
+# rm -r  ~/Library/Saved\ Application\ State/com.grassgames.CribbageLite.savedState/
