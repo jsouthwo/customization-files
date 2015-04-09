@@ -21,7 +21,7 @@ endif
 
 " Set 256 color output
 " set t_Co=256
-set t_Co=16
+set t_Co=16 " It's what solarized wants.
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -55,6 +55,7 @@ set gdefault
 " colorscheme zenburn
 colorscheme solarized
 set background=dark
+let g:solarized_termtrans = 0           "Transparent
 
 set softtabstop=4
 set shiftwidth=4
@@ -65,6 +66,8 @@ set hidden
 " Dangerous...
 " set autowrite
 set autochdir
+" autocmd BufEnter * silent! lcd %:p:h " Does same as sutochdir.
+
 let python_highlight_all = 1
 
 " list breaks this, but oh well.
@@ -174,4 +177,11 @@ endif
 if filereadable($HOME."/.vim/rc/testing.vim")
     source ${HOME}/.vim/rc/testing.vim
 endif
+
+" http://archive09.linux.com/articles/54159
+set viminfo='100,f0
+
+" Powerline fonts
+"set guifont=Inconsolata\ for\ Powerline:h15
+"let g:Powerline_symbols = 'fancy'
 

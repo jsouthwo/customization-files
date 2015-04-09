@@ -1,3 +1,4 @@
+# /* vim: set filetype=sh : */ ~
 source ~/.git-completion.bash
 
 ###### HISTORY ######
@@ -12,6 +13,37 @@ HISTCONTROL=ignoredups:erasedups
 HISTIGNORE='bg:fg:history'
 HISTTIMEFORMAT='%F %T '
 
+# Some aliases
+alias ls='ls -GFh --color=auto'
+alias l=ls
+alias la='ls -A'
+alias ll='ls -l'
+
+alias mygrep='grep -nrI --color'
+
+alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
+alias vi=vim
+alias v=vim
+alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
+alias less='less -R'
+alias hist=history
+alias h=history
+
+alias c="cd"
+alias c..='cd ..'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias .1='cd ..'
+alias ..1='cd ..'
+alias ...='cd ../..'
+alias .2='cd ../..'
+alias ..2='cd ../..'
+alias ....='cd ../../..'
+alias .3='cd ../../..'
+alias ..3='cd ../../..'
+alias .....='cd ../../../..'
+alias .4='cd ../../../..'
+alias ..4='cd ../../../..'
 
 
 function cd(){
@@ -22,9 +54,8 @@ function cd(){
         builtin cd "$*"
     fi
     RESULT=$?
-    # Junky
     if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
@@ -67,39 +98,6 @@ BLINK=$(tput blink)
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
 export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
-
-# Some aliases
-alias ls='ls -GFh'
-alias l=ls
-alias la='ls -A'
-alias ll='ls -l'
-
-alias mygrep='grep -nrI --color'
-
-#alias v="vim -c 'source ~/.vimrc.bak' "
-alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
-alias vi=vim
-alias v=vim
-alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
-alias less='less -R'
-alias hist=history
-alias h=history
-
-alias c="cd"
-alias c..='cd ..'
-alias cd..='cd ..'
-alias ..='cd ..'
-alias .1='cd ..'
-alias ..1='cd ..'
-alias ...='cd ../..'
-alias .2='cd ../..'
-alias ..2='cd ../..'
-alias ....='cd ../../..'
-alias .3='cd ../../..'
-alias ..3='cd ../../..'
-alias .....='cd ../../../..'
-alias .4='cd ../../../..'
-alias ..4='cd ../../../..'
 
 alias s='senior'
 function senior()

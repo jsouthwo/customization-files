@@ -5,8 +5,9 @@ inoremap <C-U> <C-G>u<C-U>
 
 " My stuff..."
 inoremap fj <Esc>
-inoremap <C-j> <Esc>
 nnoremap fj :noh<return>
+inoremap <C-j> <Esc>
+nnoremap <C-j> :noh<return>
 
 " Make Y act like C and D
 nnoremap Y y$

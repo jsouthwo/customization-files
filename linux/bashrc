@@ -18,37 +18,52 @@ source ~/.git-completion.bash
 source ~/.git-flow-completion.bash
 source /etc/bash_completion
 
+###### HISTORY ######
+# Append to history
+shopt -s histappend
+# Force commands to one line
+shopt -s cmdhist
+HISTFILESIZE=1000000000
+HISTSIZE=1000000000
+# HISTCONTROL=ignoreboth
+HISTCONTROL=ignoredups:erasedups
+HISTIGNORE='bg:fg:history'
+HISTTIMEFORMAT='%F %T '
+
 # Some aliases
 alias ls='ls -GFh --color=auto'
+alias l=ls
 alias la='ls -A'
 alias ll='ls -l'
-alias l=ls
 
 alias mygrep='grep -nrI --color'
 
+alias vi=vim
+alias v=vim
+alias vless='vim -u /usr/share/vim/vim74/macros/less.vim'
+alias less='less -R'
+alias hist=history
 alias h=history
-alias c=cd
+
+alias c="cd"
+alias c..='cd ..'
+alias cd..='cd ..'
 alias ..='cd ..'
+alias .1='cd ..'
+alias ..1='cd ..'
 alias ...='cd ../..'
+alias .2='cd ../..'
+alias ..2='cd ../..'
 alias ....='cd ../../..'
+alias .3='cd ../../..'
+alias ..3='cd ../../..'
 alias .....='cd ../../../..'
+alias .4='cd ../../../..'
+alias ..4='cd ../../../..'
 
 alias wd='workon dream'
 alias d='deactivate'
 
-
-alias v=vim
-alias vless='vim -u /usr/share/vim/vim74/macros/less.vim'
-alias less='less -R'
-
-git config --global alias.co checkout
-git config --global alias.br branch
-git config --global alias.ci commit
-git config --global alias.st status
-git config --global alias.unstage 'reset HEAD --'
-git config --global alias.last 'log -1 HEAD'
-git config --global alias.delete 'push origin --delete'
-git config --global core.editor 'vim'
 
 function lalala(){
     du -sh * | sort -rn | head -n 20
@@ -74,12 +89,12 @@ function cd(){
     fi
     RESULT=$?
     if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
-\[$RESET\]\[$RED$BLINK\]::: \[$RESET\]'
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+\[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
     fi
 }
 
@@ -90,7 +105,8 @@ git_prompt () {
     fi
 
     git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
-    echo "[$git_branch]"
+
+    echo "[$git_branch] "
 }
 
 DEFAULT=$(tput setaf 9)
@@ -114,20 +130,8 @@ REV=$(tput rev)
 BLINK=$(tput blink)
 
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
-export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
-
-###### HISTORY ######
-# Append to history
-shopt -s histappend
-# Force commands to one line
-shopt -s cmdhist
-HISTFILESIZE=1000000000
-HISTSIZE=1000000000
-# HISTCONTROL=ignoreboth
-HISTCONTROL=ignoredups:erasedups
-HISTIGNORE='bg:fg:history'
-HISTTIMEFORMAT='%F %T '
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
