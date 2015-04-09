@@ -14,7 +14,7 @@ HISTIGNORE='bg:fg:history'
 HISTTIMEFORMAT='%F %T '
 
 # Some aliases
-alias ls='ls -GFh --color=auto'
+alias ls='ls -GFh --color=auto --group-directories-first'
 alias l=ls
 alias la='ls -A'
 alias ll='ls -l'
@@ -57,7 +57,7 @@ function cd(){
     fi
     RESULT=$?
     if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
