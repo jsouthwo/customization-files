@@ -61,6 +61,8 @@ alias .....='cd ../../../..'
 alias .4='cd ../../../..'
 alias ..4='cd ../../../..'
 
+alias jobs='jobs -l'
+
 alias wd='workon dream'
 alias d='deactivate'
 
