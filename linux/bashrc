@@ -1,4 +1,4 @@
-/* vim: set filetype=sh : */ ~
+# /* vim: set filetype=sh : */ ~
 
 ######################################################################
 # Commands placed in here are executed for all shells.
