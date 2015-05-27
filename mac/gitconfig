@@ -4,7 +4,7 @@
 [core]
     editor = /Applications/MacVim.app/Contents/MacOS/Vim
     excludesfile = ~/.gitignore_global
-    whitespace = tabwidth=4
+    whitespace = tabwidth=4, tab-in-indent
 [alias]
     co = checkout
     br = branch
@@ -26,14 +26,15 @@
     amend = commit --amend
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
     myhist = !git log --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
+    branches =for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes
 [format]
     numbered = auto
 [fetch]
-    default = upstream
+    default = current
 [push]
-    default = upstream
+    default = current
 [pull]
-    default = upstream
+    default = current
 [color]
     ui = true
 [help]

@@ -9,10 +9,11 @@ set splitright
 
 " From: http://stevelosh.com/blog/2010/09/coming-home-to-vim/ {{{
 " Use Perl/Python regex by default
-nnoremap / /\v
-nnoremap ? ?\v
-vnoremap / /\v
-vnoremap ? ?\v
+" ## Nope. Screws up things like =, |, etc.
+"nnoremap / /\v
+"nnoremap ? ?\v
+"vnoremap / /\v
+"vnoremap ? ?\v
 
 set ignorecase
 set smartcase
@@ -21,7 +22,7 @@ set showmatch                   " Shows matching delimiter for a sec after typin
 
 "set textwidth=79
 "set formatoptions=qrn1
-set colorcolumn=80
+" set colorcolumn=80
 
 " }}}
 

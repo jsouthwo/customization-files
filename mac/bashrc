@@ -1,5 +1,15 @@
 # /* vim: set filetype=sh : */ ~
-source ~/.git-completion.bash
+
+######################################################################
+# Commands placed in here are executed for all shells.
+# Login shells source .bashrc from .bash_profile.
+######################################################################
+
+
+[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
+[ -f $HOME/.git-completion.bash ] && . ~/.git-completion.bash
+[ -f $HOME/.git-flow-completion.bash ] && . ~/.git-flow-completion.bash
+[ -f /etc/bash_completion ] && . /etc/bash_completion
 
 ###### HISTORY ######
 # Append to history
@@ -8,13 +18,12 @@ shopt -s histappend
 shopt -s cmdhist
 HISTFILESIZE=1000000000
 HISTSIZE=1000000000
-# HISTCONTROL=ignoreboth
 HISTCONTROL=ignoredups:erasedups
 HISTIGNORE='bg:fg:history'
 HISTTIMEFORMAT='%F %T '
 
 # Some aliases
-alias ls='ls -GFh --color=auto --group-directories-first'
+alias ls='ls -GFh' # Doesn't work on Mac >> # --color=auto --group-directories-first'
 alias l=ls
 alias la='ls -A'
 alias ll='ls -l'
@@ -45,7 +54,13 @@ alias .....='cd ../../../..'
 alias .4='cd ../../../..'
 alias ..4='cd ../../../..'
 
+alias gti='git'
+
 alias jobs='jobs -l'
+
+alias path='echo $PATH | tr -s ":" "\n"'
+
+alias rm='rm -I'
 
 
 function cd(){
@@ -56,6 +71,7 @@ function cd(){
         builtin cd "$*"
     fi
     RESULT=$?
+    # Junky
     if [ $RESULT -eq 0 ]; then
         export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
@@ -117,10 +133,20 @@ function payap()
     cd ~/Documents/School/1 And Done/4 Senior/COS 333/payap/sil/january2015
 }
 
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+alias i='interserve'
+function interserve()
+{
+    if [ $# -eq 0 ]; then
+        cd ~/Documents/Interserve/
+    else
+        cd ~/Documents/Interserve/*$1*
+    fi
+}
+
 # Find rm
 # find . -name "*.orig" -exec rm {} \;
 
-# Cribbage
-# rm -r  ~/Library/Saved\ Application\ State/com.grassgames.CribbageLite.savedState/
-# rm -r ~/Library/Containers/com.grassgames.CribbageLite/
-# rm -r  ~/Library/Saved\ Application\ State/com.grassgames.CribbageLite.savedState/
