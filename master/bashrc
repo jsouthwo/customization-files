@@ -1,45 +1,18 @@
-/* vim: set filetype=sh : */ ~
+# /* vim: set filetype=sh : */ ~
 
 ######################################################################
 # Commands placed in here are executed for all shells.
 # Login shells source .bashrc from .bash_profile.
 ######################################################################
 
-# Source .bash_aliases if it exists
-[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
-export CXXDIR=${HOME}/cos121s1321/Extension_Files/cxxtest
-export PATH=${PATH}:${HOME}/cos121s1321/Extension_Files/cxxtest
-export CPLUS_INCLUDE_PATH=${CXXDIR}:
 export SVN_EDITOR=/usr/bin/vim
 export EDITOR=/usr/bin/vim
 
 
-source ~/.git-completion.bash
-source ~/.git-flow-completion.bash
-source /etc/bash_completion
-
-# Some aliases
-alias ls='ls -GFh --color=auto'
-alias la='ls -A'
-alias ll='ls -l'
-alias l=ls
-
-alias mygrep='grep -nrI --color'
-
-alias h=history
-alias c=cd
-alias ..='cd ..'
-alias ...='cd ../..'
-alias ....='cd ../../..'
-alias .....='cd ../../../..'
-
-alias wd='workon dream'
-alias d='deactivate'
-
-
-alias v=vim
-alias vless='vim -u /usr/share/vim/vim74/macros/less.vim'
-alias less='less -R'
+[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
+[ -f $HOME/.git-completion.bash ] && . ~/.git-completion.bash
+[ -f $HOME/.git-flow-completion.bash ] && . ~/.git-flow-completion.bash
+[ -f /etc/bash_completion ] && . /etc/bash_completion
 
 ###### HISTORY ######
 # Append to history
@@ -48,12 +21,63 @@ shopt -s histappend
 shopt -s cmdhist
 HISTFILESIZE=1000000000
 HISTSIZE=1000000000
-# HISTCONTROL=ignoreboth
 HISTCONTROL=ignoredups:erasedups
 HISTIGNORE='bg:fg:history'
 HISTTIMEFORMAT='%F %T '
 
+# Some aliases
+alias ls='ls -GFh --color=auto --group-directories-first'
+alias l=ls
+alias la='ls -A'
+alias ll='ls -l'
 
+alias mygrep='grep -nrI --color'
+
+alias vi=vim
+alias v=vim
+alias vless='vim -u /usr/share/vim/vim74/macros/less.vim'
+alias less='less -R'
+alias hist=history
+alias h=history
+
+alias c="cd"
+alias c..='cd ..'
+alias cd..='cd ..'
+alias ..='cd ..'
+alias .1='cd ..'
+alias ..1='cd ..'
+alias ...='cd ../..'
+alias .2='cd ../..'
+alias ..2='cd ../..'
+alias ....='cd ../../..'
+alias .3='cd ../../..'
+alias ..3='cd ../../..'
+alias .....='cd ../../../..'
+alias .4='cd ../../../..'
+alias ..4='cd ../../../..'
+
+alias gti='git'
+
+alias wd='workon dream'
+alias d='deactivate'
+
+alias jobs='jobs -l'
+
+function lalala(){
+    du -sh * | sort -rn | head -n 20
+}
+
+function lala(){
+    du -ah . | sort -rn | head -n 20
+}
+
+alias path='echo $PATH | tr -s ":" "\n"'
+
+alias rm='rm -I'
+
+function myMac(){
+    ssh Justin@justin-southworth.campus.tayloru.edu
+}
 
 function cd(){
 ## Set 'cd' to automatically run 'ls'
@@ -65,12 +89,12 @@ function cd(){
     RESULT=$?
     # Junky
     if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
-\[$RESET\]\[$RED$BLINK\]::: \[$RESET\]'
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+\[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
     fi
 }
 
@@ -81,7 +105,8 @@ git_prompt () {
     fi
 
     git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
-    echo "[$git_branch]"
+
+    echo "[$git_branch] "
 }
 
 DEFAULT=$(tput setaf 9)
@@ -105,19 +130,20 @@ REV=$(tput rev)
 BLINK=$(tput blink)
 
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
-export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt) \[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$BLUE\][\u@\h]
+export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
 
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
 
-alias mygrep='grep -nrI --color'
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
-#alias v="vim -c 'source ~/.vimrc.bak' "
-alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
-alias v=vim
-alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
-alias less='less -R'
+force_color_prompt=yes
 
-alias c="cd"
+# Force 256 color terminal
+export TERM=xterm-256color
 
 alias s='senior'
 function senior()
@@ -139,8 +165,15 @@ function payap()
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Find rm
-# find . -name "*.orig" -exec rm {} \;
+alias i='interserve'
+function interserve()
+{
+    if [ $# -eq 0 ]; then
+        cd ~/Documents/Interserve/
+    else
+        cd ~/Documents/Interserve/*$1*
+    fi
+}
 
 function fanspeed() {
 ## MANUALLY SET THE MINIMUM FAN SPEED
@@ -159,4 +192,7 @@ function fanspeed() {
         fi
     fi
 }
+
+# Find rm
+# find . -name "*.orig" -exec rm {} \;
 

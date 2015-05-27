@@ -1,49 +1,38 @@
-"autocmd! BufNewFile * silent! 0r ~/.vim/skel/tmpl.%:e
+" Put this here for easymotion not updating <leader>
+let mapleader=","
+nnoremap \ ,
 
-" set t_Co=88
-
-" An example for a vimrc file.
-"
-" Maintainer:	Bram Moolenaar <Bram@vim.org>
-" Last change:	2008 Dec 17
-"
-" To use it, copy it to
-"     for Unix and OS/2:  ~/.vimrc
-"	      for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc
-"	    for OpenVMS:  sys$login:.vimrc
-
-" When started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim"
-  finish
+""""""""""""""""""""""""""""""""""""""""""""
+" PLUGINS
+""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME."/.vim/rc/plugins.vim")
+    source ${HOME}/.vim/rc/plugins.vim
 endif
 
-" Use Vim settings, rather than Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
+""""""""""""""""""""""""""""""""""""""""""""
+" FUNCTIONS
+""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME."/.vim/rc/functions.vim")
+    source ${HOME}/.vim/rc/functions.vim
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""
+" MAPS
+""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME."/.vim/rc/maps.vim")
+    source ${HOME}/.vim/rc/maps.vim
+endif
+
+" Set 256 color output
+" set t_Co=256
+set t_Co=16 " It's what solarized wants.
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-if has("vms")
-  set nobackup		" do not keep a backup file, use versions instead
-else
-  set backup		" keep a backup file
-endif
-set history=1000	" keep 50 lines of command line history
 set ruler		" show the cursor position all the time
 set showcmd		" display incomplete commands
 set incsearch		" do incremental searching
-
-" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
-" let &guioptions = substitute(&guioptions, "t", "", "g")
-
-" Don't use Ex mode, use Q for formatting
-"map Q gq
-
-" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
-" so that you can undo CTRL-U after inserting a line break.
-inoremap <C-U> <C-G>u<C-U>
 
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
@@ -57,85 +46,43 @@ if &t_Co > 2 || has("gui_running")
   set hlsearch
 endif
 
-" Only do this part when compiled with support for autocommands.
-if has("autocmd")
-
-  " Enable file type detection.
-  " Use the default filetype settings, so that mail gets 'tw' set to 72,
-  " 'cindent' is on in C files, etc.
-  " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
-
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
-
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
-
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  " Also don't do it when the mark is in the first line, that is the default
-  " position when opening a file.
-  autocmd BufReadPost *
-    \ if line("'\"") > 1 && line("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
-    \ endif
-
-  augroup END
-
-else
-
-  set cindent		" always set autoindenting on
-
-endif " has("autocmd")
-
-" Convenient command to see the difference between the current buffer and the
-" file it was loaded from, thus the changes you made.
-" Only define it when not defined already.
-if !exists(":DiffOrig")
-  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
-		  \ | wincmd p | diffthis
-endif
-
-" My stuff..."
-"nnoremap <Esc> <Esc><right>
-imap fj <Esc>
-nnoremap fj :noh<return><esc>
-set wildmode=full
+" wildmenu
 set wildmenu
+set wildignore=*.sw*,*.so,*.o,*.kate-swp,*.lo,*.pyc
+set wildmode=list:longest,full
 set smarttab
-" Next line is already in here.
-" set backspace=indent,eol,start
-" auto adds g(lobal) to substitutions. Makes it so it auto-changes all
-" occurences in a line rather than just the first.
+
+" auto adds g(lobal) to substitutions
 set gdefault
 
-" colorscheme peachpuff
-colo default
+" colorscheme Monokai-chris
+" colorscheme zenburn
+colorscheme solarized
+set background=dark
+let g:solarized_termtrans = 0           "Transparent
+
 set softtabstop=4
 set shiftwidth=4
 set expandtab
-set nu
+set number
+set hidden
 
+" Dangerous...
+" set autowrite
 set autochdir
+" autocmd BufEnter * silent! lcd %:p:h " Does same as sutochdir.
+
 let python_highlight_all = 1
 
-set list
+" list breaks this, but oh well.
+set linebreak
 "Invisible character colors
 " eol, extends, preceded
 "highlight NonText guifg=red ctermfg=red
 " nbsp, tab, trail
 highlight SpecialKey guifg=red ctermfg=red
-"set listchars=trail:×,nbsp:⋅,tab:>-,eol:¬
-set listchars=trail:×,nbsp:⋅,tab:>-
 
 highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
-au ColorScheme * highlight ExtraWhitespace ctermbg=white guibg=white ctermfg=red guifg=red
-au BufEnter * match ExtraWhitespace /\s\+$/
-au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-au InsertLeave * match ExtraWhiteSpace /\s\+$/
 
 " Amazing
 fun! <SID>StripTrailingWhitespaces()
@@ -145,20 +92,100 @@ fun! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfun
 
-autocmd FileType c,cpp,java,php,ruby,python,html autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()"
+" colors for autocomplete
+highlight Pmenu    ctermbg=white ctermfg=black guibg=white guifg=black
+highlight PmenuSel ctermfg=white ctermbg=blue  guifg=white guibg=blue
 
-" keep text highlighted after shifting
-vmap < <gv
-vmap > >gv
+" Height of command line. 2 Stops some annoying 'press ENTER...' stuffs.
+set cmdheight=2
 
-" Allow tab to be used for autocompletion
-imap <Tab> <C-N>
-imap <S-Tab> <C-P>
-" colors
-highlight Pmenu ctermbg=white ctermfg=black guibg=white guifg=black
-highlight PmenuSel ctermfg=white ctermbg=blue guifg=white guibg=blue
+" ------------------------------------------
+" Stuff for "Learn Vim the Hard Way Tuturial
+" ------------------------------------------
 
-" System Yank: will copy into the system clipboard on OS X
-vmap sy :w !pbcopy<CR><CR>
+" Both does a nice mode, but shouldn't be default with EasyMotion
+" set relativenumber
+set number
+" ALL the numbering options!
+function! NumberToggle()
+    if(&relativenumber == 1 && &number == 1)
+        set number
+        set norelativenumber
+    elseif(&relativenumber == 0 && &number == 1)
+        set nonumber
+        set relativenumber
+    else
+        set number
+        set relativenumber
+    endif
+endfunc
 
+" Wrap text when needed.
+set wrap
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LIGHTSYS "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set history=1000
+
+set list
+set listchars=trail:×,nbsp:⋅,tab:>-,extends:»,precedes:«,eol:¬
+" Tabs
+" http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
+highlight SpecialKey guifg=#5f5f5f ctermfg=59
+" Non text = extends, precedes, & eol
+highlight NonText guifg=#5f5f5f ctermfg=59
+highlight Special term=bold ctermfg=5 guifg=SlateBlue
+" Special are escaped chars. Ex. \" This is from peachpuff"
+highlight Special term=bold ctermfg=5 guifg=SlateBlue
+" highlight Special term=bold ctermfg=red guifg=red
+highlight Number ctermfg=125 guifg=#af005f
+
+set completeopt=longest,menuone
+
+set hidden
+
+" Stop Vim's autowrapping feature
+set textwidth=0
+set wrapmargin=0
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+    command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                \ | wincmd p | diffthis
+endif
+
+" left and right motion wraps lines (see help)
+" Only doesn't include ~
+set whichwrap=b,s,h,l,<,>,[,]
+
+""""""""""""""""""""""""""""""""""""""""""""
+" OS
+""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME."/.vim/rc/os.vim")
+    source ${HOME}/.vim/rc/os.vim
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""
+" AUTOS
+""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME."/.vim/rc/autos.vim")
+    source ${HOME}/.vim/rc/autos.vim
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""
+" Testing
+""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME."/.vim/rc/testing.vim")
+    source ${HOME}/.vim/rc/testing.vim
+endif
+
+" http://archive09.linux.com/articles/54159
+set viminfo='100,f0
+
+" Powerline fonts
+"set guifont=Inconsolata\ for\ Powerline:h15
+"let g:Powerline_symbols = 'fancy'
 
