@@ -27,6 +27,7 @@
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
     myhist = !git log --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
     branches =for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)\" refs/remotes
+    remove-those-branches-that-are-deleted-but-still-on-my-remotes = remote prune origin
 [format]
     numbered = auto
 [fetch]
@@ -42,6 +43,7 @@
 [credential]
     helper = osxkeychain
 [merge]
+    tool = vimdiff
     conflictstyle = diff3
 [status]
     short = 1 # Override with --long

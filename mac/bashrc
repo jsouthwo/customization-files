@@ -5,6 +5,9 @@
 # Login shells source .bashrc from .bash_profile.
 ######################################################################
 
+export SVN_EDITOR=/usr/bin/vim
+export EDITOR=/usr/bin/vim
+
 
 [ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
 [ -f $HOME/.git-completion.bash ] && . ~/.git-completion.bash
@@ -28,7 +31,7 @@ alias l=ls
 alias la='ls -A'
 alias ll='ls -l'
 
-alias mygrep='grep -nrI --color'
+alias mygrep='grep -nrIT --color'
 
 alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
 alias vi=vim
@@ -58,10 +61,26 @@ alias gti='git'
 
 alias jobs='jobs -l'
 
+alias wd='workon dream'
+alias d='deactivate'
+
+alias s='cd ~/Documents/472_cos/tinyhands/'
+
+function lalala(){
+    du -sh * .* | sort -rn | head -n 20
+}
+
+function lala(){
+    du -ah . | sort -rn | head -n 20
+}
+
 alias path='echo $PATH | tr -s ":" "\n"'
 
 alias rm='rm -I'
 
+function myMac(){
+    ssh Justin@justin-southworth.campus.tayloru.edu
+}
 
 function cd(){
 ## Set 'cd' to automatically run 'ls'
@@ -116,6 +135,18 @@ BLINK=$(tput blink)
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
 export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+force_color_prompt=yes
+
+# Force 256 color terminal
+export TERM=xterm-256color
 
 alias s='senior'
 function senior()
