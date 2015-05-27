@@ -31,7 +31,7 @@ alias l=ls
 alias la='ls -A'
 alias ll='ls -l'
 
-alias mygrep='grep -nrI --color'
+alias mygrep='grep -nrIT --color'
 
 alias vi=vim
 alias v=vim
@@ -58,13 +58,15 @@ alias ..4='cd ../../../..'
 
 alias gti='git'
 
+alias jobs='jobs -l'
+
 alias wd='workon dream'
 alias d='deactivate'
 
-alias jobs='jobs -l'
+alias s='cd ~/Documents/472_cos/tinyhands/'
 
 function lalala(){
-    du -sh * | sort -rn | head -n 20
+    du -sh * .* | sort -rn | head -n 20
 }
 
 function lala(){

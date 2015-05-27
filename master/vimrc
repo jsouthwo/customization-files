@@ -92,10 +92,6 @@ fun! <SID>StripTrailingWhitespaces()
     call cursor(l, c)
 endfun
 
-" colors for autocomplete
-highlight Pmenu    ctermbg=white ctermfg=black guibg=white guifg=black
-highlight PmenuSel ctermfg=white ctermbg=blue  guifg=white guibg=blue
-
 " Height of command line. 2 Stops some annoying 'press ENTER...' stuffs.
 set cmdheight=2
 
@@ -130,16 +126,26 @@ set history=1000
 
 set list
 set listchars=trail:×,nbsp:⋅,tab:>-,extends:»,precedes:«,eol:¬
+
+""" DEFUNCT with Solarized {{{
 " Tabs
 " http://vim.wikia.com/wiki/Xterm256_color_names_for_console_Vim
-highlight SpecialKey guifg=#5f5f5f ctermfg=59
-" Non text = extends, precedes, & eol
-highlight NonText guifg=#5f5f5f ctermfg=59
-highlight Special term=bold ctermfg=5 guifg=SlateBlue
-" Special are escaped chars. Ex. \" This is from peachpuff"
-highlight Special term=bold ctermfg=5 guifg=SlateBlue
-" highlight Special term=bold ctermfg=red guifg=red
-highlight Number ctermfg=125 guifg=#af005f
+""" nbsp, tab, trail
+""highlight SpecialKey guifg=#5f5f5f ctermfg=59
+""" Non text = extends, precedes, & eol
+""highlight NonText guifg=#5f5f5f ctermfg=59
+""highlight Special term=bold ctermfg=5 guifg=SlateBlue
+""" Special are escaped chars. Ex. \" This is from peachpuff"
+"highlight Special term=bold ctermfg=5 guifg=SlateBlue
+""" highlight Special term=bold ctermfg=red guifg=red
+"highlight Number ctermfg=125 guifg=#af005f
+
+" colors for autocomplete
+""highlight Pmenu    ctermbg=white ctermfg=black guibg=white guifg=black
+""highlight PmenuSel ctermfg=white ctermbg=blue  guifg=white guibg=blue
+" }}}
+
+highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
 
 set completeopt=longest,menuone
 

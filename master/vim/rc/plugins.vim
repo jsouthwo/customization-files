@@ -40,6 +40,8 @@ Plugin 'scrooloose/nerdcommenter'               " Commenting.
 " https://github.com/Shougo/vimshell.vim        " Shell in vim
 Plugin 'tobiasgehring/ShowMarks'                " Based on vim-scripts/ShowMarks
 
+"""""" STUDIO """"""
+Plugin 'nvie/vim-flake8'                        " Do pep8 stuff
 
 """ EXAMPLES """
 " Keep Plugin commands between vundle#begin/end.
@@ -93,5 +95,9 @@ let g:indent_guides_start_level=2
 let g:indent_guides_guide_size=1
 vnoremap <leader>ig :IndentGuidesToggle
 
-map <Leader>. <Plug>(easymotion-prefix)
+" EASYMOTION
+map ,. <Plug>(easymotion-prefix)
+
+" VIM-FLAKE8
+let g:flake8_show_in_file=0                             " SUPER annoying
 
