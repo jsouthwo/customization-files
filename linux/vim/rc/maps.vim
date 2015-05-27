@@ -14,7 +14,9 @@ nnoremap Y y$
 
 " Tab changes tabs
 nnoremap <TAB> gt
+vnoremap <TAB> gt
 nnoremap <S-TAB> gT
+vnoremap <S-TAB> gT
 
 " Toggle relativenumber and number
 nnoremap <C-n> :call NumberToggle()<cr>
