@@ -99,6 +99,7 @@ nnoremap <leader>s :set spell!<CR>:set spell?<CR>
 
 " Show word count
 nnoremap <leader>wo :w !wc -w<CR>
+nnoremap <leader>wc :w !wc -w<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""
 " END leader stuff

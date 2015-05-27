@@ -5,7 +5,7 @@
     editor = vim
     # TODO: Change to proper file location per platform
     excludesfile = ~/.gitignore_global
-    whitespace = tabwidth=4
+    whitespace = tabwidth=4, tab-in-indent
 [alias]
     co = checkout
     br = branch
@@ -30,11 +30,11 @@
 [format]
     numbered = auto
 [fetch]
-    default = upstream
+    default = current
 [push]
-    default = upstream
+    default = current
 [pull]
-    default = upstream
+    default = current
 [color]
     ui = true
 [help]

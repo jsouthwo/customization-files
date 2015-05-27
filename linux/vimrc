@@ -1,3 +1,7 @@
+" Put this here for easymotion not updating <leader>
+let mapleader=","
+nnoremap \ ,
+
 """"""""""""""""""""""""""""""""""""""""""""
 " PLUGINS
 """"""""""""""""""""""""""""""""""""""""""""
@@ -99,8 +103,8 @@ set cmdheight=2
 " Stuff for "Learn Vim the Hard Way Tuturial
 " ------------------------------------------
 
-" Show line numbers relative to current line (Doesn't screw up G)
-set relativenumber
+" Both does a nice mode, but shouldn't be default with EasyMotion
+" set relativenumber
 set number
 " ALL the numbering options!
 function! NumberToggle()
