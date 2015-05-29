@@ -59,7 +59,7 @@ set gdefault
 " colorscheme zenburn
 colorscheme solarized
 set background=dark
-let g:solarized_termtrans = 0           "Transparent
+let g:solarized_termtrans = 0           " Transparent terminal?
 
 set softtabstop=4
 set shiftwidth=4
@@ -69,7 +69,9 @@ set hidden
 
 " Dangerous...
 " set autowrite
-set autochdir
+
+" Just not part of my workflow right now.
+" set autochdir
 " autocmd BufEnter * silent! lcd %:p:h " Does same as sutochdir.
 
 let python_highlight_all = 1

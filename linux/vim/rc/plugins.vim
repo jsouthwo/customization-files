@@ -38,7 +38,7 @@ Plugin 'scrooloose/nerdcommenter'               " Commenting.
 " Plugin 'terryma/vim-multiple-cursors'         " Multiple cursors
 " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
 " https://github.com/Shougo/vimshell.vim        " Shell in vim
-Plugin 'tobiasgehring/ShowMarks'                " Based on vim-scripts/ShowMarks
+" Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
 
 """""" STUDIO """"""
 Plugin 'nvie/vim-flake8'                        " Do pep8 stuff
