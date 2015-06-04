@@ -75,8 +75,17 @@ vnoremap <C-y> 2<C-y>
 let mapleader=","
 nnoremap \ ,
 
+" Toggle autochdir.
+nnoremap <leader>a :set autochdir!<CR>:set autochdir?<CR>
+
+" Toggle list
+nnoremap <leader>l :set list!<CR>:set list?<CR>
+
 " Toggle paste mode
 nnoremap <leader>p :set paste!<CR>:set paste?<CR>
+
+" Toggle spell
+nnoremap <leader>s :set spell!<CR>:set spell?<CR>
 
 " Toggle wrap
 nnoremap <leader>wr :set wrap!<CR>:set wrap?<CR>
@@ -93,15 +102,13 @@ vnoremap <leader>; :s/^/\/\/<CR>:noh<CR>
 " Save from insert mode
 inoremap <leader>w <ESC>:w<CR>a
 
-" Toggle list
-nnoremap <leader>l :set list!<CR>:set list?<CR>
-
-" Toggle spell
-nnoremap <leader>s :set spell!<CR>:set spell?<CR>
-
 " Show word count
 nnoremap <leader>wo :w !wc -w<CR>
 nnoremap <leader>wc :w !wc -w<CR>
+
+" Show word count
+nnoremap <leader>bgd :set bg=dark<CR>
+nnoremap <leader>bgl :set bg=light<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""
 " END leader stuff
