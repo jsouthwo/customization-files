@@ -31,6 +31,7 @@ alias l=ls
 alias la='ls -A'
 alias ll='ls -l'
 
+alias mgrep='grep -nrIT --color --exclude-dir=node_modules --exclude-dir=jquery-ui --exclude-dir=htmlcov'
 alias mygrep='grep -nrIT --color'
 
 alias vim='/Applications/Macvim.app/Contents/MacOS/Vim'
@@ -76,7 +77,7 @@ function lala(){
 
 alias path='echo $PATH | tr -s ":" "\n"'
 
-alias rm='rm -I'
+alias rm='rm -i'
 
 function myMac(){
     ssh Justin@justin-southworth.campus.tayloru.edu
@@ -92,11 +93,11 @@ function cd(){
     RESULT=$?
     # Junky
     if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
         ls -GFh
     else
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
     fi
 }
@@ -110,6 +111,16 @@ git_prompt () {
     git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
 
     echo "[$git_branch] "
+}
+
+set_virtualenv () {
+# Determine active Python virtualenv details.
+    if [ -z "$VIRTUAL_ENV" ]; then
+        return 0;
+    fi
+    #PYTHON_VIRTUALENV="[$BLUE][`basename \"$VIRTUAL_ENV\"`][$RESET] "
+    virtualenv=$(basename "$VIRTUAL_ENV")
+    echo "[$virtualenv] "
 }
 
 DEFAULT=$(tput setaf 9)
@@ -133,7 +144,7 @@ REV=$(tput rev)
 BLINK=$(tput blink)
 
 # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
-export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
 \[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
 
 # check the window size after each command and, if necessary,
@@ -178,6 +189,24 @@ function interserve()
     fi
 }
 
-# Find rm
-# find . -name "*.orig" -exec rm {} \;
+function fanspeed() {
+## MANUALLY SET THE MINIMUM FAN SPEED
+    if [ $# == 0 ]
+    then
+        # -f does Fahrenheit
+        # sensors -f
+        cat /sys/devices/platform/applesmc.768/fan1_min
+    else
+        if [ $1 -ge 2000 ]
+        then
+            echo "This will change the minimum fan speed to" $1 "RPM."
+            echo $1 | sudo tee /sys/devices/platform/applesmc.768/fan1_min
+        else
+            echo "Must be at least 2000"
+        fi
+    fi
+}
+
+# Find and xargs (to touch all files in the directories named javascript.
+# find . -type d -name javascript -print0 | xargs -0 -I{.} find {.} -exec touch {} \;
 
