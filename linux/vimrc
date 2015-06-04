@@ -196,4 +196,3 @@ set viminfo='100,f0
 " Powerline fonts
 "set guifont=Inconsolata\ for\ Powerline:h15
 "let g:Powerline_symbols = 'fancy'
-

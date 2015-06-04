@@ -40,3 +40,9 @@ autocmd BufWritePost *.py call Flake8()
 " Works, but wonderfully and tremendously hacked.
 nnoremap <leader>gitconfig :%s/\n[^[]/THISTEXTNOTINFILE/<CR>:sort<CR>/\[core\]<CR>ddggP/[remote<CR>VNxggp/\[branch "master"\]<CR>dd?[remote<CR>p:%s/THISTEXTNOTINFILE/\r\t<CR>
 
+" Hiding files from netrw.
+let g:netrw_list_hide = '
+            \.*~$,
+            \.*\.pyc$,
+            \.*\.swp$
+            \'

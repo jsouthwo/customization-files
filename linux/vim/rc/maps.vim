@@ -106,6 +106,10 @@ inoremap <leader>w <ESC>:w<CR>a
 nnoremap <leader>wo :w !wc -w<CR>
 nnoremap <leader>wc :w !wc -w<CR>
 
+" Show word count
+nnoremap <leader>bgd :set bg=dark<CR>
+nnoremap <leader>bgl :set bg=light<CR>
+
 """"""""""""""""""""""""""""""""""""""""""""
 " END leader stuff
 """"""""""""""""""""""""""""""""""""""""""""
