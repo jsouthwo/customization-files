@@ -1,6 +1,8 @@
+# vim: set filetype=sshconfig :
 ############### Config ###############
 Host *
     HashKnownHosts no
+
 
 ############### taylor.cse.taylor.edu ###############
 Host taylor
@@ -10,23 +12,46 @@ Host taylor
 Host taylor-tunnel
     Hostname taylor.cse.taylor.edu
     user jsouthwo
-    LocalForward 8000 10.121.40.7:8001
+    LocalForward 8000 10.121.40.7:8008
     PermitLocalCommand yes
     LocalCommand 'workon dream && ./manage.py runserver 0.0.0.0:8001'
 
-Host taylor-tunnel2
+Host taylor-tunnel-matt
     Hostname matt.cse.taylor.edu
     user jsouthwo
-    LocalForward 8000 10.121.40.7:8001
+    LocalForward 8000 10.121.40.7:8008
     PermitLocalCommand yes
     LocalCommand 'ssh taylor'
 
-Host taylor-tunnel3
+Host taylor-tunnel-john
     Hostname john.cse.taylor.edu
     user jsouthwo
-    LocalForward 8000 10.121.40.7:8001
+    LocalForward 8000 10.121.40.7:8008
     PermitLocalCommand yes
     LocalCommand 'ssh taylor'
+
+
+############### townsend.cse.taylor.edu ###############
+Host townsend
+    Hostname 10.121.40.8
+    user jsouthwo
+
+Host townsend-tunnel
+    Hostname townsend.cse.taylor.edu
+    user jsouthwo
+    LocalForward 8000 10.121.40.8:8008
+    #PermitLocalCommand yes
+    #LocalCommand 'workon dream' && ./manage.py runserver 0.0.0.0:8008'
+
+Host townsend-tunnel-matt
+    Hostname matt.cse.taylor.edu
+    user jsouthwo
+    LocalForward 8000 10.121.40.8:8008
+
+Host townsend-tunnel-john
+    Hostname john.cse.taylor.edu
+    user jsouthwo
+    LocalForward 8000 10.121.40.8:8008
 
 
 ############### matt.cse.taylor.edu ###############
@@ -46,10 +71,19 @@ Host thi
     Hostname thi.cse.taylor.edu
     user jsouthwo
 
+Host thi-tunnel-matt
+    Hostname matt.cse.taylor.edu
+    user jsouthwo
+    LocalForward 8000 10.120.170.20:8008
 
-############### thi.cse.taylor.edu ###############
+Host thi-tunnel-john
+    Hostname john.cse.taylor.edu
+    user jsouthwo
+    LocalForward 8000 10.120.170.20:8008
+
+
+############### my laptop ###############
 Host mac
     Hostname justin-southworth.campus.tayloru.edu
     user Justin
-
 
