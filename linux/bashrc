@@ -128,6 +128,17 @@ set_virtualenv () {
     echo "[$virtualenv] "
 }
 
+alias t='tinyhands'
+tinyhands()
+{
+    if [ $# -eq 0 ]; then
+        cd ~/Documents/472_cos/tinyhands/
+    else
+        cd ~/Documents/472_cos/tinyhands/*$1*
+    fi
+}
+
+
 DEFAULT=$(tput setaf 9)
 BLACK=$(tput setaf 0)
 RED=$(tput setaf 1)
