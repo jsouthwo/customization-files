@@ -17,28 +17,58 @@ Plugin 'altercation/vim-colors-solarized'       " Solarized
 Plugin 'bling/vim-airline'                      " Airline.
 Plugin 'Lokaltog/vim-easymotion'                " Easymotion
 Plugin 'mhinz/vim-startify'                     " SUPER COOL Startup screen
-Plugin 'Yggdroot/indentLine'                    " Lines on indends (with spaces)
 Plugin 'powerline/fonts'                        " Powerline fonts for Airline
 Plugin 'Raimondi/delimitMate'                   " Delimiter completion
 Plugin 'scrooloose/nerdcommenter'               " Commenting.
 Plugin 'tpope/vim-endwise'                      " Adds 'end' keywords for some languages
 Plugin 'tpope/vim-surround'                     " ds, cs, ys
 Plugin 'tpope/vim-vinegar'                      " Enhanse netrw
+Plugin 'Yggdroot/indentLine'                    " Lines on indends (with spaces)
 
 """""" STUDIO """"""
 Plugin 'nvie/vim-flake8'                        " Do pep8 stuff
 
+" CURRENTLY BROKEN. NEEDS VIM UPDATE
+" Plugin 'vim-scripts/diffchar.vim'               " Do diffs by char, not lines
 
 """ IMPLEMENT """
+" PHP
+" https://github.com/spf13/PIV
+
+" <C-p>
+" https://github.com/kien/ctrlp.vim
+
 " Snippets
+" https://github.com/SirVer/ultisnips           " Best?
 " https://github.com/garbas/vim-snipmate
 " https://github.com/honza/vim-snippets
 " https://github.com/msanders/snipmate.vim
 " https://github.com/Shougo/neosnippet.vim
-" https://github.com/SirVer/ultisnips
 
 " Completion
-" Plugin 'Valloric/YouCompleteMe'                 " Code completion
+" Plugin 'Valloric/YouCompleteMe'               " Code completion
+" neocomplete
+
+" Stuff from spf13 or nearby
+" https://github.com/junegunn/vim-xmark         " Markdown preview
+
+" Alignment
+" https://github.com/godlygeek/tabular
+" https://github.com/junegunn/vim-easy-align
+
+" Git stuff instead of default GitGutter
+" https://github.com/tpope/vim-fugitive
+
+" Worth it???
+" https://github.com/spf13/spf13-vim
+
+" Syntax checking
+" https://github.com/scrooloose/syntastic
+
+" Different auto-close
+" https://github.com/spf13/vim-autoclose
+
+" http://spf13.com/post/ultimate-vim-config
 
 
 """ TEST LATER? """
@@ -52,7 +82,7 @@ Plugin 'nvie/vim-flake8'                        " Do pep8 stuff
 " Plugin 'flazz/vim-colorschemes'               " ALL THE COLORSCHEMES.
 " Plugin 'jnurmine/Zenburn'                     " Already exists. Zenburn. Me gusta.
 " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
-" Plugin 'nathanaelkane/vim-indent-guides'        " Indent guides
+" Plugin 'nathanaelkane/vim-indent-guides'      " Indent guides
 " Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
 
 
@@ -99,6 +129,10 @@ set laststatus=2                                        " Keep that status bar a
 " DELIMITMATE
 let g:delimitmat_expand_cr = 2                          " Expand all <CR>s
 let g:delimitmat_expand_space = 1                       " Expand <SPACE>
+
+
+"" DIFFCHAR
+"let g:DiffUpdate = 1                                        " Interactively update highlights
 
 
 " EASYMOTION

@@ -46,3 +46,31 @@ let g:netrw_list_hide = '
             \.*\.pyc$,
             \.*\.swp$
             \'
+
+set lazyredraw
+
+" Enable emacs-style editing of command-line mode {{{
+cnoremap <C-A>      <Home>
+cnoremap <C-B>      <Left>
+cnoremap <C-E>      <End>
+cnoremap <C-F>      <Right>
+cnoremap <C-N>      <Down>
+cnoremap <C-P>      <Up>
+cnoremap <C-D>      <Del>
+cnoremap <ESC>b     <S-Left>
+cnoremap <ESC><C-B> <S-Left>
+cnoremap <ESC>f     <S-Right>
+cnoremap <ESC><C-F> <S-Right>
+cnoremap <ESC><C-H> <C-W>
+cnoremap <ESC>d     <S-Right><Right><C-W>
+cnoremap <C-U>      <C-E><C-U>
+cnoremap <C-K>      <C-\>estrpart(getcmdline(),0,getcmdpos()-1)<CR>
+
+" }}}
+
+    " Reorder tabs relatively, not absolutely {{
+    " https://github.com/johntyree/dotfiles/blob/master/vimrc
+        com! -nargs=1 -bar Tabm exe 'tabm ' . (tabpagenr() + <args> - 1)
+        noremap <leader>gT :Tabm -1<CR>
+        noremap <leader>gt :Tabm +1<CR>
+    " }}

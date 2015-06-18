@@ -87,12 +87,15 @@ highlight SpecialKey guifg=red ctermfg=red
 highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
 
 " Amazing
-fun! <SID>StripTrailingWhitespaces()
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    call cursor(l, c)
-endfun
+function! FixWhitespace(line1,line2)
+    let l:save_cursor = getpos(".")
+    silent! execute ':' . a:line1 . ',' . a:line2 . 's/\s\+$//e'
+    call setpos('.', l:save_cursor)
+endfunction
+
+" Run :FixWhitespace to remove end of line white space
+command! -range=% FixWhitespace call <SID>FixWhitespace(<line1>,<line2>)
+command! -range=% StripTrailingWhitespace call <SID>FixWhitespace(<line1>,<line2>)
 
 " Height of command line. 2 Stops some annoying 'press ENTER...' stuffs.
 set cmdheight=2
