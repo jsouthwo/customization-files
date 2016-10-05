@@ -17,8 +17,8 @@
     unstage = reset HEAD --
     last = log -1 HEAD
     delete = push origin --delete
-    hist = log --graph --decorate=short --date=relative --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad%C(reset)\"
-    hist1 = log --pretty=format:\"%C(auto)%h %ad %C(red)|%C(white) %s%d %C(green)[%an]%C(reset)\" --graph --date=short
+    hist  = log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad%C(reset)\"
+    hist1 = log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h %ad %C(red)|%C(white) %s%d %C(green)[%an]%C(reset)\"
     #hist-basic = log --graph --decorate --pretty=oneline --abbrev-commit
     praise = blame
     staged = diff --cached
@@ -26,9 +26,11 @@
     both = diff HEAD
     amend = commit --amend
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    myhist = !git log --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
+    myhist =  !git log  --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
+    myhist1 = !git hist --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
     branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)%C(reset)\" refs/remotes
     remove-those-branches-that-are-deleted-but-still-on-my-remotes = remote prune origin
+    wiff = diff --word-diff=color
 [format]
     numbered = auto
 [fetch]

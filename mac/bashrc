@@ -5,226 +5,218 @@
 # Login shells source .bashrc from .bash_profile.
 ######################################################################
 
-## export SVN_EDITOR=/Applications/Macvim.app/Contents/MacOS/Vim
-## export EDITOR=/Applications/Macvim.app/Contents/MacOS/Vim
-export EDITOR=vim
+# OS Specific (Mac) {{{
 
-# Opt out of brew's google analytics
-export HOMEBREW_NO_ANALYTICS=1
+    # Opt out of brew's google analytics
+    export HOMEBREW_NO_ANALYTICS=1
 
-# pip should only run if there is a virtualenv currently activated
-export PIP_REQUIRE_VIRTUALENV=true
-# Global pip to get around the above
-gpip2(){
-   PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
-}
-gpip3(){
-   PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
-}
-alias gpip=gpip3
-alias pip=pip3
+    # pip should only run if there is a virtualenv currently activated
+    export PIP_REQUIRE_VIRTUALENV=true
+    # Global pip to get around the above
+    gpip2(){
+       PIP_REQUIRE_VIRTUALENV="" pip2 "$@"
+    }
+    gpip3(){
+       PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+    }
+    alias gpip=gpip3
+    alias pip=pip3
 
+# }}}
 
-[ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
-[ -f $HOME/.git-completion.bash ] && . ~/.git-completion.bash
-[ -f $HOME/.git-flow-completion.bash ] && . ~/.git-flow-completion.bash
-[ -f /etc/bash_completion ] && . /etc/bash_completion
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
-export FZF_DEFAULT_OPTS="-e"
+# Generic bashrc {{{
 
+    export EDITOR=vim
 
-###### HISTORY ######
-# Append to history
-shopt -s histappend
-# Force commands to one line
-shopt -s cmdhist
-HISTFILESIZE=1000000000
-HISTSIZE=1000000000
-HISTCONTROL=ignoredups:erasedups
-HISTIGNORE='bg:fg:history'
-HISTTIMEFORMAT='%F %T '
+    [ -f $HOME/.bash_aliases ] && . $HOME/.bash_aliases
+    [ -f $HOME/.git-completion.bash ] && . ~/.git-completion.bash
+    [ -f $HOME/.git-flow-completion.bash ] && . ~/.git-flow-completion.bash
+    [ -f /etc/bash_completion ] && . /etc/bash_completion
+    [ -f ~/.fzf.bash ] && . ~/.fzf.bash
+    export FZF_DEFAULT_OPTS="-e"
 
-# Some aliases
-alias ls='ls -GFh' # Doesn't work on Mac >> # --color=auto --group-directories-first'
-alias l=ls
-alias la='ls -A'
-alias ll='ls -l'
+    ###### HISTORY ######
+    # Append to history
+    shopt -s histappend
+    # Force commands to one line
+    shopt -s cmdhist
+    HISTFILESIZE=1000000000
+    HISTSIZE=1000000000
+    HISTCONTROL=ignoredups:erasedups
+    HISTIGNORE='bg:fg:history'
+    HISTTIMEFORMAT='%F %T '
 
-alias mygrep='grep -nrI --color'
-alias grept='mygrep --exclude-dir=node_modules --exclude-dir=jquery-ui --exclude-dir=htmlcov'
-alias greps='mygrep --exclude="class.b*" --exclude-dir="languages"'
+    # Some aliases
+    alias ls='ls -GFh' # Doesn't work on Mac >> # --color=auto --group-directories-first'
+    alias l=ls
+    alias la='ls -A'
+    alias ll='ls -l'
 
-## alias vim='/Applications/Macvim.app/Contents/MacOS/Vim -p'
-alias vi=vim
-alias vless='vim -u /usr/share/vim/vim73/macros/less.vim'
-alias less='less -R'
-alias hist=history
+    alias mgrep='grep -nrIT --color --exclude-dir=node_modules --exclude-dir=jquery-ui --exclude-dir=htmlcov'
+    alias mygrep='grep -nrI --color'  # -T Doesn't work on Mac
+    alias grept='mygrep --exclude-dir=node_modules --exclude-dir=jquery-ui --exclude-dir=htmlcov'
+    alias greps='mygrep --exclude="class.b*" --exclude-dir="languages"'
 
-alias c="cd"
-alias c..='cd ..'
-alias cd..='cd ..'
-alias ..='cd ..'
-alias .1='cd ..'
-alias ..1='cd ..'
-alias ...='cd ../..'
-alias .2='cd ../..'
-alias ..2='cd ../..'
-alias ....='cd ../../..'
-alias .3='cd ../../..'
-alias ..3='cd ../../..'
-alias .....='cd ../../../..'
-alias .4='cd ../../../..'
-alias ..4='cd ../../../..'
-alias ......='cd ../../../../..'
-alias .5='cd ../../../../..'
-alias ..5='cd ../../../../..'
-alias .......='cd ../../../../../..'
-alias .6='cd ../../../../../..'
-alias ..6='cd ../../../../../..'
-alias ........='cd ../../../../../../..'
-alias .7='cd ../../../../../../..'
-alias ..7='cd ../../../../../../..'
+    alias vi=vim
+    alias less='less -R'
+    alias hist=history
 
-function mkcd () { mkdir -p "$@" && eval cd "\"\$$#\""; }
+    alias c="cd"
+    alias c..='cd ..'
+    alias cd..='cd ..'
+    alias ..='cd ..'
+    alias .1='cd ..'
+    alias ..1='cd ..'
+    alias ...='cd ../..'
+    alias .2='cd ../..'
+    alias ..2='cd ../..'
+    alias ....='cd ../../..'
+    alias .3='cd ../../..'
+    alias ..3='cd ../../..'
+    alias .....='cd ../../../..'
+    alias .4='cd ../../../..'
+    alias ..4='cd ../../../..'
+    alias ......='cd ../../../../..'
+    alias .5='cd ../../../../..'
+    alias ..5='cd ../../../../..'
+    alias .......='cd ../../../../../..'
+    alias .6='cd ../../../../../..'
+    alias ..6='cd ../../../../../..'
+    alias ........='cd ../../../../../../..'
+    alias .7='cd ../../../../../../..'
+    alias ..7='cd ../../../../../../..'
 
-alias g='git'
-alias gti='git'
+    function mkcd () { mkdir -p "$@" && eval cd "\"\$$#\""; }
 
-alias jobs='jobs -l'
+    alias g='git'
+    alias gti='git'
 
-alias v.wd='workon dream'
-alias v.deactivate='deactivate'
+    alias jobs='jobs -l'
 
-function lalala(){
-    du -sh * .* | sort -rn | head -n 20
-}
+    alias v.wd='workon dream'
+    alias v.deactivate='deactivate'
 
-function lala(){
-    du -ah . | sort -rn | head -n 20
-}
+    function lalala(){
+        du -sh * .* | sort -rn | head -n 20
+    }
 
-alias path='echo $PATH | tr -s ":" "\n"'
+    function lala(){
+        du -ah . | sort -rn | head -n 20
+    }
 
-alias rm='rm -i'
+    alias path='echo $PATH | tr -s ":" "\n"'
 
-function myMac(){
-    ssh Justin@justin-southworth.campus.tayloru.edu
-}
+    alias rm='rm -i'
 
-function cd(){
-## Set 'cd' to automatically run 'ls'
-    if [ $# -eq 0 ]; then
-        builtin cd ~
-    else
-        builtin cd "$*"
-    fi
-    RESULT=$?
-    # Junky
-    if [ $RESULT -eq 0 ]; then
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
-\[$RESET\]\[$GREEN\]\[$BLINK\]::: \[$RESET\]'
-        ls -GFh
-    else
-        export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
-\[$RESET\]\[$RED\]\[$BLINK\]::: \[$RESET\]'
-    fi
-}
+    function myMac(){
+        ssh Justin@justin-southworth.campus.tayloru.edu
+    }
 
-git_prompt () {
-## Outputs git branch if in a repo
-    if ! git rev-parse --git-dir > /dev/null 2>&1; then
-        return 0
-    fi
-
-    git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
-
-    echo "[$git_branch] "
-}
-
-set_virtualenv () {
-# Determine active Python virtualenv details.
-    if [ -z "$VIRTUAL_ENV" ]; then
-        return 0;
-    fi
-    #PYTHON_VIRTUALENV="[$BLUE][`basename \"$VIRTUAL_ENV\"`][$RESET] "
-    virtualenv=$(basename "$VIRTUAL_ENV")
-    echo "[$virtualenv] "
-}
-
-DEFAULT=$(tput setaf 9)
-BLACK=$(tput setaf 0)
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-BLUE=$(tput setaf 4)
-MAGENTA=$(tput setaf 5)
-CYAN=$(tput setaf 6)
-WHITE=$(tput setaf 7)
-
-# DIM doesn't seem to work. Just reset.
-DIM=$(tput dim)
-BOLD=$(tput bold)
-RESET=$(tput sgr0)
-START_UNDER=$(tput smul)
-END_UNDER=$(tput rmul)
-# reverses fg and bg
-REV=$(tput rev)
-BLINK=$(tput blink)
-
-# TODO: Fix the hackiness. Also, only make jobs show up if > 1?
-export PS1='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
-\[$RESET\]\[$(es=$?;if [ $es -eq 0 ]; then echo $GREEN; else echo $RED;fi)\]\[$BOLD$BLINK\]::: \[$RESET\]'
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
-shopt -s checkwinsize
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-force_color_prompt=yes
-
-# Force 256 color terminal
-export TERM=xterm-256color
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-function fanspeed() {
-## MANUALLY SET THE MINIMUM FAN SPEED
-    if [ $# == 0 ]
-    then
-        # -f does Fahrenheit
-        # sensors -f
-        cat /sys/devices/platform/applesmc.768/fan1_min
-    else
-        if [ $1 -ge 2000 ]
-        then
-            echo "This will change the minimum fan speed to" $1 "RPM."
-            echo $1 | sudo tee /sys/devices/platform/applesmc.768/fan1_min
+    function cd(){
+    ## Set 'cd' to automatically run 'ls'
+        if [ $# -eq 0 ]; then
+            builtin cd ~
         else
-            echo "Must be at least 2000"
+            builtin cd "$*"
         fi
-    fi
-}
+        ls -GFh
+    }
 
-# Find and xargs (to touch all files in the directories named javascript.
-# find . -type d -name javascript -print0 | xargs -0 -I{.} find {.} -exec touch {} \;
+    git_prompt () {
+    ## Outputs git branch if in a repo
+        if ! git rev-parse --git-dir > /dev/null 2>&1; then
+            return 0
+        fi
 
-# fasd
-eval "$(fasd --init auto)"
-alias v='f -e vim'          # quick opening files with vim
-alias j='fasd_cd -d'        # Mimick autojump, not z
+        git_branch=$(git branch 2>/dev/null| sed -n '/^\*/s/^\* //p')
 
-# Builtin aliases
-# alias a='fasd -a'        # any
-# alias s='fasd -si'       # show / search / select
-# alias d='fasd -d'        # directory
-# alias f='fasd -f'        # file
-# alias sd='fasd -sid'     # interactive directory selection
-# alias sf='fasd -sif'     # interactive file selection
-# alias z='fasd_cd -d'     # cd, same functionality as j in autojump
-# alias zz='fasd_cd -d -i' # cd with interactive selection
+        echo "[$git_branch] "
+    }
 
+    set_virtualenv () {
+    # Determine active Python virtualenv details.
+        if [ -z "$VIRTUAL_ENV" ]; then
+            return 0;
+        fi
+        #PYTHON_VIRTUALENV="[$BLUE][`basename \"$VIRTUAL_ENV\"`][$RESET] "
+        virtualenv=$(basename "$VIRTUAL_ENV")
+        echo "[$virtualenv] "
+    }
+
+    DEFAULT=$(tput setaf 9)
+    BLACK=$(tput setaf 0)
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 3)
+    BLUE=$(tput setaf 4)
+    MAGENTA=$(tput setaf 5)
+    CYAN=$(tput setaf 6)
+    WHITE=$(tput setaf 7)
+
+    # DIM doesn't seem to work. Just reset.
+    DIM=$(tput dim)
+    BOLD=$(tput bold)
+    RESET=$(tput sgr0)
+    START_UNDER=$(tput smul)
+    END_UNDER=$(tput rmul)
+    # reverses fg and bg
+    REV=$(tput rev)
+    BLINK=$(tput blink)
+
+    # TODO: Fix the hackiness. Also, only make jobs show up if > 1?
+    prompt='\n\[$RESET$CYAN\][\d > \t] \[$RED$BOLD\][\w] \[$BOLD$GREEN\]$(git_prompt)\[$RESET$BLUE\]$(set_virtualenv)\[$RESET$MAGENTA\][command: \#] \[$YELLOW\][jobs: \j] \[$GREEN\][\u@\h]
+ \[$BOLD\]::: \[$RESET\]'
+    export PS1=$prompt
+
+    # check the window size after each command and, if necessary,
+    # update the values of LINES and COLUMNS.
+    shopt -s checkwinsize
+
+    # make less more friendly for non-text input files, see lesspipe(1)
+    [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+    force_color_prompt=yes
+
+    # Force 256 color terminal
+    export TERM=xterm-256color
+
+    # Add an "alert" alias for long running commands.  Use like so:
+    #   sleep 10; alert
+    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+    function fanspeed() {
+    ## MANUALLY SET THE MINIMUM FAN SPEED
+        if [ $# == 0 ]
+        then
+            # -f does Fahrenheit
+            # sensors -f
+            cat /sys/devices/platform/applesmc.768/fan1_min
+        else
+            if [ $1 -ge 2000 ]
+            then
+                echo "This will change the minimum fan speed to" $1 "RPM."
+                echo $1 | sudo tee /sys/devices/platform/applesmc.768/fan1_min
+            else
+                echo "Must be at least 2000"
+            fi
+        fi
+    }
+
+    # Find and xargs (to touch all files in the directories named javascript.
+    # find . -type d -name javascript -print0 | xargs -0 -I{.} find {.} -exec touch {} \;
+
+    # fasd
+    eval "$(fasd --init auto)"
+    alias v='f -e vim'          # quick opening files with vim
+    alias j='fasd_cd -d'        # Mimick autojump, not z
+
+    # Builtin aliases
+    # alias a='fasd -a'        # any
+    # alias s='fasd -si'       # show / search / select
+    # alias d='fasd -d'        # directory
+    # alias f='fasd -f'        # file
+    # alias sd='fasd -sid'     # interactive directory selection
+    # alias sf='fasd -sif'     # interactive file selection
+    # alias z='fasd_cd -d'     # cd, same functionality as j in autojump
+    # alias zz='fasd_cd -d -i' # cd with interactive selection
+# }}}

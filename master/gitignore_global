@@ -1,18 +1,52 @@
-# Temp files
-*~
-.#*
-\#*#
+# Temp files {{{
+    .#*
+    \#*#
+# }}}
 
-# Stupid OS X Finder stuff
-.DS_Store
-._.DS_Store
+# vim {{{
+    [._]*.s[a-w][a-z]
+    [._]s[a-w][a-z]
+    *.un~
+    Session.vim
+    .netrwhist
+    *~
+# }}}
 
-# Swap files
-*.swp
-*.swo
+# Mac {{{
+    .DS_Store
+    ._.DS_Store
+    .AppleDouble
+    .LSOverride
 
-# Merge files
-*.orig
+    # Icon must end with two \r
+    Icon
 
-# Python junk
-*.pyc
+
+    # Thumbnails
+    ._*
+
+    # Files that might appear in the root of a volume
+    .DocumentRevisions-V100
+    .fseventsd
+    .Spotlight-V100
+    .TemporaryItems
+    .Trashes
+    .VolumeIcon.icns
+
+    # Directories potentially created on remote AFP share
+    .AppleDB
+    .AppleDesktop
+    Network Trash Folder
+    Temporary Items
+    .apdisk
+# }}}
+
+# Merge files {{{
+    *.orig
+# }}}
+
+# Python junk {{{
+    *.pyc
+# }}}
+
+# vim: set foldmethod=marker:

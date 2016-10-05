@@ -2,7 +2,8 @@
     name = Justin Southworth
     email = justin_southworth@taylor.edu
 [core]
-    editor = /Applications/MacVim.app/Contents/MacOS/Vim
+    editor = vim
+    # TODO: Change to proper file location per platform
     excludesfile = ~/.gitignore_global
     whitespace = tabwidth=4, tab-in-indent
 [alias]
@@ -16,7 +17,7 @@
     unstage = reset HEAD --
     last = log -1 HEAD
     delete = push origin --delete
-    hist =  log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad%C(reset)\"
+    hist  = log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad%C(reset)\"
     hist1 = log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h %ad %C(red)|%C(white) %s%d %C(green)[%an]%C(reset)\"
     #hist-basic = log --graph --decorate --pretty=oneline --abbrev-commit
     praise = blame
@@ -25,7 +26,7 @@
     both = diff HEAD
     amend = commit --amend
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
-    myhist =  !git log --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
+    myhist =  !git log  --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
     myhist1 = !git hist --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
     branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)%C(reset)\" refs/remotes
     remove-those-branches-that-are-deleted-but-still-on-my-remotes = remote prune origin
@@ -52,9 +53,3 @@
 
 #[pretty]
 #    name = some custom format to use as --format={{name}}
-[difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
-[mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
