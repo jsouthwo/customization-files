@@ -1,0 +1,718 @@
+" FIRST {{{
+
+    set nocompatible
+
+    " Put this here for easymotion not updating <leader>
+    let mapleader=","
+    nnoremap \ ,
+
+" }}}
+
+" Pathogen {{{
+
+    call pathogen#infect()
+    " call pathogen#helptags()
+
+    """"""""""""""""""""""""""""""""""""""""""""
+    " PLUGINS
+    """"""""""""""""""""""""""""""""""""""""""""
+    "Plugin 'powerline/fonts'                        " Powerline fonts for Airline
+    "Plugin 'tpope/vim-endwise'                      " Adds 'end' keywords for some languages
+
+    " CURRENTLY BROKEN. NEEDS VIM UPDATE
+    " Plugin 'vim-scripts/diffchar.vim'               " Do diffs by char, not lines
+
+    " <C-p>
+    " https://github.com/kien/ctrlp.vim
+
+    " Snippets
+    " https://github.com/SirVer/ultisnips           " Best?
+    " https://github.com/garbas/vim-snipmate
+    " https://github.com/honza/vim-snippets
+    " https://github.com/msanders/snipmate.vim
+    " https://github.com/Shougo/neosnippet.vim
+
+    " Completion
+    " Plugin 'Valloric/YouCompleteMe'               " Code completion
+    " neocomplete
+
+    " Stuff from spf13 or nearby
+    " https://github.com/junegunn/vim-xmark         " Markdown preview
+
+    " Alignment
+    " https://github.com/godlygeek/tabular
+    " https://github.com/junegunn/vim-easy-align
+
+    " Git stuff instead of default GitGutter
+    " https://github.com/tpope/vim-fugitive
+
+    " Worth it???
+    " https://github.com/spf13/spf13-vim
+
+    " Syntax checking
+    " https://github.com/scrooloose/syntastic
+
+    " Different auto-close
+    " https://github.com/spf13/vim-autoclose
+
+    " http://spf13.com/post/ultimate-vim-config
+
+
+    """ TEST LATER? """
+    " Plugin 'itchyny/lightline.vim'                " Superior to Airline?
+    " Plugin 'terryma/vim-multiple-cursors'         " Multiple cursors
+
+
+    """ FORMERLY USED and worth keeping around """
+    " Plugin 'bronson/vim-trailing-whitespace'      " Trailing whitespace
+    " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
+    " Plugin 'nathanaelkane/vim-indent-guides'      " Indent guides
+    " Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
+
+    """ }}}
+
+" Necessary basics {{{
+
+    syntax on
+    filetype plugin indent on
+
+" }}}
+
+" SETS {{{
+set history=1000
+set hidden
+set undofile
+
+" Dangerous...
+" set autowrite
+
+
+    " Display {{{
+
+        " Font {{{
+            set guifont=Source_Code_Pro_Light:h11
+
+            set t_Co=16
+            for scheme in [ 'solarized', 'molokai', 'desert', 'default' ]
+             try
+                if scheme == 'molokai'
+                    set t_Co=256
+                endif
+                execute 'colorscheme '.scheme
+                break
+              catch
+                continue
+              endtry
+            endfor
+            set background=dark
+
+        " }}}
+
+        set number
+        set laststatus=2
+        set showcmd
+        set cmdheight=2
+        set shortmess=aoOtTI        " Use some shorter messages
+
+
+        " Doesn't work with airline. {{{
+            " set ruler                   " Show the ruler
+            " set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%) " A ruler on steroids
+        " }}}
+
+        " Add an indicator when lines are wrapped
+        let &showbreak='+++ '
+        " Put the indicator in the number column
+        set cpoptions+=n
+
+        " Wildmenu {{{
+
+            set wildmenu
+            set wildignore=*.sw*,*.so,*.o,*.kate-swp,*.lo,*.pyc
+            set wildmode=list:longest,full
+
+        " }}}
+
+        set list
+        set listchars=trail:x,nbsp:*,tab:>-,extends:>,precedes:< ",eol:¬
+
+        set linebreak
+
+        set splitbelow
+        set splitright
+
+
+    " }}}
+
+    " Editing {{{
+
+        " allow backspacing over everything in insert mode
+        set backspace=indent,eol,start
+
+        " http://vim.wikia.com/wiki/Selecting_your_pasted_text
+        nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
+
+        " auto adds g(lobal) to substitutions
+        set gdefault
+
+        " Tabs {{{
+
+            set shiftwidth=4
+            " Negative means use shiftwidth
+            set softtabstop=-1
+            set expandtab
+            set smarttab
+
+        " }}}
+
+        " Auto-completion {{{
+
+            set completeopt=longest,menuone
+
+        " }}}
+
+    " }}}
+
+    " Fold {{{
+
+        set foldmethod=marker
+
+    " }}}
+
+    " Search {{{
+
+        set hlsearch
+        set incsearch
+
+    " }}}
+
+    " Mouse {{{
+
+        if has('mouse')
+          set mouse=a
+          set mousemodel=popup_setpos
+        endif
+
+    " }}}
+
+" }}}
+
+" Plugin customization {{{
+
+    " AIRLINE {{{
+
+        let g:airline_left_sep = ''
+        let g:airline_right_sep = ''
+        " Add tab line, but screw using the mouse to close a tab.
+        let g:airline#extensions#tabline#enabled = 1
+        let g:airline#extensions#tabline#show_close_button = 0
+
+        " Be powerful...
+        " let g:airline_powerline_fonts=1
+        " Or not, cause Windows.
+        let g:airline_powerline_fonts=0
+
+    " }}}
+
+    " ALIGN {{{
+    "
+        " Commas.
+        vnoremap <leader>t, :Align ,<CR>:FixWhitespace<CR>
+        nnoremap <leader>t, :Align ,<CR>
+
+        nnoremap <leader>tacsubs :AlignCtrl p0P1lrrr<CR>
+
+    " }}}
+
+    " DELIMITMATE {{{
+
+        " Expand all <CR>s
+        let g:delimitmat_expand_cr = 2
+
+        " Expand <SPACE>
+        let g:delimitmat_expand_space = 1
+
+    " }}}
+
+    " EASYMOTION {{{
+
+        map Q <Plug>(easymotion-prefix)
+
+    " }}}
+
+    " INDENTLINE {{{
+
+        let g:indentLine_enabled = 1
+        let g:indentLine_char = '¦'
+        " Can't find the right color
+        let g:indentLine_color_gui = '#586E75'
+
+    " }}}
+
+    " NERDCOMMENTER {{{
+
+        let g:NERDCustomDelimiters = { 'rml': { 'left': "<!--", 'right': "-->" } }
+
+    " }}}
+
+    " SOLARIZED {{{
+
+        " Transparent terminal?
+        let g:solarized_termtrans = 0
+
+        " Purple numbers
+        highlight Number guifg=#6c71c4
+
+    " }}}
+
+    " VIM-VINEGAR {{{
+
+        let g:netrw_liststyle=3                                 " Makes 'tree' default netrw listing
+
+    " }}}
+
+    " Unused {{{
+
+        " " DIFFCHAR {{{
+
+        "     " Interactively update highlights
+        "     let g:DiffUpdate = 1
+
+        " " }}}
+
+    " TABULAR {{{
+
+        " " acsubs_hw_testing.py
+        " vnoremap <leader>t, :Tabularize /^[^,]*\zs/l0<CR>
+        " nnoremap <leader>t, :Tabularize /^[^,]*\zs/l0<CR>
+
+    " }}}
+
+         " VIM-FLAKE8 {{{
+             " SUPER annoying
+             let g:flake8_show_in_file=0
+
+             " run flake8 after saving python files
+             "autocmd BufWritePost *.py call Flake8()
+             autocmd FileType python map <buffer> <leader>f :call Flake8()<CR>
+         " }}}
+
+    " }}}
+
+" }}}
+
+" FUNCTIONS {{{
+
+    " Numbers {{{
+
+        function! NumberToggle()
+        " ALL the numbering options!
+            if    (&relativenumber == 0 && &number == 0)
+                set norelativenumber
+                set number
+            elseif(&relativenumber == 0 && &number == 1)
+                set relativenumber
+                set nonumber
+            elseif(&relativenumber == 1 && &number == 0)
+                set relativenumber
+                set number
+            else " &relativenumber == 1 && &number == 1
+                set norelativenumber
+                set nonumber
+            endif
+        endfunc
+
+        " :NumberToggle to toggle numbering
+        command! NumberToggle call NumberToggle()
+        command! JsNumberToggle call NumberToggle()
+
+    " }}}
+
+    " Whitespace {{{
+
+        function! FixWhitespace(line1,line2)
+            let l:save_cursor = getpos(".")
+            silent! execute ':' . a:line1 . ',' . a:line2 . 's/\s\+$//e'
+            call setpos('.', l:save_cursor)
+        endfunction
+
+        " Run :FixWhitespace to remove end of line white space
+        command! -range=% FixWhitespace call FixWhitespace(<line1>,<line2>)
+        command! -range=% JsFixWhitespace call FixWhitespace(<line1>,<line2>)
+
+    " }}}
+
+" }}}
+
+" MAPS {{{
+
+    " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+    " so that you can undo CTRL-U after inserting a line break.
+    inoremap <C-U> <C-G>u<C-U>
+
+    " <Esc> sucks {{{
+
+        inoremap fj <Esc>
+        inoremap <C-j> <Esc>
+        nnoremap <leader>/ :noh<return>
+
+    " }}}
+
+    " Make Y act like C and D
+    nnoremap Y y$
+
+    " Tab changes tabs {{{
+        nnoremap <TAB> gt
+        vnoremap <TAB> gt
+        nnoremap <S-TAB> gT
+        vnoremap <S-TAB> gT
+    " }}}
+
+    " Better split windows {{{
+        nnoremap <C-h> <C-W><C-h>
+        nnoremap <C-j> <C-W><C-j>
+        nnoremap <C-k> <C-W><C-k>
+        nnoremap <C-l> <C-W><C-l>
+    " }}}
+
+    " Toggle relativenumber and number
+    nnoremap <C-n> :call NumberToggle()<cr>
+
+    " Upcase a word
+    inoremap <C-u> <ESC>hehviwUea
+
+    " keep text highlighted after shifting {{{
+
+        vnoremap < <gv
+        vnoremap > >gv
+
+    " }}}
+
+    " : sucks {{{
+
+        nnoremap <Space> :
+        vnoremap <Space> :
+
+    " }}}
+
+    " Support for multi-line lines {{{
+
+        nnoremap j gj
+        vnoremap j gj
+        nnoremap k gk
+        vnoremap k gk
+        inoremap <silent> <Up> <C-o>gk
+        inoremap <silent> <Down> <C-o>gj
+        ""  nnoremap 0 g0
+        ""  vnoremap 0 g0
+        ""  nnoremap ^ g^
+        ""  vnoremap ^ g^
+        ""  nnoremap $ g$
+        ""  vnoremap $ g$
+        " And switch.
+        nnoremap gj j
+        vnoremap gj j
+        nnoremap gk k
+        vnoremap gk k
+        "inoremap <silent> <Up> <C-o>gk         " Not these
+        "inoremap <silent> <Down> <C-o>gj       " Not these
+        ""  nnoremap g0 0
+        ""  vnoremap g0 0
+        ""  nnoremap g^ ^
+        ""  vnoremap g^ ^
+        ""  nnoremap g$ $
+        ""  vnoremap g$ $
+
+        nnoremap <C-e> 2<C-e>
+        vnoremap <C-e> 2<C-e>
+        nnoremap <C-y> 2<C-y>
+        vnoremap <C-y> 2<C-y>
+
+    " }}}
+
+    " Enable emacs-style editing of command-line mode {{{
+        cnoremap <C-A>      <Home>
+        cnoremap <C-B>      <Left>
+        cnoremap <C-E>      <End>
+        cnoremap <C-F>      <Right>
+        cnoremap <C-N>      <Down>
+        cnoremap <C-P>      <Up>
+        cnoremap <C-D>      <Del>
+        cnoremap <ESC>b     <S-Left>
+        cnoremap <ESC><C-B> <S-Left>
+        cnoremap <ESC>f     <S-Right>
+        cnoremap <ESC><C-F> <S-Right>
+        cnoremap <ESC><C-H> <C-W>
+        cnoremap <ESC>d     <S-Right><Right><C-W>
+        cnoremap <C-U>      <C-E><C-U>
+        cnoremap <C-K>      <C-\>estrpart(getcmdline(),0,getcmdpos()-1)<CR>
+    " }}}
+
+    " Leader {{{
+
+        let mapleader=","
+        nnoremap \ ,
+
+        " Toggle autochdir.
+        nnoremap <leader>a :set autochdir!<CR>:set autochdir?<CR>
+
+        " Toggle list
+        nnoremap <leader>l :set list!<CR>:set list?<CR>
+
+        " Toggle paste mode
+        nnoremap <leader>p :set paste!<CR>:set paste?<CR>
+
+        " Toggle spell
+        nnoremap <leader>s :set spell!<CR>:set spell?<CR>
+
+        " Toggle wrap
+        nnoremap <leader>wr :set wrap!<CR>:set wrap?<CR>
+
+        " Make session
+        nnoremap <leader>m :mks!
+
+        " Unhighlight search
+        nnoremap <leader>/ :noh<CR>
+
+        " Source my rc
+        nnoremap <leader>\s :so ~/_vimrc<CR>
+
+        " Edit my rc in a new tab
+        nnoremap <leader>\e :tabe ~/_vimrc<CR>
+
+        " Save from insert mode
+        inoremap <leader>w <ESC>:w<CR>a
+
+        " Change background color
+        nnoremap <leader>bgd :set bg=dark<CR>
+        nnoremap <leader>bgl :set bg=light<CR>
+
+    " }}}
+
+" }}}
+
+"------------------------------------------------------------------------------"
+"-------------------------- TODO: Editing the vimrc----------------------------"
+"------------------------------------------------------------------------------"
+
+" Just not part of my workflow right now.
+" set autochdir
+" autocmd BufEnter * silent! lcd %:p:h " Does same as autochdir.
+
+" TODO: Move to python autocmd
+let python_highlight_all = 1
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" LIGHTSYS "
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+highlight ExtraWhitespace ctermbg=red guibg=red ctermfg=white guifg=white
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+    command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                \ | wincmd p | diffthis
+endif
+
+" left and right motion wraps lines (see help)
+" Includes all possible options
+set whichwrap=b,s,h,l,<,>,[,],~
+
+" OS {{{
+" }}}
+
+" AUTOS {{{
+    " Whitespace {{{
+
+        augroup Whitespace
+            au!
+            au BufEnter    * match ExtraWhitespace /\s\+$/
+            au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+            au InsertLeave * match ExtraWhitespace /\s\+$/
+
+            " Set extra whitespace to Solarized colors (bg=red, fg=base0)
+            au ColorScheme * highlight ExtraWhitespace guibg=#dc322f
+                        \ guifg=#839496
+
+            au FileType ada,
+                       \c,
+                       \cpp,
+                       \html,
+                       \java,
+                       \php,
+                       \python,
+                       \ruby,
+                       \vim
+                       \ autocmd BufWritePre :call FixWhitespace(1,$)
+        augroup end
+        highlight ExtraWhitespace guibg=#dc322f guifg=#839496
+
+    " }}}
+
+    " txt {{{
+
+        augroup txt
+            au BufRead,BufNewFile *.txt     setfiletype text
+
+            " Set autoindent and spell check for text files
+            autocmd FileType text setlocal ai spell
+        augroup end
+
+    " }}}
+
+    " Ada {{{
+
+        augroup ADA
+            au!
+            au BufRead,BufNewFile *.ads setfiletype ada
+            au BufRead,BufNewFile *.adb setfiletype ada
+            au FileType ada setlocal sts=3 ts=3 sw=3
+        augroup end
+
+    " }}}
+
+    " asp.net {{{
+
+        augroup ASP
+            au!
+            au BufRead,BufNewFile *.aspx setfiletype aspnet
+            au BufRead,BufNewFile *.ascx setfiletype aspnet
+            au BufRead,BufNewFile *.asmx setfiletype aspnet
+            au FileType aspnet setlocal sts=4 ts=4 sw=4
+        augroup end
+
+    " }}}
+
+    " vimrc {{{
+
+        augroup vimrc
+            au!
+            " TODO: Get this working {{{
+                if has('win32')
+                    let vim_files='~/_vimrc,~/vimfiles/rc/*'
+                else  " *nixish
+                    let vim_files='~/.vimrc,~/.vim/rc/*'
+                endif
+                autocmd bufwritepost vim_files source %
+                autocmd BufWritePost vim_files AirlineRefresh
+                autocmd BufWritePost vim_files IndentLinesReset
+            " }}}
+
+            if has('win32')
+                autocmd bufwritepost ~/_vimrc,~/vimfiles/rc/* source %
+                autocmd BufWritePost ~/_vimrc,~/vimfiles/rc/* AirlineRefresh
+                autocmd BufWritePost ~/_vimrc,~/vimfiles/rc/* IndentLinesReset
+            else
+                autocmd bufwritepost ~/.vimrc,~/.vim/rc/* source %
+                autocmd BufWritePost ~/.vimrc,~/.vim/rc/* AirlineRefresh
+                autocmd BufWritePost ~/.vimrc,~/.vim/rc/* IndentLinesReset
+            endif
+        augroup END
+
+    " }}}
+
+" }}}
+
+" Testing {{{
+
+" From: http://stevelosh.com/blog/2010/09/coming-home-to-vim/ {{{
+    " Use Perl/Python regex by default
+    " ## Nope. Screws up things like =, |, etc.
+    "nnoremap / /\v
+    "nnoremap ? ?\v
+    "vnoremap / /\v
+    "vnoremap ? ?\v
+
+    set ignorecase
+    set smartcase
+
+    " Shows matching delimiter for a sec after typing.
+    set showmatch
+
+    " Autoformat {{{
+
+        set textwidth=80
+        " :h fo-table
+        set formatoptions+=tcrqnj
+        " Adds from textwidth (81, 82)
+        let &colorcolumn=join(range(81,300),",")
+
+    " }}}
+
+" }}}
+
+" Works, but wonderfully and tremendously hacked.
+nnoremap <leader>gitconfig :%s/\n[^[]/THISTEXTNOTINFILE/<CR>:sort<CR>/\[core\]<CR>ddggP/[remote<CR>VNxggp/\[branch "master"\]<CR>dd?[remote<CR>p:%s/THISTEXTNOTINFILE/\r\t<CR>
+
+" Hiding files from netrw.
+let g:netrw_list_hide = '
+            \.*~$,
+            \.*\.pyc$,
+            \.*\.swp$
+            \'
+
+set lazyredraw
+
+    " Reorder tabs relatively {{{
+        " https://github.com/johntyree/dotfiles/blob/master/vimrc
+            command! -nargs=1 -bar Tabm exe 'tabm ' . (tabpagenr() + <args> - 1)
+            noremap <leader>gT :Tabm -1<CR>
+            noremap <leader>gt :Tabm +1<CR>
+    " }}}
+
+""" Don't think I want this... {{{
+"""   " http://archive09.linux.com/articles/54159
+"""   set viminfo='100,f0
+" }}}
+
+    " Backups {{{
+        set backup writebackup
+        if has('win32')
+            set backupdir=~\vimfiles\_backup,.
+            set directory=~\vimfiles\_swp,.
+            set undodir=~\vimfiles\_undo\\,.
+        else
+            set backupdir=~/.vim/backup,~/scratch/vim_backup,~/scratch/,.
+        endif
+    " }}}
+cd ~
+" }}}
+inoremap <C-E> <C-X><C-E>
+inoremap <C-Y> <C-X><C-Y>
+ab teh the
+ab fro for
+
+"Bubble single lines (kicks butt)
+"http://vimcasts.org/episodes/bubbling-text/
+nmap <C-Up> ddkP
+nmap <C-Down> ddp
+
+"Bubble multiple lines
+vmap <C-Up> xkP`[V`]
+vmap <C-Down> xp`[V`]
+
+" set pastetoggle=<leader>p
+
+source $VIMRUNTIME/mswin.vim
+behave mswin
+
+map <C-y> <C-y>
+map <C-e> <C-e>
+map <C-a> <C-a>
+
+" Default tabbing
+" :Tabularize /,/r0r1
+map <leader><tab> <Esc>:Tabularize /,/r0r1<CR>
+
+" Count passes and fails
+" pneumonic: count (total, case) (passes,fails)
+nnoremap <leader>ctp :%s/PASSED/PASSED/n<CR>
+nnoremap <leader>ctf :%s/FAILED/FAILED/n<CR>
+nnoremap <leader>ccp :%s/PASSED/PASSED/gn<CR>
+nnoremap <leader>ccf :%s/FAILED/FAILED/gn<CR>
+
+set sidescroll=1
+set autochdir
+
+cd C:\IPDS
