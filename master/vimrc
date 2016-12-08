@@ -1,5 +1,5 @@
 " TODO: https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
-" TODO: Look here before searchiing plugins. https://www.vi-improved.org/
+" TODO: Look here before searching plugins. https://www.vi-improved.org/
 
 " Environment
     " Identify platform
@@ -12,111 +12,124 @@
         silent function! WINDOWS()
             return has('win16') || has('win32') || has('win64')
         endfunction
+        silent function! VIM8()
+            return v:version >= 800
+        endfunction
 
     " Basics
         set nocompatible
+
         if !WINDOWS()
             set shell=/bin/sh
+            source $VIMRUNTIME/mswin.vim
+            behave mswin
         endif
 
-    " On Windows, also use '.vim' instead of '_vim'
-        if WINDOWS()
-            set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,
-                      \$HOME/.vim/after
-        endif
+    " TODO: Implement right after syncing all this (12-8-16)
+    "" On Windows, also use '.vim' instead of '_vim'
+        "if WINDOWS()
+            "set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,
+                      "\$HOME/.vim/after
+        "endif
 
-" Plugins (Vundle)
-    filetype off                  " required for Vundle
+if WINDOWS()
+    " Pathogen
+        call pathogen#infect()
+        call pathogen#helptags()
+else
+    " Plugins (Vundle)
+        filetype off                  " required for Vundle
 
-    " set the runtime path to include Vundle and initialize
-        set rtp+=~/.vim/bundle/Vundle.vim
-        call vundle#begin()
+        " set the runtime path to include Vundle and initialize
+            set rtp+=~/.vim/bundle/Vundle.vim
+            call vundle#begin()
 
-    " Current plugins
-        Plugin 'gmarik/Vundle.vim'                  " let Vundle manage Vundle
-        " Has to be above henrik/vim-indexed-search for some reason
-        Plugin 'Yggdroot/indentLine'                " Lines on indents (with spaces) based on sw
+        " Current plugins
+            Plugin 'gmarik/Vundle.vim'                  " let Vundle manage Vundle
+            " Has to be above henrik/vim-indexed-search for some reason
+            Plugin 'Yggdroot/indentLine'                " Lines on indents (with spaces) based on sw
 
-        Plugin 'airblade/vim-gitgutter'             " git in the sidebar
-        Plugin 'ajh17/VimCompletesMe'               " Completion
-        Plugin 'altercation/vim-colors-solarized'   " Solarized
-        Plugin 'bling/vim-airline'                  " Airline
-        Plugin 'vim-airline/vim-airline-themes'     " Solarized themes
-        Plugin 'cohama/lexima.vim'                  " Better autoclose
-        Plugin 'Gundo'                              " Undotree
-        Plugin 'henrik/vim-indexed-search'          " Shows count while searching
-        Plugin 'junegunn/fzf'                       " Fuzzy file finder
-        Plugin 'Lokaltog/vim-easymotion'            " Easymotion
-        Plugin 'matchit.zip'                        " Matchit
-        Plugin 'mhinz/vim-startify'                 " Startup screen
-        Plugin 'powerline/fonts'                    " Powerline fonts for Airline
-        "Plugin 'rickhowe/diffchar.vim'              " Do diffs by char, not lines
-        Plugin 'scrooloose/nerdcommenter'           " Commenting
-        Plugin 'tommcdo/vim-lion'                   " Alignment
-        Plugin 'tpope/vim-endwise'                  " Adds 'end' keywords for some languages
-        Plugin 'tpope/vim-surround'                 " ds, cs, ys
-        Plugin 'tpope/vim-repeat'                   " . for plugins
-        Plugin 'tpope/vim-speeddating'              " Increment dates
-        Plugin 'tpope/vim-vinegar'                  " Enhanse netrw
+            Plugin 'airblade/vim-gitgutter'             " git in the sidebar
+            Plugin 'ajh17/VimCompletesMe'               " Completion
+            Plugin 'altercation/vim-colors-solarized'   " Solarized
+            Plugin 'bling/vim-airline'                  " Airline
+            Plugin 'vim-airline/vim-airline-themes'     " Solarized themes
+            Plugin 'cohama/lexima.vim'                  " Better autoclose
+            Plugin 'Gundo'                              " Undotree
+            Plugin 'henrik/vim-indexed-search'          " Shows count while searching
+            Plugin 'junegunn/fzf'                       " Fuzzy file finder
+            Plugin 'Lokaltog/vim-easymotion'            " Easymotion
+            Plugin 'matchit.zip'                        " Matchit
+            Plugin 'mhinz/vim-startify'                 " Startup screen
+            Plugin 'powerline/fonts'                    " Powerline fonts for Airline
+            "Plugin 'rickhowe/diffchar.vim'              " Do diffs by char, not lines
+            Plugin 'scrooloose/nerdcommenter'           " Commenting
+            Plugin 'tommcdo/vim-lion'                   " Alignment
+            Plugin 'tpope/vim-endwise'                  " Adds 'end' keywords for some languages
+            Plugin 'tpope/vim-surround'                 " ds, cs, ys
+            Plugin 'tpope/vim-repeat'                   " . for plugins
+            Plugin 'tpope/vim-speeddating'              " Increment dates
+            Plugin 'tpope/vim-vinegar'                  " Enhanse netrw
 
-    " Todo
-        " Different auto-close
-        " https://github.com/jiangmiao/auto-pairs
+        " Todo
+            " Different auto-close
+            " https://github.com/jiangmiao/auto-pairs
 
-        " PHP
-        " https://github.com/spf13/PIV
+            " PHP
+            " https://github.com/spf13/PIV
 
-        " Snippets
-        " https://github.com/SirVer/ultisnips           " Best?
-        " https://github.com/garbas/vim-snipmate
-        " https://github.com/honza/vim-snippets
-        " https://github.com/msanders/snipmate.vim
-        " https://github.com/Shougo/neosnippet.vim
+            " Snippets
+            " https://github.com/SirVer/ultisnips           " Best?
+            " https://github.com/garbas/vim-snipmate
+            " https://github.com/honza/vim-snippets
+            " https://github.com/msanders/snipmate.vim
+            " https://github.com/Shougo/neosnippet.vim
 
-        " Stuff from spf13 or nearby
-        " https://github.com/junegunn/vim-xmark         " Markdown preview
+            " Stuff from spf13 or nearby
+            " https://github.com/junegunn/vim-xmark         " Markdown preview
 
-        " Alignment
-        " https://github.com/godlygeek/tabular
-        " https://github.com/junegunn/vim-easy-align
+            " Alignment
+            " https://github.com/godlygeek/tabular
+            " https://github.com/junegunn/vim-easy-align
 
-        " Better git stuff than GitGutter
-        " https://github.com/tpope/vim-fugitive
+            " Better git stuff than GitGutter
+            " https://github.com/tpope/vim-fugitive
 
-        " Syntax checking
-        " https://github.com/scrooloose/syntastic
+            " Syntax checking
+            " https://github.com/scrooloose/syntastic
 
-    " Glean
-        " https://github.com/spf13/spf13-vim
-        " http://spf13.com/post/ultimate-vim-config
+        " Glean
+            " https://github.com/spf13/spf13-vim
+            " http://spf13.com/post/ultimate-vim-config
 
-    " Maybe sometime.
-        " Plugin 'bronson/vim-trailing-whitespace'      " Trailing whitespace
-        " Plugin 'itchyny/lightline.vim'                " Superior to Airline?
-        " Plugin 'rizzatti/dash.vim'                    " Maybe Dash.app will play nice?
-        " Plugin 'terryma/vim-multiple-cursors'         " Multiple cursors
+        " Maybe sometime.
+            " Plugin 'bronson/vim-trailing-whitespace'      " Trailing whitespace
+            " Plugin 'itchyny/lightline.vim'                " Superior to Airline?
+            " Plugin 'rizzatti/dash.vim'                    " Maybe Dash.app will play nice?
+            " Plugin 'terryma/vim-multiple-cursors'         " Multiple cursors
 
-    " Old.
-        " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
-        " Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
-        " Plugin 'flazz/vim-colorschemes'               " ALL THE COLORSCHEMES.
+        " Old.
+            " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
+            " Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
+            " Plugin 'flazz/vim-colorschemes'               " ALL THE COLORSCHEMES.
 
-    " Vundle examples
-        " plugin on GitHub repo
-        " Plugin 'tpope/vim-fugitive'
-        " plugin from http://vim-scripts.org/vim/scripts.html
-        " Plugin 'L9'
-        " Git plugin not hosted on GitHub
-        " Plugin 'git://git.wincent.com/command-t.git'
-        " git repos on your local machine (i.e. when working on your own plugin)
-        " Plugin 'file:///home/gmarik/path/to/plugin'
-        " The sparkup vim script is in a subdirectory of this repo called vim.
-        " Pass the path to set the runtimepath properly.
-        " Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-        " Avoid a name conflict with L9
-        " Plugin 'user/L9', {'name': 'newL9'}
+        " Vundle examples
+            " plugin on GitHub repo
+            " Plugin 'tpope/vim-fugitive'
+            " plugin from http://vim-scripts.org/vim/scripts.html
+            " Plugin 'L9'
+            " Git plugin not hosted on GitHub
+            " Plugin 'git://git.wincent.com/command-t.git'
+            " git repos on your local machine (i.e. when working on your own plugin)
+            " Plugin 'file:///home/gmarik/path/to/plugin'
+            " The sparkup vim script is in a subdirectory of this repo called vim.
+            " Pass the path to set the runtimepath properly.
+            " Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+            " Avoid a name conflict with L9
+            " Plugin 'user/L9', {'name': 'newL9'}
 
-    call vundle#end()
+        call vundle#end()
+endif
 
 " Necessary basics
     syntax on
@@ -130,31 +143,33 @@
         set backup
         set undofile
 
-        if has ('win32')
-            set backupdir="$HOME\\vimfiles\\_backup, ."
-            set directory="$HOME\\vimfiles\\_swp, ."
-            set undodir="$HOME\\vimfiles\\_undo, ."
+        if WINDOWS()
+            set backupdir^=~\\vimfiles\\_backup//
+            set directory^=~\\vimfiles\\_swap//
+            set undodir^=~\\vimfiles\\_undo//
         else
             " Create the directories if need be
-            if !isdirectory("/Users/Justin/.vim/swp")
-                call mkdir("/Users/Justin/.vim/swp", "p")
+            if !isdirectory("~/.vim/swp")
+                call mkdir("~/.vim/swp", "p")
             endif
-            if !isdirectory("/Users/Justin/.vim/backup")
-                call mkdir("/Users/Justin/.vim/backup", "p")
+            if !isdirectory("~/.vim/backup")
+                call mkdir("~/.vim/backup", "p")
             endif
-            if !isdirectory("/Users/Justin/.vim/undo")
-                call mkdir("/Users/Justin/.vim/undo", "p")
+            if !isdirectory("~/.vim/undo")
+                call mkdir("~/.vim/undo", "p")
             endif
 
+            set backupdir^=~/.vim/backup//
+            set directory^=~/.vim/swp//
+            set undodir^=~/.vim/undo//
+        endif
+
+        if has("autocmd")
             augroup backup
                 au!
                 " Double slash does not actually work for backupdir, here's a fix
                 au BufWritePre * let &backupext='@'.substitute(substitute(substitute(expand('%:p:h'), '/', '%', 'g'), '\', '%', 'g'), ':', '', 'g')
             augroup end
-
-            set backupdir=~/.vim/backup//,.
-            set directory=~/.vim/swp//,.
-            set undodir=~/.vim/undo//,.
         endif
 
     " Display
@@ -163,7 +178,12 @@
             set cursorline
 
             set list
-            set listchars=trail:×,nbsp:⋅,tab:▸\ ,extends:»,precedes:«,eol:¬
+            if WINDOWS()
+                set listchars=trail:x,nbsp:*,tab:>-,extends:>,precedes:<, "eol:¬
+            else
+                set listchars=trail:Ã—,nbsp:â‹…,tab:â–¸\ ,extends:Â»,precedes:Â«,eol:Â¬
+            endif
+
             set linebreak
 
             set laststatus=2
@@ -174,6 +194,12 @@
             set lazyredraw
             set sidescroll=1
             set scrolloff=5         " x lines above/below cursor when scrolling
+
+            " hide unnecessary gui in gVim
+            if has("gui_running")
+                " remove menu bar, toolbar, and scroll bars
+                set guioptions-=mTrL
+            endif
 
         " Colors
             set t_Co=16
@@ -188,6 +214,7 @@
                     continue
                 endtry
             endfor
+
             set background=dark
 
             " ColorColumn
@@ -208,7 +235,12 @@
 
         " Font
             " TODO: All this will need to be moved after done
-            set guifont=Source\ Code\ Pro\ ExtraLight:h15
+            if WINDOWS()
+                set guifont=Source_Code_Pro_Light:h11
+            else
+                set guifont=Source\ Code\ Pro\ ExtraLight:h15
+            endif
+
             let g:Powerline_symbols = 'fancy'
 
         set showmatch
@@ -230,18 +262,14 @@
             let &showbreak='....'  " Add an indicator when lines are wrapped
             set cpoptions+=n       " Put the indicator in the number column
 
-            " Visually wraps text with indents
-                set breakindent
-                set breakindentopt="min:20,shift:8,sbr"
-
-        " Wildmenu
-            set wildmenu
-            set wildignore=*.sw?,*.so,*.o,*.kate-swp,*.lo,*.pyc
-            set wildmode=list:longest,full
+            " TODO: Make sure this works with vim8
+            if VIM8()
+                " Visually wraps text with indents
+                    set breakindent
+                    set breakindentopt="min:20,shift:8,sbr"
+            endif
 
     " Editing
-        set path+=**
-
         set backspace=indent,eol,start
 
         " http://vim.wikia.com/wiki/Selecting_your_pasted_text
@@ -249,7 +277,7 @@
 
         " Tabs
             set shiftwidth=4
-            set softtabstop=4
+            set softtabstop=-1
             set tabstop=4
             set expandtab
             set smarttab
@@ -257,12 +285,16 @@
         " Auto-completion
             set completeopt=longest,menuone
 
-        " set formatoptions=tcrqn
-        " TODO: make if statement, cuz needs vim8
-        set formatoptions+=tcqn2l1j
+        if VIM8()
+            set formatoptions+=tcqn2l1j
+        else
+            set formatoptions+=tcrqn
+        endif
 
-        " No more EOL stuff!!!! (Even though it's right :/ )
+        if VIM8()
+            " No more EOL stuff!!!! (Even though it's right :/ )
             set nofixendofline
+        endif
 
     " Fold
         set foldmethod=indent
@@ -276,7 +308,7 @@
         " TODO: _JS_ Risky bisky...
         "set foldclose=all
 
-        set foldtext=MyFoldText()
+        set foldtext=JSFoldText()
 
     " Search
         set hlsearch
@@ -299,26 +331,46 @@
     " Airline
         let g:airline#extensions#tabline#enabled = 1            " Adding tab line.
         let g:airline#extensions#tabline#show_close_button = 0
-        let g:airline_powerline_fonts=1                         " Be powerful.
 
-        "" " Be weak
-        "" let g:airline_powerline_fonts=0
-        "" let g:airline_left_sep = ''
-        "" let g:airline_right_sep = ''
+        " Be powerful, if you're on a decent OS
+        if WINDOWS()
+            let g:airline_powerline_fonts=0
+            let g:airline_left_sep = ''
+            let g:airline_right_sep = ''
+        else
+            let g:airline_powerline_fonts=1
+        endif
 
     " Align
 
         " Commas.
         vnoremap <leader>t, :Align ,<CR>:FixWhitespace<CR>
         nnoremap <leader>t, :Align ,<CR>
-
         nnoremap <leader>tacsubs :AlignCtrl p0P1lrrr<CR>
+
+    " Closetag
+        let g:closetag_filenames = "*.xml,*.html,*.xhtml,*.phtml,*.htm"
 
     " Diffchar
         let g:DiffUpdate = 1  " Interactively update highlights
 
     " Easymotion
+        nnoremap q Q
         map q <Plug>(easymotion-prefix)
+
+    " Emmet
+        " https://raw.githubusercontent.com/mattn/emmet-vim/master/TUTORIAL
+
+        let g:user_emmet_install_global = 0
+        autocmd FileType html,css EmmetInstall
+
+        let g:user_emmet_leader_key='<C-H>'
+
+        let g:user_emmet_settings = {
+         \  'xml' : {
+         \    'extends' : 'html',
+         \  },
+         \}
 
     " Fugitive
         if isdirectory(expand("~/.vim/bundle/vim-fugitive/"))
@@ -337,6 +389,16 @@
         endif
 
     " fzf
+        " Map FuzzyFinder commands.
+        noremap <Tab>b  :FufBuffer<cr>
+        " use :b
+
+        noremap <Tab>cd :FufDir<cr>
+        noremap <Tab>f  :FufFile<cr>
+        noremap <Tab>h  :FufHelp<cr>
+        noremap <Tab>j  :FufJumpList<cr>
+        noremap <Tab>l  :FufLine<cr>
+
         nnoremap <C-p> :FZF 
 
     " Gitgutter
@@ -347,12 +409,28 @@
 
     " Indentline
         let g:indentLine_enabled = 1
-        let g:indentLine_char = '│'
-        " TODO: Set a powerline font variable for stuff like this.
-        "let g:indentLine_char = '¦'
+        if WINDOWS()
+            let g:indentLine_char = '¦'
+        else
+            let g:indentLine_char = 'â”‚'
+        endif
         let g:indentLine_setColors = 1
         let g:indentLine_color_term = 10
         let g:indentLine_color_gui = '#586E75'
+
+        " Messing with conceal level
+        "let g:indentLine_noConcealCursor = 1
+        "set concealcursor=nc
+        "set conceallevel=1
+
+    " Javascript
+        let g:javascript_conceal_function       = "ƒ"
+        let g:javascript_conceal_null           = "ø"
+        let g:javascript_conceal_this           = "@"
+        let g:javascript_conceal_undefined      = "¿"
+
+    " Javascript Libraries Syntax
+        let g:used_javascript_libraries = 'jquery,underscore,angularjs,angularui,angularuirouterjasmine'
 
     " NERDCommenter
         let g:NERDCustomDelimiters = { 'rml': { 'left': "<!--", 'right': "-->" } }
@@ -376,6 +454,9 @@
             nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
             vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
         endif
+
+    " Solarized
+        " Purple numbers
 
     " UndoTree
         if isdirectory(expand("~/.vim/bundle/undotree/"))
@@ -421,7 +502,7 @@
         command! -range=% JSFixWhitespace call FixWhitespace(<line1>,<line2>)
 
     " Fold Text
-        function! MyFoldText()
+        function! JSFoldText()
             let line = getline(v:foldstart)
 
             let nucolwidth = &fdc + &number * &numberwidth
@@ -436,7 +517,11 @@
             let linespace = windowwidth - 3 - len(foldedlinecount)
             let line = strpart(line, 0, linespace)
             let fillcharcount = linespace - len(line)
-            return line . ' … ' . repeat(" ", fillcharcount) . foldedlinecount
+            if WINDOWS()
+                return line . ' ... ' . repeat(" ", fillcharcount-2) . foldedlinecount
+            else
+                return line . ' â€¦ ' . repeat(" ", fillcharcount) . foldedlinecount
+            endif
         endfunction
 
     " Fold Column
@@ -613,8 +698,8 @@
         noremap gV `[v`]
 
     " Macros with Q since EasyMotion takes q
-        nnoremap Q q
-        vnoremap Q q
+        nnoremap q Q
+        vnoremap q Q
 
     " Bubble lines
         "http://vimcasts.org/episodes/bubbling-text/
@@ -688,11 +773,13 @@
         inoremap <leader>w <ESC>:w<CR>a
 
         " Show word count
-        " nnoremap <leader>wo :w !wc -w<CR>
-        " nnoremap <leader>wc :w !wc -w<CR>
-        " TODO: vim8 / if windows
-        nnoremap <leader>wc :echo wordcount()["words"]<CR>
-        nnoremap <leader>wo :echo wordcount()["words"]<CR>
+        if VIM8()
+            nnoremap <leader>wc :echo wordcount()["words"]<CR>
+            nnoremap <leader>wo :echo wordcount()["words"]<CR>
+        elseif !WINDOWS()
+            nnoremap <leader>wo :w !wc -w<CR>
+            nnoremap <leader>wc :w !wc -w<CR>
+        endif
 
         " Works, but wonderfully and tremendously hacked.
         nnoremap <leader>gitconfig :%s/\n[^[]/THISTEXTNOTINFILE/<CR>:sort<CR>/\[core\]<CR>ddggP/[remote<CR>VNxggp/\[branch "master"\]<CR>dd?[remote<CR>p:%s/THISTEXTNOTINFILE/\r\t<CR>
@@ -753,6 +840,7 @@
 
                 "highlight MatchParen ctermbg=lightblue ctermfg=magenta
                 highlight MatchParen ctermbg=black ctermfg=magenta
+                highlight Number guifg=#6c71c4
 
             augroup random
                 au!
@@ -842,3 +930,28 @@
         command! -bang Qa qa<bang>
 
 " Testing
+" Turns off swap files if the file is unmodified
+" https://github.com/tpope/tpope/blob/338a4e89494bfe4928d3a0221c3ea1a7f09937cb/.vimrc#L328-L329
+"autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+"  \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+
+augroup ANGULAR
+    autocmd!
+    autocmd BufLeave *.controller.js     :normal! mC
+    autocmd BufLeave *.directive.js      :normal! mD
+    autocmd BufLeave *.html              :normal! mH
+    autocmd BufLeave *.js                :normal! mJ
+    autocmd BufLeave *.css,*.less        :normal! mL
+    autocmd BufLeave *.module.js         :normal! mM
+    autocmd BufLeave *.service.js        :normal! mS
+    autocmd BufLeave *.service.js        :normal! mF
+augroup end
+
+nmap - <nop>
+
+if WINDOWS()
+    cd ~
+endif
+
+command! Difft windo diffthis
+command! Diffo windo diffoff
