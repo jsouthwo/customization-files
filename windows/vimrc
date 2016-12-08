@@ -6,70 +6,19 @@
     let mapleader=","
     nnoremap \ ,
 
+    if has('win32')
+        source $VIMRUNTIME/mswin.vim
+        behave mswin
+    endif
+
 " }}}
 
 " Pathogen {{{
 
     call pathogen#infect()
-    " call pathogen#helptags()
+    call pathogen#helptags()
 
-    """"""""""""""""""""""""""""""""""""""""""""
-    " PLUGINS
-    """"""""""""""""""""""""""""""""""""""""""""
-    "Plugin 'powerline/fonts'                        " Powerline fonts for Airline
-    "Plugin 'tpope/vim-endwise'                      " Adds 'end' keywords for some languages
-
-    " CURRENTLY BROKEN. NEEDS VIM UPDATE
-    " Plugin 'vim-scripts/diffchar.vim'               " Do diffs by char, not lines
-
-    " <C-p>
-    " https://github.com/kien/ctrlp.vim
-
-    " Snippets
-    " https://github.com/SirVer/ultisnips           " Best?
-    " https://github.com/garbas/vim-snipmate
-    " https://github.com/honza/vim-snippets
-    " https://github.com/msanders/snipmate.vim
-    " https://github.com/Shougo/neosnippet.vim
-
-    " Completion
-    " Plugin 'Valloric/YouCompleteMe'               " Code completion
-    " neocomplete
-
-    " Stuff from spf13 or nearby
-    " https://github.com/junegunn/vim-xmark         " Markdown preview
-
-    " Alignment
-    " https://github.com/godlygeek/tabular
-    " https://github.com/junegunn/vim-easy-align
-
-    " Git stuff instead of default GitGutter
-    " https://github.com/tpope/vim-fugitive
-
-    " Worth it???
-    " https://github.com/spf13/spf13-vim
-
-    " Syntax checking
-    " https://github.com/scrooloose/syntastic
-
-    " Different auto-close
-    " https://github.com/spf13/vim-autoclose
-
-    " http://spf13.com/post/ultimate-vim-config
-
-
-    """ TEST LATER? """
-    " Plugin 'itchyny/lightline.vim'                " Superior to Airline?
-    " Plugin 'terryma/vim-multiple-cursors'         " Multiple cursors
-
-
-    """ FORMERLY USED and worth keeping around """
-    " Plugin 'bronson/vim-trailing-whitespace'      " Trailing whitespace
-    " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
-    " Plugin 'nathanaelkane/vim-indent-guides'      " Indent guides
-    " Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
-
-    """ }}}
+" }}}
 
 " Necessary basics {{{
 
@@ -79,12 +28,12 @@
 " }}}
 
 " SETS {{{
-set history=1000
-set hidden
-set undofile
+    set history=1000
+    set hidden
+    set undofile
 
-" Dangerous...
-" set autowrite
+    " Dangerous...
+    " set autowrite
 
 
     " Display {{{
@@ -94,16 +43,17 @@ set undofile
 
             set t_Co=16
             for scheme in [ 'solarized', 'molokai', 'desert', 'default' ]
-             try
-                if scheme == 'molokai'
-                    set t_Co=256
-                endif
-                execute 'colorscheme '.scheme
-                break
-              catch
-                continue
-              endtry
+                try
+                    if scheme == 'molokai'
+                        set t_Co=256
+                    endif
+                    execute 'colorscheme '.scheme
+                    break
+                catch
+                    continue
+                endtry
             endfor
+
             set background=dark
 
         " }}}
@@ -207,15 +157,17 @@ set undofile
         let g:airline#extensions#tabline#enabled = 1
         let g:airline#extensions#tabline#show_close_button = 0
 
-        " Be powerful...
-        " let g:airline_powerline_fonts=1
-        " Or not, cause Windows.
-        let g:airline_powerline_fonts=0
+        " Be powerful, if you're on a decent OS
+        if has('win32')
+            let g:airline_powerline_fonts=0
+        else
+            let g:airline_powerline_fonts=1
+        endif
 
     " }}}
 
     " ALIGN {{{
-    "
+
         " Commas.
         vnoremap <leader>t, :Align ,<CR>:FixWhitespace<CR>
         nnoremap <leader>t, :Align ,<CR>
@@ -224,19 +176,47 @@ set undofile
 
     " }}}
 
-    " DELIMITMATE {{{
+    " CLOSETAG {{{
 
-        " Expand all <CR>s
-        let g:delimitmat_expand_cr = 2
-
-        " Expand <SPACE>
-        let g:delimitmat_expand_space = 1
+        let g:closetag_filenames = "*.xml,*.html,*.xhtml,*.phtml,*.htm"
 
     " }}}
 
     " EASYMOTION {{{
 
-        map Q <Plug>(easymotion-prefix)
+        nnoremap q Q
+        map q <Plug>(easymotion-prefix)
+
+    " }}}
+
+    " EMMET {{{
+
+        " https://raw.githubusercontent.com/mattn/emmet-vim/master/TUTORIAL
+
+        let g:user_emmet_install_global = 0
+        autocmd FileType html,css EmmetInstall
+
+        let g:user_emmet_leader_key='<C-H>'
+
+        let g:user_emmet_settings = {
+         \  'xml' : {
+         \    'extends' : 'html',
+         \  },
+         \}
+
+    " }}}
+
+    " FUZZYFINDER {{{
+
+        " Map FuzzyFinder commands.
+        noremap <Tab>b  :FufBuffer<cr>
+        " use :b
+
+        noremap <Tab>cd :FufDir<cr>
+        noremap <Tab>f  :FufFile<cr>
+        noremap <Tab>h  :FufHelp<cr>
+        noremap <Tab>j  :FufJumpList<cr>
+        noremap <Tab>l  :FufLine<cr>
 
     " }}}
 
@@ -246,6 +226,24 @@ set undofile
         let g:indentLine_char = '¦'
         " Can't find the right color
         let g:indentLine_color_gui = '#586E75'
+        "let g:indentLine_noConcealCursor = 1
+        "set concealcursor=nc
+        "set conceallevel=1
+
+    " }}}
+
+    " JAVASCRIPT {{{
+
+        let g:javascript_conceal_function       = "ƒ"
+        let g:javascript_conceal_null           = "ø"
+        let g:javascript_conceal_this           = "@"
+        let g:javascript_conceal_undefined      = "¿"
+
+    " }}}
+
+    " JAVASCRIPT LIBRARIES SYNTAX {{{
+
+        let g:used_javascript_libraries = 'jquery,underscore,angularjs,angularui,angularuirouterjasmine'
 
     " }}}
 
@@ -302,6 +300,20 @@ set undofile
 " }}}
 
 " FUNCTIONS {{{
+
+    " Home Zero {{{
+
+        function! ToggleHomeZero()
+            let pos = getpos('.')
+            execute "normal! ^"
+            if pos == getpos('.')
+                execute "normal! 0"
+            endif
+        endfunction
+
+        nnoremap 0 :call ToggleHomeZero()<CR>
+
+    " }}}
 
     " Numbers {{{
 
@@ -495,10 +507,6 @@ set undofile
 "-------------------------- TODO: Editing the vimrc----------------------------"
 "------------------------------------------------------------------------------"
 
-" Just not part of my workflow right now.
-" set autochdir
-" autocmd BufEnter * silent! lcd %:p:h " Does same as autochdir.
-
 " TODO: Move to python autocmd
 let python_highlight_all = 1
 
@@ -523,19 +531,20 @@ set whichwrap=b,s,h,l,<,>,[,],~
 " }}}
 
 " AUTOS {{{
+
     " Whitespace {{{
 
         augroup Whitespace
-            au!
-            au BufEnter    * match ExtraWhitespace /\s\+$/
-            au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-            au InsertLeave * match ExtraWhitespace /\s\+$/
+            autocmd!
+            autocmd BufEnter    * match ExtraWhitespace /\s\+$/
+            autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+            autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 
             " Set extra whitespace to Solarized colors (bg=red, fg=base0)
-            au ColorScheme * highlight ExtraWhitespace guibg=#dc322f
+            autocmd ColorScheme * highlight ExtraWhitespace guibg=#dc322f
                         \ guifg=#839496
 
-            au FileType ada,
+            autocmd FileType ada,
                        \c,
                        \cpp,
                        \html,
@@ -548,12 +557,14 @@ set whichwrap=b,s,h,l,<,>,[,],~
         augroup end
         highlight ExtraWhitespace guibg=#dc322f guifg=#839496
 
+        highlight! link Conceal Type
+
     " }}}
 
     " txt {{{
 
         augroup txt
-            au BufRead,BufNewFile *.txt     setfiletype text
+            autocmd BufRead,BufNewFile *.txt     setfiletype text
 
             " Set autoindent and spell check for text files
             autocmd FileType text setlocal ai spell
@@ -564,10 +575,10 @@ set whichwrap=b,s,h,l,<,>,[,],~
     " Ada {{{
 
         augroup ADA
-            au!
-            au BufRead,BufNewFile *.ads setfiletype ada
-            au BufRead,BufNewFile *.adb setfiletype ada
-            au FileType ada setlocal sts=3 ts=3 sw=3
+            autocmd!
+            autocmd BufRead,BufNewFile *.ads setfiletype ada
+            autocmd BufRead,BufNewFile *.adb setfiletype ada
+            autocmd FileType ada setlocal sts=3 ts=3 sw=3
         augroup end
 
     " }}}
@@ -575,11 +586,11 @@ set whichwrap=b,s,h,l,<,>,[,],~
     " asp.net {{{
 
         augroup ASP
-            au!
-            au BufRead,BufNewFile *.aspx setfiletype aspnet
-            au BufRead,BufNewFile *.ascx setfiletype aspnet
-            au BufRead,BufNewFile *.asmx setfiletype aspnet
-            au FileType aspnet setlocal sts=4 ts=4 sw=4
+            autocmd!
+            autocmd BufRead,BufNewFile *.aspx setfiletype aspnet
+            autocmd BufRead,BufNewFile *.ascx setfiletype aspnet
+            autocmd BufRead,BufNewFile *.asmx setfiletype aspnet
+            autocmd FileType aspnet setlocal sts=4 ts=4 sw=4
         augroup end
 
     " }}}
@@ -587,28 +598,18 @@ set whichwrap=b,s,h,l,<,>,[,],~
     " vimrc {{{
 
         augroup vimrc
-            au!
+            autocmd!
             " TODO: Get this working {{{
                 if has('win32')
                     let vim_files='~/_vimrc,~/vimfiles/rc/*'
                 else  " *nixish
                     let vim_files='~/.vimrc,~/.vim/rc/*'
                 endif
-                autocmd bufwritepost vim_files source %
+                autocmd Bufwritepost vim_files source %
                 autocmd BufWritePost vim_files AirlineRefresh
                 autocmd BufWritePost vim_files IndentLinesReset
             " }}}
-
-            if has('win32')
-                autocmd bufwritepost ~/_vimrc,~/vimfiles/rc/* source %
-                autocmd BufWritePost ~/_vimrc,~/vimfiles/rc/* AirlineRefresh
-                autocmd BufWritePost ~/_vimrc,~/vimfiles/rc/* IndentLinesReset
-            else
-                autocmd bufwritepost ~/.vimrc,~/.vim/rc/* source %
-                autocmd BufWritePost ~/.vimrc,~/.vim/rc/* AirlineRefresh
-                autocmd BufWritePost ~/.vimrc,~/.vim/rc/* IndentLinesReset
-            endif
-        augroup END
+        augroup end
 
     " }}}
 
@@ -632,7 +633,7 @@ set whichwrap=b,s,h,l,<,>,[,],~
 
     " Autoformat {{{
 
-        set textwidth=80
+        "set textwidth=80
         " :h fo-table
         set formatoptions+=tcrqnj
         " Adds from textwidth (81, 82)
@@ -667,21 +668,25 @@ set lazyredraw
 " }}}
 
     " Backups {{{
+
         set backup writebackup
         if has('win32')
-            set backupdir=~\vimfiles\_backup,.
-            set directory=~\vimfiles\_swp,.
-            set undodir=~\vimfiles\_undo\\,.
+            set backupdir^=~\\vimfiles\\_backup//
+            set directory^=~\\vimfiles\\_swap//
+            set undodir^=~\\vimfiles\\_undo//
         else
             set backupdir=~/.vim/backup,~/scratch/vim_backup,~/scratch/,.
         endif
+
     " }}}
-cd ~
+
 " }}}
+
 inoremap <C-E> <C-X><C-E>
 inoremap <C-Y> <C-X><C-Y>
-ab teh the
-ab fro for
+abbreviate teh the
+abbreviate fro for
+abbreviate flase false
 
 "Bubble single lines (kicks butt)
 "http://vimcasts.org/episodes/bubbling-text/
@@ -692,27 +697,56 @@ nmap <C-Down> ddp
 vmap <C-Up> xkP`[V`]
 vmap <C-Down> xp`[V`]
 
-" set pastetoggle=<leader>p
-
-source $VIMRUNTIME/mswin.vim
-behave mswin
-
-map <C-y> <C-y>
-map <C-e> <C-e>
+" Overwrite >behave mswin
 map <C-a> <C-a>
+map <C-e> <C-e>
+map <C-y> <C-y>
 
 " Default tabbing
-" :Tabularize /,/r0r1
 map <leader><tab> <Esc>:Tabularize /,/r0r1<CR>
 
-" Count passes and fails
-" pneumonic: count (total, case) (passes,fails)
-nnoremap <leader>ctp :%s/PASSED/PASSED/n<CR>
-nnoremap <leader>ctf :%s/FAILED/FAILED/n<CR>
-nnoremap <leader>ccp :%s/PASSED/PASSED/gn<CR>
-nnoremap <leader>ccf :%s/FAILED/FAILED/gn<CR>
-
 set sidescroll=1
-set autochdir
 
-cd C:\IPDS
+" Testing
+" Turns off swap files if the file is unmodified
+" https://github.com/tpope/tpope/blob/338a4e89494bfe4928d3a0221c3ea1a7f09937cb/.vimrc#L328-L329
+"autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+"  \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+
+augroup ANGULAR
+    autocmd!
+    autocmd BufLeave *.controller.js     :normal! mC
+    autocmd BufLeave *.directive.js      :normal! mD
+    autocmd BufLeave *.html              :normal! mH
+    autocmd BufLeave *.js                :normal! mJ
+    autocmd BufLeave *.css,*.less        :normal! mL
+    autocmd BufLeave *.module.js         :normal! mM
+    autocmd BufLeave *.service.js        :normal! mS
+    autocmd BufLeave *.service.js        :normal! mF
+augroup end
+
+nnoremap ' `
+nnoremap ` '
+
+" hide unnecessary gui in gVim
+if has("gui_running")
+    set guioptions-=m  " remove menu bar
+    set guioptions-=T  " remove toolbar
+    set guioptions-=r  " remove right-hand scroll bar
+    set guioptions-=L  " remove left-hand scroll bar
+end
+
+nmap <Leader>syn :call <SID>SynStack()<CR>
+
+function! <SID>SynStack()
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
+
+map <F3> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">" . " FG:" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"fg#")<CR>
+
+nmap - <nop>
+
+cd ~
