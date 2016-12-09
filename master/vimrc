@@ -254,6 +254,11 @@ endif
                         \.*\.swp$
                         \'
 
+        " Wildmenu
+            set wildmenu
+            set wildignore=*.sw*,*.so,*.o,*.kate-swp,*.lo,*.pyc
+            set wildmode=list:longest,full
+
         " Wrapping
             set wrap
             set whichwrap=b,s,h,l,<,>,[,]  " Only doesn't include ~
