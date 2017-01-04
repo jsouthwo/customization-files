@@ -19,7 +19,7 @@
     " Basics
         set nocompatible
 
-        if !WINDOWS()
+        if WINDOWS()
             set shell=/bin/sh
             source $VIMRUNTIME/mswin.vim
             behave mswin
@@ -198,7 +198,10 @@ endif
             " hide unnecessary gui in gVim
             if has("gui_running")
                 " remove menu bar, toolbar, and scroll bars
-                set guioptions-=mTrL
+                set guioptions-=m
+                set guioptions-=T
+                set guioptions-=r
+                set guioptions-=L
             endif
 
         " Colors
@@ -280,6 +283,10 @@ endif
         " http://vim.wikia.com/wiki/Selecting_your_pasted_text
         nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
 
+        let g:html_indent_inctags = "html,body,head,tbody,div"
+        let g:html_indent_script1 = "inc"
+        let g:html_indent_style = "inc"
+
         " Tabs
             set shiftwidth=4
             set softtabstop=-1
@@ -309,7 +316,8 @@ endif
         set foldcolumn=4       " Already set above
         set foldminlines=3
         set foldlevelstart=5
-        set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
+        " Remove `block` so highlighting folds makes more sense
+        set foldopen=hor,insert,jump,mark,percent,quickfix,search,tag,undo
         " TODO: _JS_ Risky bisky...
         "set foldclose=all
 
@@ -360,7 +368,8 @@ endif
         let g:DiffUpdate = 1  " Interactively update highlights
 
     " Easymotion
-        nnoremap q Q
+        nnoremap Q q
+        vnoremap Q q
         map q <Plug>(easymotion-prefix)
 
     " Emmet
@@ -369,7 +378,7 @@ endif
         let g:user_emmet_install_global = 0
         autocmd FileType html,css EmmetInstall
 
-        let g:user_emmet_leader_key='<C-H>'
+        let g:user_emmet_leader_key='<C-S-H>'
 
         let g:user_emmet_settings = {
          \  'xml' : {
@@ -509,6 +518,11 @@ endif
     " Fold Text
         function! JSFoldText()
             let line = getline(v:foldstart)
+            if WINDOWS()
+                let ellipsis = ' ... '
+            else
+                let ellipsis = ' â€¦ '
+            endif
 
             let nucolwidth = &fdc + &number * &numberwidth
             "let windowwidth = winwidth(0) - nucolwidth - 3
@@ -519,13 +533,13 @@ endif
             let onetab = strpart('          ', 0, &tabstop)
             let line = substitute(line, '\t', onetab, 'g')
 
-            let linespace = windowwidth - 3 - len(foldedlinecount)
+            let linespace = windowwidth - len(ellipsis) - len(foldedlinecount)
             let line = strpart(line, 0, linespace)
             let fillcharcount = linespace - len(line)
             if WINDOWS()
-                return line . ' ... ' . repeat(" ", fillcharcount-2) . foldedlinecount
+                return line . ellipsis . repeat(" ", fillcharcount) . foldedlinecount
             else
-                return line . ' â€¦ ' . repeat(" ", fillcharcount) . foldedlinecount
+                return line . ellipsis . repeat(" ", fillcharcount) . foldedlinecount
             endif
         endfunction
 
@@ -617,6 +631,8 @@ endif
 
     " Make Y act like C and D with less janky yanking
     " https://ddrscott.github.io/blog/2016/yank-without-jank/
+        nnoremap Y myy$`y
+
         vnoremap y myy`y
         vnoremap Y myy$`y
         vnoremap <expr>y "my\"" . v:register . "y`y"
@@ -666,15 +682,11 @@ endif
         "inoremap <silent> <Up> <C-o>gk         " Not these
         "inoremap <silent> <Down> <C-o>gj       " Not these
 
-    " Speedy scrolling
-        nnoremap <C-e> 2<C-e>
-        vnoremap <C-e> 2<C-e>
-        nnoremap <C-y> 2<C-y>
-        vnoremap <C-y> 2<C-y>
-
-        " But keep true scrolling manageable
-            map <ScrollWheelUp> <C-y>
-            map <ScrollWheelDown> <C-e>
+    " Speedy scrolling with Meta
+        nnoremap <M-e> 2<C-e>
+        vnoremap <M-e> 2<C-e>
+        nnoremap <M-y> 2<C-y>
+        vnoremap <M-y> 2<C-y>
 
     " Enable emacs-style editing of command-line mode
         cnoremap <C-A>      <Home>
@@ -701,10 +713,6 @@ endif
 
         " Visually select the text that was last edited/pasted (Vimcast#26).
         noremap gV `[v`]
-
-    " Macros with Q since EasyMotion takes q
-        nnoremap q Q
-        vnoremap q Q
 
     " Bubble lines
         "http://vimcasts.org/episodes/bubbling-text/
@@ -796,7 +804,11 @@ endif
         nnoremap <silent> <leader>/ :nohlsearch<CR>
 
         " Edit my rc
-        nnoremap <leader>\ :tabe ~/.vimrc<CR>
+        if WINDOWS()
+            nnoremap <leader>\ :tabe ~/_vimrc<CR>
+        else
+            nnoremap <leader>\ :tabe ~/.vimrc<CR>
+        endif
 
         " Default tabbing
             map <leader><tab> <Esc>:Tabularize /,/r0r1<CR>
@@ -830,21 +842,17 @@ endif
                 au BufEnter    * match ExtraWhitespace /\s\+$/
                 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
                 au InsertLeave * match ExtraWhitespace /\s\+$/
-                au ColorScheme * highlight ExtraWhitespace ctermfg=red guifg=red ctermbg=darkgrey guibg=darkgrey
-                " TODO: Fix how this interacts with the adjustible colorschemes
-                colorscheme solarized
+                au ColorScheme * highlight ExtraWhitespace ctermfg=red guifg=#dc322f ctermbg=darkgrey guibg=#002b36
                 au ColorScheme * highlight EndOfBuffer ctermbg=black ctermfg=darkblue guibg=black guifg=darkblue
             augroup end
 
             " TODO: Random crap I have to put after solarized...
                 "Invisible character colors
-                " nbsp, tab, trail
-                " highlight SpecialKey guifg=red guibg=darkgrey ctermfg=red ctermbg=darkgrey
                 " TODO: This don't belong here
-                highlight SpecialKey guibg=darkgrey ctermbg=darkgrey
-
-                "highlight MatchParen ctermbg=lightblue ctermfg=magenta
-                highlight MatchParen ctermbg=black ctermfg=magenta
+                " nbsp, tab, trail
+                highlight SpecialKey guifg=#586e75 guibg=#002b36 ctermbg=darkgrey
+                highlight ExtraWhitespace ctermfg=red guifg=#dc322f ctermbg=darkgrey guibg=#002b36
+                highlight MatchParen ctermbg=black ctermfg=magenta guibg=#002b36 guifg=#d33682
                 highlight Number guifg=#6c71c4
 
             augroup random
@@ -960,3 +968,8 @@ endif
 
 command! Difft windo diffthis
 command! Diffo windo diffoff
+if WINDOWS()
+    set path=.\**
+else
+    set path=$PWD/**
+endif
