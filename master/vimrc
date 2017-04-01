@@ -20,9 +20,10 @@
         set nocompatible
 
         if WINDOWS()
-            set shell=/bin/sh
             source $VIMRUNTIME/mswin.vim
             behave mswin
+        else
+            set shell=/bin/sh
         endif
 
     " TODO: Implement right after syncing all this (12-8-16)
@@ -149,19 +150,15 @@ endif
             set undodir^=~\\vimfiles\\_undo//
         else
             " Create the directories if need be
-            if !isdirectory("~/.vim/swp")
-                call mkdir("~/.vim/swp", "p")
+            if !isdirectory("/Users/Justin/.vim/swp")
+                call mkdir("/Users/Justin/.vim/swp", "p")
             endif
-            if !isdirectory("~/.vim/backup")
-                call mkdir("~/.vim/backup", "p")
+            if !isdirectory("/Users/Justin/.vim/backup")
+                call mkdir("/Users/Justin/.vim/backup", "p")
             endif
-            if !isdirectory("~/.vim/undo")
-                call mkdir("~/.vim/undo", "p")
+            if !isdirectory("/Users/Justin/.vim/undo")
+                call mkdir("/Users/Justin/.vim/undo", "p")
             endif
-
-            set backupdir^=~/.vim/backup//
-            set directory^=~/.vim/swp//
-            set undodir^=~/.vim/undo//
         endif
 
         if has("autocmd")
@@ -172,6 +169,10 @@ endif
             augroup end
         endif
 
+        set backupdir^=~/.vim/backup//,.
+        set directory^=~/.vim/swp//,.
+        set undodir^=~/.vim/undo//,.
+
     " Display
         " General
             set number
@@ -181,7 +182,7 @@ endif
             if WINDOWS()
                 set listchars=trail:x,nbsp:*,tab:>-,extends:>,precedes:<, "eol:¬
             else
-                set listchars=trail:Ã—,nbsp:â‹…,tab:â–¸\ ,extends:Â»,precedes:Â«,eol:Â¬
+                set listchars=trail:×,nbsp:⋅,tab:▸\ ,extends:»,precedes:«,eol:¬
             endif
 
             set linebreak
@@ -270,7 +271,6 @@ endif
             let &showbreak='....'  " Add an indicator when lines are wrapped
             set cpoptions+=n       " Put the indicator in the number column
 
-            " TODO: Make sure this works with vim8
             if VIM8()
                 " Visually wraps text with indents
                     set breakindent
@@ -278,6 +278,13 @@ endif
             endif
 
     " Editing
+        if WINDOWS()
+            set path=.\**
+        else
+            " set path+=**
+            set path=$PWD/**
+        endif
+
         set backspace=indent,eol,start
 
         " http://vim.wikia.com/wiki/Selecting_your_pasted_text
@@ -356,10 +363,13 @@ endif
 
     " Align
 
-        " Commas.
-        vnoremap <leader>t, :Align ,<CR>:FixWhitespace<CR>
-        nnoremap <leader>t, :Align ,<CR>
-        nnoremap <leader>tacsubs :AlignCtrl p0P1lrrr<CR>
+        if isdirectory(expand("!/.vim/bundle/Align"))
+            " Commas.
+            vnoremap <leader>t, :Align ,<CR>:FixWhitespace<CR>
+            nnoremap <leader>t, :Align ,<CR>
+
+            nnoremap <leader>tacsubs :AlignCtrl p0P1lrrr<CR>
+        endif
 
     " Closetag
         let g:closetag_filenames = "*.xml,*.html,*.xhtml,*.phtml,*.htm"
@@ -423,10 +433,11 @@ endif
 
     " Indentline
         let g:indentLine_enabled = 1
+        " TODO: Set a powerline font variable for stuff like this.
         if WINDOWS()
             let g:indentLine_char = '¦'
         else
-            let g:indentLine_char = 'â”‚'
+            let g:indentLine_char = '│'
         endif
         let g:indentLine_setColors = 1
         let g:indentLine_color_term = 10
@@ -468,9 +479,6 @@ endif
             nmap <Leader>a<Bar> :Tabularize /<Bar><CR>
             vmap <Leader>a<Bar> :Tabularize /<Bar><CR>
         endif
-
-    " Solarized
-        " Purple numbers
 
     " UndoTree
         if isdirectory(expand("~/.vim/bundle/undotree/"))
@@ -521,7 +529,7 @@ endif
             if WINDOWS()
                 let ellipsis = ' ... '
             else
-                let ellipsis = ' â€¦ '
+                let ellipsis = ' … '
             endif
 
             let nucolwidth = &fdc + &number * &numberwidth
@@ -536,11 +544,8 @@ endif
             let linespace = windowwidth - len(ellipsis) - len(foldedlinecount)
             let line = strpart(line, 0, linespace)
             let fillcharcount = linespace - len(line)
-            if WINDOWS()
-                return line . ellipsis . repeat(" ", fillcharcount) . foldedlinecount
-            else
-                return line . ellipsis . repeat(" ", fillcharcount) . foldedlinecount
-            endif
+
+            return line . ellipsis . repeat(" ", fillcharcount) . foldedlinecount
         endfunction
 
     " Fold Column
@@ -921,13 +926,13 @@ endif
         abbreviate fro for
         abbreviate lorem Lorem ipsum dolor sit amet
         abbreviate llorem Lorem ipsum dolor sit amet, in nam iusto appellantur, an meis consequat voluptaria pro. Eos aeque indoctum gloriatur ad. Ut mei veritus suavitate, nulla congue nominavi sea ei. Possim repudiandae per ea.
-        abbreviate lllorem Lorem ipsum dolor sit amet, est rebum molestie ad, cu novum disputando mei. Ancillae similique deterruisset cu per. Oratio disputationi cum cu, eos eu pericula accusamus disputationi, facilis philosophia eu nec. Ne eos diceret consequuntur.
+        abbreviate lllorem Lorem ipsum dolor sit amet, est rebum molestie ad, cu novum disputando mei. Ancillae similique deterruisset cu per. Oratio disputationi cum cu, eos eu pericula accusamus disputationi, facilis philosophia eu nec. Ne eos diceret consequuntur. 
                     \
-                    \Ei insolens interpretaris eum, ne facilisis adipiscing eum, stet posse eu vis. Quo libris dicunt no, no menandri persequeris ius, quaerendum scriptorem has in. Duis officiis aliquando in per, facete contentiones ad his. Fuisset assentior eu ius, mel ea prompta tacimates, ne summo dicunt platonem mea.
+                    \Ei insolens interpretaris eum, ne facilisis adipiscing eum, stet posse eu vis. Quo libris dicunt no, no menandri persequeris ius, quaerendum scriptorem has in. Duis officiis aliquando in per, facete contentiones ad his. Fuisset assentior eu ius, mel ea prompta tacimates, ne summo dicunt platonem mea. 
                     \
-                    \Modo volumus pertinacia at has. No vim wisi graece liberavisse, qui no omnium volumus. Vix harum mundi prodesset ea, pri solum eripuit iracundia et. Choro tempor maluisset no his, has ad cibo alterum, usu amet mollis ne. Animal quaeque ex pro, mei modus malis petentium ut. Vel in vero choro labores, possim pericula no sea, simul electram ut eam.
+                    \Modo volumus pertinacia at has. No vim wisi graece liberavisse, qui no omnium volumus. Vix harum mundi prodesset ea, pri solum eripuit iracundia et. Choro tempor maluisset no his, has ad cibo alterum, usu amet mollis ne. Animal quaeque ex pro, mei modus malis petentium ut. Vel in vero choro labores, possim pericula no sea, simul electram ut eam. 
                     \
-                    \Ad vix commune ullamcorper consequuntur, error honestatis an duo. Petentium deseruisse in vim, sit ne sonet partem neglegentur. Choro cetero dolorem an qui, ea porro legimus duo. Per ut case munere, wisi perpetua maiestatis at vix. Vocent delectus ocurreret duo ad, magna fuisset no quo. Ad cum lucilius qualisque, duis dicta nemore ei vim, alia saperet appellantur id mel. Nam illud nostro suscipiantur ex, ne nominati rationibus cum.
+                    \Ad vix commune ullamcorper consequuntur, error honestatis an duo. Petentium deseruisse in vim, sit ne sonet partem neglegentur. Choro cetero dolorem an qui, ea porro legimus duo. Per ut case munere, wisi perpetua maiestatis at vix. Vocent delectus ocurreret duo ad, magna fuisset no quo. Ad cum lucilius qualisque, duis dicta nemore ei vim, alia saperet appellantur id mel. Nam illud nostro suscipiantur ex, ne nominati rationibus cum. 
                     \
                     \Vix tantas corrumpit in, est legere doctus accumsan no, ad pri sumo idque interesset. Ei eam impedit reprimique, vim ad case prima option. Idque choro mucius sed et, error scaevola atomorum quo ex. Cum homero admodum expetenda ut. Eos eu tation tritani appellantur, dolor libris vis et.
 
@@ -968,8 +973,3 @@ endif
 
 command! Difft windo diffthis
 command! Diffo windo diffoff
-if WINDOWS()
-    set path=.\**
-else
-    set path=$PWD/**
-endif
