@@ -1,3 +1,6 @@
+scriptencoding utf-8
+set encoding=utf-8
+
 " TODO: https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
 " TODO: Look here before searching plugins. https://www.vi-improved.org/
 
@@ -53,24 +56,29 @@ else
             Plugin 'airblade/vim-gitgutter'             " git in the sidebar
             Plugin 'ajh17/VimCompletesMe'               " Completion
             Plugin 'altercation/vim-colors-solarized'   " Solarized
+            Plugin 'alvan/vim-closetag'                 " Close HTML tags
+            Plugin 'aspnet.vim--Abshire'                " ASP.net stuff
             Plugin 'bling/vim-airline'                  " Airline
             Plugin 'vim-airline/vim-airline-themes'     " Solarized themes
             Plugin 'cohama/lexima.vim'                  " Better autoclose
             Plugin 'Gundo'                              " Undotree
             Plugin 'henrik/vim-indexed-search'          " Shows count while searching
+            Plugin 'L9'  " Must be a dependency for something else, as it doesn't really do anything
             Plugin 'junegunn/fzf'                       " Fuzzy file finder
             Plugin 'Lokaltog/vim-easymotion'            " Easymotion
             Plugin 'matchit.zip'                        " Matchit
             Plugin 'mhinz/vim-startify'                 " Startup screen
+            Plugin 'othree/javascript-libraries-syntax.vim' " JS libs syntax
+            Plugin 'pangloss/vim-javascript'            " General JS support
             Plugin 'powerline/fonts'                    " Powerline fonts for Airline
-            "Plugin 'rickhowe/diffchar.vim'              " Do diffs by char, not lines
             Plugin 'scrooloose/nerdcommenter'           " Commenting
             Plugin 'tommcdo/vim-lion'                   " Alignment
+            Plugin 'tpope/vim-abolish'                  " Awesome substution
             Plugin 'tpope/vim-endwise'                  " Adds 'end' keywords for some languages
             Plugin 'tpope/vim-surround'                 " ds, cs, ys
             Plugin 'tpope/vim-repeat'                   " . for plugins
             Plugin 'tpope/vim-speeddating'              " Increment dates
-            Plugin 'tpope/vim-vinegar'                  " Enhanse netrw
+            Plugin 'tpope/vim-vinegar'                  " Enhance netrw
 
         " Todo
             " Different auto-close
@@ -88,10 +96,6 @@ else
 
             " Stuff from spf13 or nearby
             " https://github.com/junegunn/vim-xmark         " Markdown preview
-
-            " Alignment
-            " https://github.com/godlygeek/tabular
-            " https://github.com/junegunn/vim-easy-align
 
             " Better git stuff than GitGutter
             " https://github.com/tpope/vim-fugitive
@@ -142,6 +146,8 @@ endif
 
     " Backups
         set backup
+        " https://github.com/karma-runner/karma/issues/199#issue-8825748
+        set backupcopy=yes
         set undofile
 
         if WINDOWS()
@@ -159,6 +165,10 @@ endif
             if !isdirectory("/Users/Justin/.vim/undo")
                 call mkdir("/Users/Justin/.vim/undo", "p")
             endif
+
+            set backupdir^=~/.vim/backup//,.
+            set directory^=~/.vim/swp//,.
+            set undodir^=~/.vim/undo//,.
         endif
 
         if has("autocmd")
@@ -169,10 +179,6 @@ endif
             augroup end
         endif
 
-        set backupdir^=~/.vim/backup//,.
-        set directory^=~/.vim/swp//,.
-        set undodir^=~/.vim/undo//,.
-
     " Display
         " General
             set number
@@ -180,7 +186,7 @@ endif
 
             set list
             if WINDOWS()
-                set listchars=trail:x,nbsp:*,tab:>-,extends:>,precedes:<, "eol:¬
+                set listchars=trail:x,nbsp:*,tab:>-,extends:>,precedes:<
             else
                 set listchars=trail:×,nbsp:⋅,tab:▸\ ,extends:»,precedes:«,eol:¬
             endif
@@ -235,6 +241,12 @@ endif
                 let &t_SI = "\<Esc>]50;CursorShape=1\x7"    " Enter Insert Mode
                 let &t_SR = "\<Esc>]50;CursorShape=2\x7"    " Enter Replace Mode
                 let &t_EI = "\<Esc>]50;CursorShape=0\x7"    " Leaving either Mode
+            elseif has('gui_running')
+                "set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+                " Default is Base 03 and Base 0
+                highlight Cursor guifg=#002b36 guibg=#6c71c4
+                "set guicursor+=a:blinkwait667-blinkoff333-blinkon667
+                set guicursor+=a:blinkwait1000-blinkoff500-blinkon1000
             endif
 
         " Font
@@ -281,11 +293,11 @@ endif
         if WINDOWS()
             set path=.\**
         else
-            " set path+=**
             set path=$PWD/**
         endif
 
         set backspace=indent,eol,start
+        set clipboard=unnamed
 
         " http://vim.wikia.com/wiki/Selecting_your_pasted_text
         nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -321,8 +333,8 @@ endif
         set foldmarker={,}
         set fillchars=fold:_
         set foldcolumn=4       " Already set above
-        set foldminlines=3
-        set foldlevelstart=5
+        set foldminlines=0
+        set foldlevelstart=99
         " Remove `block` so highlighting folds makes more sense
         set foldopen=hor,insert,jump,mark,percent,quickfix,search,tag,undo
         " TODO: _JS_ Risky bisky...
@@ -361,16 +373,6 @@ endif
             let g:airline_powerline_fonts=1
         endif
 
-    " Align
-
-        if isdirectory(expand("!/.vim/bundle/Align"))
-            " Commas.
-            vnoremap <leader>t, :Align ,<CR>:FixWhitespace<CR>
-            nnoremap <leader>t, :Align ,<CR>
-
-            nnoremap <leader>tacsubs :AlignCtrl p0P1lrrr<CR>
-        endif
-
     " Closetag
         let g:closetag_filenames = "*.xml,*.html,*.xhtml,*.phtml,*.htm"
 
@@ -386,9 +388,9 @@ endif
         " https://raw.githubusercontent.com/mattn/emmet-vim/master/TUTORIAL
 
         let g:user_emmet_install_global = 0
-        autocmd FileType html,css EmmetInstall
+        autocmd FileType html,xml,css EmmetInstall
 
-        let g:user_emmet_leader_key='<C-S-H>'
+        let g:user_emmet_leader_key='<M-H>'
 
         let g:user_emmet_settings = {
          \  'xml' : {
@@ -737,7 +739,10 @@ endif
         cmap w!! w !sudo tee % >/dev/null
 
     " Better 0
-    nnoremap <silent> 0 :call JSToggleHomeZero()<CR>
+        nnoremap <silent> 0 :call JSToggleHomeZero()<CR>
+
+    " Buffer management
+        nnoremap gb :ls<CR>:b<Space>
 
     " leader maps
         let mapleader=","
@@ -762,7 +767,7 @@ endif
             nmap <leader>f6 :set foldlevel=6<CR>
             nmap <leader>f7 :set foldlevel=7<CR>
             nmap <leader>f8 :set foldlevel=8<CR>
-            nmap <leader>f9 :set foldlevel=9<CR>
+            nmap <leader>f9 :set foldlevel=99<CR>
 
         " Toggle list
         nnoremap <leader>l :set list!<CR>:set list?<CR>
@@ -815,12 +820,8 @@ endif
             nnoremap <leader>\ :tabe ~/.vimrc<CR>
         endif
 
-        " Default tabbing
-            map <leader><tab> <Esc>:Tabularize /,/r0r1<CR>
-
 " OS
     " OS X
-        set clipboard=unnamed
 
     " Linux
 
@@ -832,14 +833,15 @@ endif
             " Creates a file mark at the exact position of the cursor whenever
             " you leave a buffer so that, wherever you are, 'J jumps to the
             " latest JavaScript buffer you edited. Awesome.
-            augroup Marks autocmd!
+            """ Overwritten by Angular
+            """   augroup Marks autocmd!
 
-                " Set marks to return to previous file location
-                    autocmd BufLeave filetype css           normal! mC
-                    autocmd BufLeave filetype html          normal! mH
-                    autocmd BufLeave filetype javascript    normal! mJ
-                    autocmd BufLeave filetype php           normal! mP
-            augroup end
+            """       " Set marks to return to previous file location
+            """           autocmd BufLeave filetype css           normal! mC
+            """           autocmd BufLeave filetype html          normal! mH
+            """           autocmd BufLeave filetype javascript    normal! mJ
+            """           autocmd BufLeave filetype php           normal! mP
+            """   augroup end
 
         " Whitespace
             augroup Whitespace
@@ -857,7 +859,9 @@ endif
                 " nbsp, tab, trail
                 highlight SpecialKey guifg=#586e75 guibg=#002b36 ctermbg=darkgrey
                 highlight ExtraWhitespace ctermfg=red guifg=#dc322f ctermbg=darkgrey guibg=#002b36
-                highlight MatchParen ctermbg=black ctermfg=magenta guibg=#002b36 guifg=#d33682
+                "highlight MatchParen ctermfg=black ctermbg=magenta guifg=#002b36 guibg=#d33682
+                "                                          Should be violet
+                highlight MatchParen ctermfg=DarkMagenta ctermbg=DarkMagenta guifg=#6c71c4 guibg=#6c71c4
                 highlight Number guifg=#6c71c4
 
             augroup random
@@ -871,7 +875,6 @@ endif
                   \ if line("'\"") >= 1 && line("'\"") <= line("$") |
                   \   exe "normal! g`\"" |
                   \ endif
-
             augroup end
 
         " Ada
@@ -885,10 +888,17 @@ endif
         " Git
             augroup git
                 au!
-                au BufRead,BufNewFile .gitconfig        setfiletype sh
+                au BufRead,BufNewFile .gitconfig setfiletype sh
 
                 " Don't remember the last cursor position for git commit msgs
                 " autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
+            augroup end
+
+        " Javascript
+            augroup javascript
+                au!
+                " Overwrites default vim behavior
+                autocmd BufRead,BufNewFile *.json.html set filetype=javascript
             augroup end
 
         " PHP
@@ -901,14 +911,14 @@ endif
             augroup python
                 au!
                 autocmd FileType python let python_highlight_all = 1
-                autocmd FileType python set textwidth=80
+                autocmd FileType python setlocal textwidth=80
             augroup end
 
         " Text/txt
             augroup txt
                 au!
-                autocmd BufRead,BufNewFile *.txt     setfiletype text
-                autocmd FileType text setlocal ai spell textwidth=80
+                autocmd BufRead,BufNewFile *.txt setfiletype text
+                autocmd FileType text setlocal ai spell textwidth=80 foldlevelstart=99
             augroup end
 
         " vimrc
@@ -926,13 +936,13 @@ endif
         abbreviate fro for
         abbreviate lorem Lorem ipsum dolor sit amet
         abbreviate llorem Lorem ipsum dolor sit amet, in nam iusto appellantur, an meis consequat voluptaria pro. Eos aeque indoctum gloriatur ad. Ut mei veritus suavitate, nulla congue nominavi sea ei. Possim repudiandae per ea.
-        abbreviate lllorem Lorem ipsum dolor sit amet, est rebum molestie ad, cu novum disputando mei. Ancillae similique deterruisset cu per. Oratio disputationi cum cu, eos eu pericula accusamus disputationi, facilis philosophia eu nec. Ne eos diceret consequuntur. 
+        abbreviate lllorem Lorem ipsum dolor sit amet, est rebum molestie ad, cu novum disputando mei. Ancillae similique deterruisset cu per. Oratio disputationi cum cu, eos eu pericula accusamus disputationi, facilis philosophia eu nec. Ne eos diceret consequuntur.
                     \
-                    \Ei insolens interpretaris eum, ne facilisis adipiscing eum, stet posse eu vis. Quo libris dicunt no, no menandri persequeris ius, quaerendum scriptorem has in. Duis officiis aliquando in per, facete contentiones ad his. Fuisset assentior eu ius, mel ea prompta tacimates, ne summo dicunt platonem mea. 
+                    \Ei insolens interpretaris eum, ne facilisis adipiscing eum, stet posse eu vis. Quo libris dicunt no, no menandri persequeris ius, quaerendum scriptorem has in. Duis officiis aliquando in per, facete contentiones ad his. Fuisset assentior eu ius, mel ea prompta tacimates, ne summo dicunt platonem mea.
                     \
-                    \Modo volumus pertinacia at has. No vim wisi graece liberavisse, qui no omnium volumus. Vix harum mundi prodesset ea, pri solum eripuit iracundia et. Choro tempor maluisset no his, has ad cibo alterum, usu amet mollis ne. Animal quaeque ex pro, mei modus malis petentium ut. Vel in vero choro labores, possim pericula no sea, simul electram ut eam. 
+                    \Modo volumus pertinacia at has. No vim wisi graece liberavisse, qui no omnium volumus. Vix harum mundi prodesset ea, pri solum eripuit iracundia et. Choro tempor maluisset no his, has ad cibo alterum, usu amet mollis ne. Animal quaeque ex pro, mei modus malis petentium ut. Vel in vero choro labores, possim pericula no sea, simul electram ut eam.
                     \
-                    \Ad vix commune ullamcorper consequuntur, error honestatis an duo. Petentium deseruisse in vim, sit ne sonet partem neglegentur. Choro cetero dolorem an qui, ea porro legimus duo. Per ut case munere, wisi perpetua maiestatis at vix. Vocent delectus ocurreret duo ad, magna fuisset no quo. Ad cum lucilius qualisque, duis dicta nemore ei vim, alia saperet appellantur id mel. Nam illud nostro suscipiantur ex, ne nominati rationibus cum. 
+                    \Ad vix commune ullamcorper consequuntur, error honestatis an duo. Petentium deseruisse in vim, sit ne sonet partem neglegentur. Choro cetero dolorem an qui, ea porro legimus duo. Per ut case munere, wisi perpetua maiestatis at vix. Vocent delectus ocurreret duo ad, magna fuisset no quo. Ad cum lucilius qualisque, duis dicta nemore ei vim, alia saperet appellantur id mel. Nam illud nostro suscipiantur ex, ne nominati rationibus cum.
                     \
                     \Vix tantas corrumpit in, est legere doctus accumsan no, ad pri sumo idque interesset. Ei eam impedit reprimique, vim ad case prima option. Idque choro mucius sed et, error scaevola atomorum quo ex. Cum homero admodum expetenda ut. Eos eu tation tritani appellantur, dolor libris vis et.
 
@@ -955,21 +965,27 @@ endif
 
 augroup ANGULAR
     autocmd!
-    autocmd BufLeave *.controller.js     :normal! mC
-    autocmd BufLeave *.directive.js      :normal! mD
-    autocmd BufLeave *.html              :normal! mH
-    autocmd BufLeave *.js                :normal! mJ
-    autocmd BufLeave *.css,*.less        :normal! mL
-    autocmd BufLeave *.module.js         :normal! mM
-    autocmd BufLeave *.service.js        :normal! mS
-    autocmd BufLeave *.service.js        :normal! mF
+    autocmd BufLeave *.component.js     normal! mC
+    autocmd BufLeave filetype html       normal! mH
+    autocmd BufLeave filetype javascript normal! mJ
+    autocmd BufLeave *.css,*.less        normal! mL
+    autocmd BufLeave *.module.js         normal! mM
+    autocmd BufLeave *service.js        normal! mS
+    autocmd BufLeave *service.js        normal! mF
+
+    autocmd BufLeave filetype php        normal! mP
 augroup end
 
 nmap - <nop>
+nmap <F1> <nop>
 
 if WINDOWS()
-    cd ~
+    cd C:\IPDS\SystemsTeam\RayPAL-ALM\AngJSPrototype\AlmAngularJs\AlmAngularJs
+    nnoremap <C-a> <C-a>
+    vnoremap <C-a> <C-a>
+    nnoremap <C-y> <C-y>
+    vnoremap <C-y> <C-y>
 endif
 
-command! Difft windo diffthis
-command! Diffo windo diffoff
+command! JSDiffthis windo diffthis
+command! JSDiffoff windo diffoff
