@@ -298,6 +298,8 @@ endif
 
         set backspace=indent,eol,start
         set clipboard=unnamed
+        " Never use select mode (changed by :behave)
+        set selectmode=""
 
         " http://vim.wikia.com/wiki/Selecting_your_pasted_text
         nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
