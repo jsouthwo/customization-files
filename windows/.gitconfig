@@ -1,0 +1,80 @@
+[user]
+    name = Justin Southworth
+    email = justin.r.southworth@raytheon.com
+[core]
+    editor = 'C:\\Program Files (x86)\\Vim\\vim82\\gvim.exe'
+    excludesfile = ~/.gitignore_global
+    whitespace = cr-at-eol
+[alias]
+    a = add
+    au = add -u
+    br = branch
+    rename = branch -m
+    ci = commit
+    cim = commit -m
+    co = checkout
+    cob = checkout -b
+    s = status
+    st = status --long
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    delete = push origin --delete
+    hist  = log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h%d %s %C(red)|%C(green) By: %aN %ad%C(reset)\"
+    hist1 = log --graph --date=relative --decorate=short --pretty=format:\"%C(auto)%h %ad %C(red)|%C(white) %s%d %C(green)[%an]%C(reset)\"
+    #hist-basic = log --graph --decorate --pretty=oneline --abbrev-commit
+    praise = blame
+    staged = diff --cached
+    unstaged = diff
+    both = diff HEAD
+    amend = commit --amend
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
+    myhist =  !git log  --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
+    myhist1 = !git hist --author=$(git config user.email) --format=%H |xargs git show --name-only --format=-------------%n%Cred%s%Creset%n%Cblue%h%Creset
+    branches = for-each-ref --sort=-committerdate --format=\"%(color:blue)%(authordate:relative)\t%(color:red)%(authorname)\t%(color:white)%(color:bold)%(refname:short)%C(reset)\" refs/remotes
+    remove-those-branches-that-are-deleted-but-still-on-my-remotes = remote prune origin
+    wiff = diff --word-diff=color
+
+    # list branches sorted by last modified
+    b = "!git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'"
+
+    # list aliases
+    la = "!git config -l | grep alias | cut -c 7-"
+
+    # Stash and get files back
+    # stash-push = "!f() { if (( $# > 0)); then branch=$(git branch | sed -n 's/^\\* //p'); git update-ref -m \"On ${branch}: $*\" refs/stash $(git stash create \"On ${branch}: $*\"); else hash=$(git stash create); msg=$(git log --no-walk --pretty=\"tformat:%-s\" $hash); git update-ref -m \"$msg\" refs/stash $hash; echo $msg; echo $hash;fi;}; f"
+[apply]
+    ignoreWhitespace = change
+[format]
+    numbered = auto
+[fetch]
+    default = current
+[push]
+    default = current
+[pull]
+    default = current
+[color]
+    ui = true
+[help]
+    autocorrect = 8
+[diff]
+    tool = meld
+[difftool "meld"]
+    path = C:\\Program Files (x86)\\Meld\\meld.exe
+[merge]
+    tool = gvimdiff
+    guitool = meld
+[mergetool "gvimdiff"]
+    command = C:\\Program Files (x86)\\Vim\\vim82\\gvim.exe -d "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+[mergetool "meld"]
+    path = C:\\Program Files (x86)\\Meld\\meld.exe
+[mergetool]
+    keepBackup = false
+[status]
+    short = 1 # Override with --long
+
+#[pretty]
+#    name = some custom format to use as --format={{name}}
+[gui]
+    recentrepo = C:/SKR/workspace/SKR_JASS_TEST
+[credential]
+    helper = manager

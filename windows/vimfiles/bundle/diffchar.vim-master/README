@@ -1,0 +1,79 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=4932
+
+This plugin has been developed in order to make diff mode more useful. Vim highlights all the text in between the changed first and last characters on changed lines. But this plugin will find the exact differences between them, character by character - so called DiffChar. 
+
+For example, in diff mode: ([DiffText], <DiffAdd>) 
+
+     (file A) The [quick brown fox jumps over the lazy] dog. 
+     (file B) The [lazy fox jumps over the quick brown] dog. 
+
+this plugin will exactly highlight the changed and added units: 
+
+     (file A) The [quick] <brown >fox jumps over the [lazy] dog. 
+     (file B) The [lazy] fox jumps over the [quick] <brown >dog. 
+
+This plugin can be triggered after diff mode starts by pressing <F7>/<F8> or using SDChar command. At update 5.5, a new global variable, g:DiffModeSync, is introduced. Its default is "enable" and synchronously show/reset the highlights of the exact differences as soon as the diff mode starts/ends. It also works on your custom diff tool (e.g. git-diff) when specified to the diffexpr option. 
+
+In diff mode, this plugin compares the corresponding changed lines between two windows. In non-diff mode, it compares the same lines between them. 
+
+This plugin has been using "An O(NP) Sequence Comparison Algorithm" developed by S.Wu, et al., which always finds an optimum sequence quickly. But for longer lines and less-similar files, it takes time to complete the diff tracing. At update 5.2, this plugin splits the tracing with the diff command. Firstly applies the internal O(NP) algorithm. If not completed within the time specified by a g:DiffSplitTime global (and tabpage) variable, continuously switches to the diff command at that point, and then joins both results. This approach provides a stable performance and reasonable accuracy, because the diff command effectively optimizes between them. The default of its variable is 500 ms, which would be useful for smaller files. If prefer to always apply the internal algorithm for accuracy (or the diff command for performance) only, set some large value (or 0) to the variable. 
+
+Since update 4.7, this plugin has set the DiffCharExpr() to the diffexpr option, if it is empty. this function would be rather useful for smaller files than the diff command. If the total number of lines on two windows <= 200, by default, this plugin's internal algorithm is used to make the diff faster. If prefer to leave the diffexpr option as empty, set 0 to g:DiffExpr. 
+
+This plugin has been always positively supporting mulltibyte characters. 
+
+Commands 
+:[range]SDChar - Highlight difference units for [range] 
+:[range]RDChar - Reset the highlight of difference units for [range] 
+
+Configurable Keymaps 
+<Plug>ToggleDiffCharAllLines (default: <F7>) 
+    toggle the highlight/reset of difference units for all lines 
+<Plug>ToggleDiffCharCurrentLine (default: <F8>) 
+    toggle the highlight/reset of difference units for current line 
+<Plug>JumpDiffCharPrevStart (default: [b) 
+    jump cursor to the start position of the previous difference unit 
+<Plug>JumpDiffCharNextStart (default: ]b) 
+    jump cursor to the start position of the next difference unit 
+<Plug>JumpDiffCharPrevEnd (default: [e) 
+    jump cursor to the end position of the previous difference unit 
+<Plug>JumpDiffCharNextEnd (default: ]e) 
+    jump cursor to the end position of the next difference unit 
+
+Global Variables (and Tabpage variables when using t:) 
+g:DiffUnit - type of difference unit 
+    "Char"   : any single character (default) 
+    "Word1"  : \w\+ word and any \W single character 
+    "Word2"  : non-space and space words 
+    "Word3"  : \< or \> character class boundaries 
+    "CSV(,)" : separated by characters such as ',', ';', and '\t' 
+g:DiffColors - matching colors for changed unit pairs 
+    0   : always DiffText (default) 
+    1   : 4 colors in fixed order 
+    2   : 8 colors in fixed order 
+    3   : 16 colors in fixed order 
+    100 : all available colors in dynamic random order 
+        (notes : always DiffAdd for added units) 
+g:DiffUpdate - interactively updating of highlightings while editing 
+    1 : enable (default) 
+    0 : disable 
+      (notes : available on vim 7.4) 
+g:DiffSplitTime - a time length (ms) to apply the internal algorithm first 
+    0 ~ : (500 as default) 
+g:DiffModeSync - synchronously show/reset with diff mode 
+    1 : enable (default) 
+    0 : disable 
+
+DiffCharExpr(mxi) function for the diffexpr option 
+    mxi: the maximum number of total lines of both windows to apply internal algorithm, apply diff command when more lines 
+
+Update : 5.5 
+* Introduced g:DiffModeSync to synchronously show/reset the highlights as the diff mode starts/ends, which also works on your custom diff tool. 
+* Changed to enable g:DiffUpdate as a default and then interactively update the highlights while editing. 
+* Enhanced to draw and delete the highlights faster by specifying as many position parameters as possible in one matchaddpos() and matchadd() call. 
+* Changed to select current window and next diff mode window (if present) whose buffer is different at initialize. 
+* Fixed: 
+  - caused an error on getwinvar() in vim 7.3. 
+  - in non-gVim, did not show a matching pair cursor when jumping the cursor by using [e or ]b, depending on a color scheme. 
+  - sometimes failed to toggle the highlights when using <F7> or <F8> in diff mode windows. 
+  - did not interactively update the highlight of all the lines when multiple lines were changed at once on g:DiffUpdate = 1.

@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# git-stash-push
+# Push working tree onto the stash without modifying working tree.
+# First argument (optional) is the stash message.
+#
+# If the working dir is clean, no stash will be generated/saved.
+#
+# Options:
+#   -c "changes" mode, do not stash if there are no changes since the
+#      last stash.
+function gitStashSnap {
+    #if [ "$1" == "-c" ]; then
+    CHECK_CHANGES=1
+    #        shift
+    #fi
+
+    if [ -n "$1" ]; then
+            MESSAGE=$1
+            HASH=$( git stash create "$MESSAGE" )
+    else
+            DATE=`date  "+%F %X"`
+            MESSAGE=`git log --no-walk --pretty="tformat:%-s" "HEAD"`
+            MESSAGE="$DATE - Based on: $MESSAGE"
+            HASH=$( git stash create )
+    fi
+
+    if [ "$CHECK_CHANGES" ]; then
+            # "check for changes" mode: only stash if there are changes
+            # since the last stash
+
+            # Make sure there is a stash
+            STASH=$( git stash list )
+            if [ -n "$STASH" ] ; then
+                # check if nothing has changed since last stash
+                CHANGES=$( git diff stash@{0} )
+                if [ -z "$CHANGES" ] ; then
+                        echo "Nothing changed since last stash."
+                        return 0
+                fi
+            else
+                echo "No stashes."
+            fi
+
+    fi
+
+    if [ -n "$HASH" ]; then
+            echo "$MESSAGE"
+            git stash store -m "$MESSAGE" "$(git stash create)"
+            echo "Working directory stashed."
+    else
+            echo "Working tree clean, nothing to do."
+    fi
+}
+
+while true ; do date ; gitStashSnap ; sleep 600 ; done
+

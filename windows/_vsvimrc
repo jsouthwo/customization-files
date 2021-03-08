@@ -1,0 +1,1021 @@
+"scriptencoding utf-8
+"set encoding=utf-8
+
+" TODO: https://realpython.com/blog/python/vim-and-python-a-match-made-in-heaven/
+" TODO: Look here before searching plugins. https://www.vi-improved.org/
+
+" Environment
+    " Identify platform
+        silent function! OSX()
+            return has('macunix')
+        endfunction
+        silent function! LINUX()
+            return has('unix') && !has('macunix') && !has('win32unix')
+        endfunction
+        silent function! WINDOWS()
+            return has('win16') || has('win32') || has('win64')
+        endfunction
+        silent function! VIM8()
+            return v:version >= 800
+        endfunction
+
+    " Basics
+        set nocompatible
+
+        if WINDOWS()
+            source $VIMRUNTIME/mswin.vim
+            behave mswin
+        else
+            set shell=/bin/sh
+        endif
+
+    " TODO: Implement right after syncing all this (12-8-16)
+    "" On Windows, also use '.vim' instead of '_vim'
+        "if WINDOWS()
+            "set runtimepath=$HOME/.vim,$VIM/vimfiles,$VIMRUNTIME,$VIM/vimfiles/after,
+                      "\$HOME/.vim/after
+        "endif
+
+if WINDOWS()
+    " Pathogen
+        call pathogen#infect()
+        call pathogen#helptags()
+else
+    " Plugins (Vundle)
+        filetype off                  " required for Vundle
+
+        " set the runtime path to include Vundle and initialize
+            set rtp+=~/.vim/bundle/Vundle.vim
+            call vundle#begin()
+
+        " Current plugins
+            Plugin 'gmarik/Vundle.vim'                  " let Vundle manage Vundle
+            " Has to be above henrik/vim-indexed-search for some reason
+            Plugin 'Yggdroot/indentLine'                " Lines on indents (with spaces) based on sw
+
+            Plugin 'airblade/vim-gitgutter'             " git in the sidebar
+            Plugin 'ajh17/VimCompletesMe'               " Completion
+            Plugin 'altercation/vim-colors-solarized'   " Solarized
+            Plugin 'alvan/vim-closetag'                 " Close HTML tags
+            Plugin 'aspnet.vim--Abshire'                " ASP.net stuff
+            Plugin 'bling/vim-airline'                  " Airline
+            Plugin 'vim-airline/vim-airline-themes'     " Solarized themes
+            Plugin 'cohama/lexima.vim'                  " Better autoclose
+            Plugin 'Gundo'                              " Undotree
+            Plugin 'henrik/vim-indexed-search'          " Shows count while searching
+            Plugin 'hoffstein/vim-tsql'              " MS SQL 05/08 highlighting
+            Plugin 'L9'  " Must be a dependency for something else, as it doesn't really do anything
+            Plugin 'junegunn/fzf'                       " Fuzzy file finder
+            Plugin 'Lokaltog/vim-easymotion'            " Easymotion
+            Plugin 'matchit.zip'                        " Matchit
+            Plugin 'mhinz/vim-startify'                 " Startup screen
+            Plugin 'othree/javascript-libraries-syntax.vim' " JS libs syntax
+            Plugin 'pangloss/vim-javascript'            " General JS support
+            Plugin 'powerline/fonts'                    " Powerline fonts for Airline
+            Plugin 'scrooloose/nerdcommenter'           " Commenting
+            Plugin 'tommcdo/vim-lion'                   " Alignment
+            Plugin 'tpope/vim-abolish'                  " Awesome substution
+            Plugin 'tpope/vim-endwise'                  " Adds 'end' keywords for some languages
+            Plugin 'tpope/vim-surround'                 " ds, cs, ys
+            Plugin 'tpope/vim-repeat'                   " . for plugins
+            Plugin 'tpope/vim-speeddating'              " Increment dates
+            Plugin 'tpope/vim-vinegar'                  " Enhance netrw
+
+        " Todo
+            " Different auto-close
+            " https://github.com/jiangmiao/auto-pairs
+
+            " PHP
+            " https://github.com/spf13/PIV
+
+            " Snippets
+            " https://github.com/SirVer/ultisnips           " Best?
+            " https://github.com/garbas/vim-snipmate
+            " https://github.com/honza/vim-snippets
+            " https://github.com/msanders/snipmate.vim
+            " https://github.com/Shougo/neosnippet.vim
+
+            " Stuff from spf13 or nearby
+            " https://github.com/junegunn/vim-xmark         " Markdown preview
+
+            " Better git stuff than GitGutter
+            " https://github.com/tpope/vim-fugitive
+
+            " Syntax checking
+            " https://github.com/scrooloose/syntastic
+
+        " Glean
+            " https://github.com/spf13/spf13-vim
+            " http://spf13.com/post/ultimate-vim-config
+
+        " Maybe sometime.
+            " Plugin 'bronson/vim-trailing-whitespace'      " Trailing whitespace
+            " Plugin 'itchyny/lightline.vim'                " Superior to Airline?
+            " Plugin 'rizzatti/dash.vim'                    " Maybe Dash.app will play nice?
+            " Plugin 'terryma/vim-multiple-cursors'         " Multiple cursors
+
+        " Old.
+            " Plugin 'kien/rainbow_parentheses'             " Rainbow parens
+            " Plugin 'tobiasgehring/ShowMarks'              " Based on vim-scripts/ShowMarks. Just don't use marks yet.
+            " Plugin 'flazz/vim-colorschemes'               " ALL THE COLORSCHEMES.
+
+        " Vundle examples
+            " plugin on GitHub repo
+            " Plugin 'tpope/vim-fugitive'
+            " plugin from http://vim-scripts.org/vim/scripts.html
+            " Plugin 'L9'
+            " Git plugin not hosted on GitHub
+            " Plugin 'git://git.wincent.com/command-t.git'
+            " git repos on your local machine (i.e. when working on your own plugin)
+            " Plugin 'file:///home/gmarik/path/to/plugin'
+            " The sparkup vim script is in a subdirectory of this repo called vim.
+            " Pass the path to set the runtimepath properly.
+            " Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+            " Avoid a name conflict with L9
+            " Plugin 'user/L9', {'name': 'newL9'}
+
+        call vundle#end()
+endif
+
+" Necessary basics
+    syntax on
+    filetype plugin indent on
+
+" Sets
+    set history=1000
+    set hidden
+
+    " Backups
+        set backup
+        " https://github.com/karma-runner/karma/issues/199#issue-8825748
+        set backupcopy=yes
+        set undofile
+
+        if WINDOWS()
+            set backupdir^=~\\vimfiles\\_backup//
+            set directory^=~\\vimfiles\\_swap//
+            set undodir^=~\\vimfiles\\_undo//
+        else
+            " Create the directories if need be
+            if !isdirectory("/Users/Justin/.vim/swp")
+                call mkdir("/Users/Justin/.vim/swp", "p")
+            endif
+            if !isdirectory("/Users/Justin/.vim/backup")
+                call mkdir("/Users/Justin/.vim/backup", "p")
+            endif
+            if !isdirectory("/Users/Justin/.vim/undo")
+                call mkdir("/Users/Justin/.vim/undo", "p")
+            endif
+
+            set backupdir^=~/.vim/backup//,.
+            set directory^=~/.vim/swp//,.
+            set undodir^=~/.vim/undo//,.
+        endif
+
+        if has("autocmd")
+            augroup backup
+                au!
+                " Double slash does not actually work for backupdir, here's a fix
+                au BufWritePre * let &backupext='@'.substitute(substitute(substitute(expand('%:p:h'), '/', '%', 'g'), '\', '%', 'g'), ':', '', 'g')
+            augroup end
+        endif
+
+    " Display
+        " General
+            set number
+            set cursorline
+
+            set list
+            if WINDOWS()
+                set listchars=trail:x,nbsp:*,tab:>-,extends:>,precedes:<
+            else
+                set listchars=trail:×,nbsp:⋅,tab:▸\ ,extends:»,precedes:«,eol:¬
+            endif
+
+            set linebreak
+
+            set laststatus=2
+            set cmdheight=2
+            set showcmd
+
+            set shortmess=aoOtTI
+            set lazyredraw
+            set sidescroll=1
+            set scrolloff=5         " x lines above/below cursor when scrolling
+
+            " hide unnecessary gui in gVim
+            if has("gui_running")
+                " remove menu bar, toolbar, and scroll bars
+                set guioptions-=m
+                set guioptions-=T
+                set guioptions-=r
+                set guioptions-=L
+            endif
+
+        " Colors
+            set t_Co=16
+            for scheme in ['solarized', 'molokai', 'desert', 'default']
+                try
+                    if scheme == 'molokai'
+                        set t_Co=256
+                    endif
+                    execute 'colorscheme '.scheme
+                    break
+                catch
+                    continue
+                endtry
+            endfor
+
+            set background=dark
+
+            " ColorColumn
+                if exists('+colorcolumn')
+                    let &colorcolumn=join(range(81,300),",")
+                else
+                    "call matchadd('ColorColumn', '\(\%80v\|\%100v\)')
+                    match Colorcolumn /\%81v.\+/
+                endif
+
+        " Cursor
+            " Switch from block-cursor to vertical-line-cursor when going into/out of insert mode
+            if &term =~ "xterm"
+                let &t_SI = "\<Esc>]50;CursorShape=1\x7"    " Enter Insert Mode
+                let &t_SR = "\<Esc>]50;CursorShape=2\x7"    " Enter Replace Mode
+                let &t_EI = "\<Esc>]50;CursorShape=0\x7"    " Leaving either Mode
+            elseif has('gui_running')
+                "set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+                " Default is Base 03 and Base 0
+                highlight Cursor guifg=#002b36 guibg=#6c71c4
+                "set guicursor+=a:blinkwait667-blinkoff333-blinkon667
+                set guicursor+=a:blinkwait1000-blinkoff500-blinkon1000
+            endif
+
+        " Font
+            " TODO: All this will need to be moved after done
+            if WINDOWS()
+                set guifont=Source_Code_Pro_Light:h15
+            else
+                set guifont=Source\ Code\ Pro\ ExtraLight:h15
+            endif
+
+            let g:Powerline_symbols = 'fancy'
+
+        set showmatch
+        set splitbelow
+        set splitright
+
+        " netrw
+            let g:netrw_list_hide = '
+                        \.*~$,
+                        \.*\.pyc$,
+                        \.*\.swp$
+                        \'
+
+        " Wildmenu
+            set wildmenu
+            set wildignore=*.sw*,*.so,*.o,*.kate-swp,*.lo,*.pyc
+            set wildmode=list:longest,full
+
+        " Wrapping
+            set wrap
+            set whichwrap=b,s,h,l,<,>,[,]  " Only doesn't include ~
+            set textwidth=0
+
+            let &showbreak='....'  " Add an indicator when lines are wrapped
+            set cpoptions+=n       " Put the indicator in the number column
+
+            if VIM8()
+                " Visually wraps text with indents
+                    set breakindent
+                    set breakindentopt="min:20,shift:8,sbr"
+            endif
+
+    " Editing
+        if WINDOWS()
+            set path=.\**
+        else
+            set path=$PWD/**
+        endif
+
+        set backspace=indent,eol,start
+        set clipboard=unnamed
+        " Never use select mode (changed by :behave)
+        set selectmode=""
+
+        " http://vim.wikia.com/wiki/Selecting_your_pasted_text
+        nnoremap <expr> vp '`[' . strpart(getregtype(), 0, 1) . '`]'
+
+        let g:html_indent_inctags = "html,body,head,tbody,div"
+        let g:html_indent_script1 = "inc"
+        let g:html_indent_style = "inc"
+
+        " Tabs
+            set shiftwidth=4
+            set softtabstop=-1
+            set tabstop=4
+            set expandtab
+            set smarttab
+
+        " Auto-completion
+            set completeopt=longest,menuone
+
+        if VIM8()
+            set formatoptions+=tcqn2l1j
+        else
+            set formatoptions+=tcrqn
+        endif
+
+        if VIM8()
+            " No more EOL stuff!!!! (Even though it's right :/ )
+            set nofixendofline
+        endif
+
+    " Fold
+        set foldmethod=indent
+        " Use with foldmethod=marker
+        set foldmarker={,}
+        set fillchars=fold:_
+        set foldcolumn=1
+        set foldminlines=0
+        set foldlevelstart=99
+        " Remove `block` so highlighting folds makes more sense
+        set foldopen=hor,insert,jump,mark,percent,quickfix,search,tag,undo
+        " TODO: _JS_ Risky bisky...
+        "set foldclose=all
+
+        set foldtext=JSFoldText()
+
+    " Mouse
+        if has('mouse')
+          set mouse=a
+          set mousemodel=popup_setpos
+        endif
+
+    " Search
+        set hlsearch
+        set incsearch
+        set gdefault
+        set ignorecase
+        set smartcase
+
+        " https://www.linux.com/news/vim-tips-moving-around-using-marks-and-jumps
+        " how many files to save mark info for, whether to save global marks (f0 or f1)
+        set viminfo='100,f1
+
+    " Sessions
+        set sessionoptions=buffers,curdir,folds,help,localoptions,resize,tabpages,winpos,winsize
+
+" Plugin customization
+    " Airline
+        let g:airline#extensions#tabline#enabled = 1            " Adding tab line.
+        let g:airline#extensions#tabline#show_close_button = 0
+
+        " Be powerful, if you're on a decent OS
+        if WINDOWS()
+            let g:airline_powerline_fonts=0
+            let g:airline_left_sep = ''
+            let g:airline_right_sep = ''
+        else
+            let g:airline_powerline_fonts=1
+        endif
+
+    " Closetag
+        let g:closetag_filenames = "*.xml,*.html,*.xhtml,*.phtml,*.htm"
+
+    " Diffchar
+        let g:DiffUpdate = 1  " Interactively update highlights
+
+    " Easymotion
+        nnoremap Q q
+        vnoremap Q q
+        map q <Plug>(easymotion-prefix)
+
+    " Emmet
+        " https://raw.githubusercontent.com/mattn/emmet-vim/master/TUTORIAL
+
+        let g:user_emmet_install_global = 0
+        autocmd FileType html,xml,css EmmetInstall
+
+        let g:user_emmet_leader_key='<M-H>'
+
+        let g:user_emmet_settings = {
+         \  'xml' : {
+         \    'extends' : 'html',
+         \  },
+         \}
+
+    " Fugitive
+        if isdirectory(expand("~/.vim/bundle/vim-fugitive/"))
+            nnoremap <silent> <leader>gs :Gstatus<CR>
+            nnoremap <silent> <leader>gd :Gdiff<CR>
+            nnoremap <silent> <leader>gc :Gcommit<CR>
+            nnoremap <silent> <leader>gb :Gblame<CR>
+            nnoremap <silent> <leader>gl :Glog<CR>
+            nnoremap <silent> <leader>gp :Git push<CR>
+            nnoremap <silent> <leader>gr :Gread<CR>
+            nnoremap <silent> <leader>gw :Gwrite<CR>
+            nnoremap <silent> <leader>ge :Gedit<CR>
+            " Mnemonic _i_nteractive
+            nnoremap <silent> <leader>gi :Git add -p %<CR>
+            nnoremap <silent> <leader>gg :SignifyToggle<CR>
+        endif
+
+    " fzf
+        " Map FuzzyFinder commands.
+        noremap <Tab>b  :FufBuffer<cr>
+        " use :b
+
+        noremap <Tab>cd :FufDir<cr>
+        noremap <Tab>f  :FufFile<cr>
+        noremap <Tab>h  :FufHelp<cr>
+        noremap <Tab>j  :FufJumpList<cr>
+        noremap <Tab>l  :FufLine<cr>
+
+        nnoremap <C-p> :FZF 
+
+    " Gitgutter
+        let g:gitgutter_realtime=1
+        let g:gitgutter_eager=1
+        let g:gitgutter_sign_column_always=1
+        let g:gitgutter_updatetime=500
+
+    " Indentline
+        let g:indentLine_enabled = 1
+        " TODO: Set a powerline font variable for stuff like this.
+        if WINDOWS()
+            let g:indentLine_char = '|'
+        else
+            let g:indentLine_char = '│'
+        endif
+        let g:indentLine_setColors = 1
+        let g:indentLine_color_term = 10
+        let g:indentLine_color_gui = '#586E75'
+
+        " Messing with conceal level
+        "let g:indentLine_noConcealCursor = 1
+        "set concealcursor=nc
+        "set conceallevel=1
+
+    " Javascript
+        "let g:javascript_conceal_function       = "ƒ"
+        "let g:javascript_conceal_null           = "ø"
+        "let g:javascript_conceal_this           = "@"
+        "let g:javascript_conceal_undefined      = "¿"
+
+    " Javascript Libraries Syntax
+        let g:used_javascript_libraries = 'jquery,underscore,angularjs,angularui,angularuirouterjasmine'
+
+    " NERDCommenter
+        let g:NERDCustomDelimiters = { 'rml': { 'left': "<!--", 'right': "-->" } }
+
+    " Startify
+        let g:startify_enable_special = 0
+        let g:startify_bookmarks = [ '~\_vimrc', '~\Documents\IPDS\log.txt' ]
+        let g:startify_session_autoload = 1
+        " let g:startify_enable_unsafe = 1
+        let g:startify_files_number = 8
+    let g:startify_skiplist = [
+        \ 'COMMIT_EDITMSG',
+        \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') . 'doc',
+        \ 'C:\\Users\\1115028\\vimfiles\\bundle.*\\doc',
+        \ 'C:\\Users\\1115028\\_vimrc',
+        \ 'C:\\Users\\1115028\\Documents\\IPDS\\log.txt'
+        \ ]
+
+    " UndoTree
+        nnoremap <Leader>u :UndotreeToggle<CR>
+        " If undotree is opened, it is likely one wants to interact with it.
+        let g:undotree_SetFocusWhenToggle=1
+
+    " TSQL
+        let g:sql_type_default = 'sqlserver'
+
+    " vim-flake8
+        " Put back in when you get flake8
+        " let g:flake8_show_in_file=0                             " SUPER annoying
+
+    " Vim-indexed-search
+        let g:indexed_search_colors=0                           " Messages not in color
+        let g:indexed_search_shortmess=1                        " Short
+        " Never tried, but maybe better?
+        " If 1, the mappings for n and N open the least amount of
+        " folds needed to show the match.  Basically, nzv (or Nzv).
+        let g:indexed_search_unfold=1
+
+    " Vim-vinegar
+        let g:netrw_liststyle=3                                 " Makes 'tree' default netrw listing
+
+" Functions
+    " DiffOrig
+        " Convenient command to see the difference between the current buffer
+        " and the file it was loaded from, thus the changes you made. Only
+        " define it when not defined already.
+        if !exists(":DiffOrig")
+            command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                        \ | wincmd p | diffthis
+        endif
+
+    " Cursor line color correct
+        function! s:updateCursorLine()
+            if &background == "dark"
+                highlight CursorLineNr guifg=#839496 guibg=#002b36 gui=NONE
+            else
+                highlight CursorLineNr guifg=#073642 guibg=#fdf6e3 gui=NONE
+            endif
+        endfunction
+
+    " FixWhitespace
+        function! FixWhitespace(line1,line2)
+            let l:save_cursor = getpos(".")
+            silent! execute ':' . a:line1 . ',' . a:line2 . 's/\s\+$//e'
+            call setpos('.', l:save_cursor)
+        endfunction
+
+        " Run :FixWhitespace to remove end of line white space
+        command! -range=% FixWhitespace call FixWhitespace(<line1>,<line2>)
+        command! -range=% JSFixWhitespace call FixWhitespace(<line1>,<line2>)
+
+    " Fold Text
+        function! JSFoldText()
+            let line = getline(v:foldstart)
+            if WINDOWS()
+                let ellipsis = ' ... '
+            else
+                let ellipsis = ' … '
+            endif
+
+            let nucolwidth = &fdc + &number * &numberwidth
+            "let windowwidth = winwidth(0) - nucolwidth - 3
+            let windowwidth = 80
+            let foldedlinecount = v:foldend - v:foldstart
+
+            " expand tabs into spaces
+            let onetab = strpart('          ', 0, &tabstop)
+            let line = substitute(line, '\t', onetab, 'g')
+
+            let linespace = windowwidth - len(ellipsis) - len(foldedlinecount)
+            let line = strpart(line, 0, linespace)
+            let fillcharcount = linespace - len(line)
+
+            return line . ellipsis . repeat(" ", fillcharcount) . foldedlinecount
+        endfunction
+
+    " Fold Column
+        let g:last_fold_column_width = 4  " Pick a sane default for the foldcolumn
+        function! FoldColumnToggle()
+            if &foldcolumn
+                let g:last_fold_column_width = &foldcolumn
+                setlocal foldcolumn=0
+            else
+                let &l:foldcolumn = g:last_fold_column_width
+            endif
+        endfunction
+
+    " Number Toggle
+        function! JSNumberToggle()
+            if    (&relativenumber == 0 && &number == 0)
+                set norelativenumber
+                set number
+            elseif(&relativenumber == 0 && &number == 1)
+                set relativenumber
+                set nonumber
+            elseif(&relativenumber == 1 && &number == 0)
+                set relativenumber
+                set number
+            else " &relativenumber == 1 && &number == 1
+                set norelativenumber
+                set nonumber
+            endif
+        endfunc
+
+        " :NumberToggle to toggle numbering
+        command! JSNumberToggle call JSNumberToggle()
+
+    " Tabs
+        " Reorder tabs relatively, not absolutely
+            " https://github.com/johntyree/dotfiles/blob/master/vimrc
+                command! -nargs=1 -bar Tabm exe 'tabm ' . (tabpagenr() + <args> - 1)
+                command! -nargs=1 -bar JSTabm exe 'tabm ' . (tabpagenr() + <args> - 1)
+
+        " Vimcast #2
+        " Set tabstop, softtabstop and shiftwidth to the same value
+        command! -nargs=* Stab call Stab()
+        command! -nargs=* JSStab call Stab()
+        function! Stab()
+            let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+            if l:tabstop > 0
+                let &l:sts = l:tabstop
+                let &l:ts = l:tabstop
+                let &l:sw = l:tabstop
+            endif
+            call SummarizeTabs()
+        endfunction
+
+        command! -nargs=* SummarizeTabs call SummarizeTabs()
+        command! -nargs=* JSSummarizeTabs call SummarizeTabs()
+        function! SummarizeTabs()
+            try
+                echohl ModeMsg
+                echon 'ts='.&l:ts
+                echon ' sw='.&l:sw
+                echon ' sts='.&l:sts
+                if &l:et
+                    echon ' expandtab'
+                else
+                    echon ' noexpandtab'
+                endif
+            finally
+                echohl None
+            endtry
+        endfunction
+
+" Maps
+    " CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+    " so that you can undo CTRL-U after inserting a line break.
+        inoremap <C-U> <C-G>u<C-U>
+
+    " Fix Escape since Karabiner died :/
+        inoremap fj <Esc>
+
+    " Make Y act like C and D with less janky yanking
+    " https://ddrscott.github.io/blog/2016/yank-without-jank/
+        nnoremap Y myy$`y
+
+        vnoremap y myy`y
+        vnoremap Y myy$`y
+
+    " Better split windows
+        nnoremap <C-h> <C-W><C-h>
+        nnoremap <C-j> <C-W><C-j>
+        nnoremap <C-k> <C-W><C-k>
+        nnoremap <C-l> <C-W><C-l>
+
+        vnoremap <C-h> <C-w>h
+        vnoremap <C-j> <C-w>j
+        vnoremap <C-k> <C-w>k
+        vnoremap <C-l> <C-w>l
+
+    " Toggle relativenumber and number
+        nnoremap <C-n> :call JSNumberToggle()<cr>
+
+    " keep text selected after shifting
+        vnoremap < <gv
+        vnoremap > >gv
+
+    " Swap implementations of ` and ' jump to markers
+        nnoremap ' `
+        nnoremap ` '
+        vnoremap ' `
+        vnoremap ` '
+
+    " Space for :
+        nnoremap <Space> :
+        vnoremap <Space> :
+
+    " Support for multi-line lines.
+        nnoremap j gj
+        vnoremap j gj
+        nnoremap k gk
+        vnoremap k gk
+        inoremap <silent> <Up> <C-o>gk
+        inoremap <silent> <Down> <C-o>gj
+
+        " And switch.
+            nnoremap gj j
+            vnoremap gj j
+            nnoremap gk k
+            vnoremap gk k
+        "inoremap <silent> <Up> <C-o>gk         " Not these
+        "inoremap <silent> <Down> <C-o>gj       " Not these
+
+    " Speedy scrolling with Meta
+        nnoremap <M-e> 2<C-e>
+        vnoremap <M-e> 2<C-e>
+        nnoremap <M-y> 2<C-y>
+        vnoremap <M-y> 2<C-y>
+
+    " Enable emacs-style editing of command-line mode
+        cnoremap <C-A>      <Home>
+        cnoremap <C-B>      <Left>
+        cnoremap <C-E>      <End>
+        cnoremap <C-F>      <Right>
+        cnoremap <C-N>      <Down>
+        cnoremap <C-P>      <Up>
+        cnoremap <C-D>      <Del>
+        cnoremap <ESC>b     <S-Left>
+        cnoremap <ESC><C-B> <S-Left>
+        cnoremap <ESC>f     <S-Right>
+        cnoremap <ESC><C-F> <S-Right>
+        cnoremap <ESC><C-H> <C-W>
+        cnoremap <ESC>d     <S-Right><Right><C-W>
+        cnoremap <C-U>      <C-E><C-U>
+        cnoremap <C-K>      <C-\>estrpart(getcmdline(),0,getcmdpos()-1)<CR>
+
+    " From http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity
+
+        " Automatically jump to end of text you pasted:
+        vnoremap <silent> p p`]
+        nnoremap <silent> p p`]
+
+        " Visually select the text that was last edited/pasted (Vimcast#26).
+        noremap gV `[v`]
+
+    " Bubble lines
+        "http://vimcasts.org/episodes/bubbling-text/
+        nmap <C-Up> ddkP
+        nmap <C-Down> ddp
+
+        "Bubble multiple lines
+        vmap <C-Up> xkP`[V`]
+        vmap <C-Down> xp`[V`]
+
+    " Insert mode scrolling
+        " :h i_ctrl-x
+        inoremap <C-E> <C-X><C-E>
+        inoremap <C-Y> <C-X><C-Y>
+
+    " For when you forget to sudo.. Really Write the file.
+        cmap w!! w !sudo tee % >/dev/null
+
+    " Slightly better 0
+        nnoremap 0 ^
+	nnoremap ^ 0
+
+    " Buffer management
+        nnoremap gb :ls<CR>:b<Space>
+
+    " leader maps
+        let mapleader=","
+        nnoremap \ ,
+
+        " Toggle autochdir.
+            nnoremap <leader>a :set autochdir!<CR>:set autochdir?<CR>
+
+        " Toggle background color
+            nnoremap <leader>bg :let &background = ( &background == "dark" ? "light" : "dark" )<CR>
+
+        " File opening
+            nnoremap <leader>ee :e **/
+            nnoremap <leader>es :sp **/
+            nnoremap <leader>et :tabe **/
+            nnoremap <leader>ev :vs **/
+
+        " Font Size
+            nnoremap <leader>fb :set guifont=Source_Code_Pro_Light:h15<cr>
+            nnoremap <leader>fs :set guifont=Source_Code_Pro_Light:h11<cr>
+
+        " Toggle fold column
+            nnoremap <leader>fc :call FoldColumnToggle()<cr>
+            nnoremap <leader>ff :call FoldColumnToggle()<cr>
+
+        " Code folding levels
+            nmap <leader>f0 :set foldlevel=0<CR>
+            nmap <leader>f1 :set foldlevel=1<CR>
+            nmap <leader>f2 :set foldlevel=2<CR>
+            nmap <leader>f3 :set foldlevel=3<CR>
+            nmap <leader>f4 :set foldlevel=4<CR>
+            nmap <leader>f5 :set foldlevel=5<CR>
+            nmap <leader>f6 :set foldlevel=6<CR>
+            nmap <leader>f7 :set foldlevel=7<CR>
+            nmap <leader>f8 :set foldlevel=8<CR>
+            nmap <leader>f9 :set foldlevel=99<CR>
+
+        " Toggle list
+        nnoremap <leader>l :set list!<CR>:set list?<CR>
+
+        " Make session
+        nnoremap <leader>m :mks!
+
+        " Make default session
+        nnoremap <leader>ms :mks! Session.vim<CR>
+
+        " Toggle paste mode
+        " nnoremap <leader>p :set paste!<CR>:set paste?<CR>
+        set pastetoggle=<leader>p
+
+        " Easier formatting
+        nnoremap <silent> <leader>q gwip
+
+        " Toggle spell
+        nnoremap <leader>s :set spell!<CR>:set spell?<CR>
+
+        " Move tabs
+        noremap <leader>gT :JSTabm -1<CR>
+        noremap <leader>gt :JSTabm +1<CR>
+
+        " Save from insert mode
+        inoremap <leader>w <ESC>:w<CR>a
+
+        " Show word count
+        if VIM8()
+            nnoremap <leader>wc :echo wordcount()["words"]<CR>
+            nnoremap <leader>wo :echo wordcount()["words"]<CR>
+        elseif !WINDOWS()
+            nnoremap <leader>wo :w !wc -w<CR>
+            nnoremap <leader>wc :w !wc -w<CR>
+        endif
+
+        " Works, but wonderfully and tremendously hacked.
+        nnoremap <leader>gitconfig :%s/\n[^[]/THISTEXTNOTINFILE/<CR>:sort<CR>/\[core\]<CR>ddggP/[remote<CR>VNxggp/\[branch "master"\]<CR>dd?[remote<CR>p:%s/THISTEXTNOTINFILE/\r\t<CR>
+
+        " Toggle wrap
+        nnoremap <leader>wr :set wrap!<CR>:set wrap?<CR>
+
+        " Clear search
+        nnoremap <silent> <leader>/ :nohlsearch<CR>
+
+        " Edit my rc
+        if WINDOWS()
+            nnoremap <leader>\ :tabe ~/_vimrc<CR>
+        else
+            nnoremap <leader>\ :tabe ~/.vimrc<CR>
+        endif
+
+" OS
+    " OS X
+
+    " Linux
+
+    " Windows
+
+" Autos
+    if has("autocmd")
+        " Marks
+            " Creates a file mark at the exact position of the cursor whenever
+            " you leave a buffer so that, wherever you are, 'J jumps to the
+            " latest JavaScript buffer you edited. Awesome.
+            """ Overwritten by Angular
+            """   augroup Marks autocmd!
+
+            """       " Set marks to return to previous file location
+            """           autocmd BufLeave filetype css           normal! mC
+            """           autocmd BufLeave filetype html          normal! mH
+            """           autocmd BufLeave filetype javascript    normal! mJ
+            """           autocmd BufLeave filetype php           normal! mP
+            """   augroup end
+
+        " Colors
+            augroup Colors
+                au!
+                autocmd ColorScheme * call s:updateCursorLine()
+            augroup end
+
+        " Whitespace
+            augroup Whitespace
+                au!
+                au BufEnter    * match ExtraWhitespace /\s\+$/
+                au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+                au InsertLeave * match ExtraWhitespace /\s\+$/
+                au ColorScheme * highlight ExtraWhitespace ctermfg=red guifg=#dc322f ctermbg=darkgrey guibg=#002b36
+                au ColorScheme * highlight EndOfBuffer ctermbg=black ctermfg=darkblue guibg=black guifg=darkblue
+            augroup end
+
+            " TODO: Random crap I have to put after solarized...
+                "Invisible character colors
+                " TODO: This don't belong here
+                " nbsp, tab, trail
+                highlight SpecialKey guifg=#586e75 guibg=#002b36 ctermbg=darkgrey
+                highlight ExtraWhitespace ctermfg=red guifg=#dc322f ctermbg=darkgrey guibg=#002b36
+                "highlight MatchParen ctermfg=black ctermbg=magenta guifg=#002b36 guibg=#d33682
+                "                                          Should be violet
+                "highlight MatchParen ctermfg=DarkMagenta ctermbg=DarkMagenta guifg=#6c71c4 guibg=#6c71c4
+                "Magenta
+                "highlight MatchParen ctermfg=DarkMagenta ctermbg=DarkMagenta guifg=#002b36 guibg=#d33682
+                "Orange
+                highlight MatchParen ctermfg=DarkMagenta ctermbg=DarkMagenta guifg=#002b36 guibg=#cb4b16
+                highlight Number guifg=#6c71c4
+
+            augroup random
+                au!
+                " Helps reduce effects of a memory leak caused by calling `match`
+                " http://vim.wikia.com/wiki/Highlight_unwanted_spaces section 7
+                autocmd BufWinLeave * call clearmatches()
+
+                " Save my cursor location?
+                autocmd BufReadPost *
+                  \ if line("'\"") >= 1 && line("'\"") <= line("$") |
+                  \   exe "normal! g`\"" |
+                  \ endif
+            augroup end
+
+        " Ada
+            augroup ADA
+                au!
+                au BufRead,BufNewFile *.ads setfiletype ada
+                au BufRead,BufNewFile *.adb setfiletype ada
+                au FileType ada setlocal sts=3 ts=3 sw=3
+            augroup end
+
+        " Batch
+            augroup BATCH
+                " There's also dosbatch, but btm works better for these
+                au!
+                au BufRead,BufNewFile *.ps1 setfiletype btm
+            augroup end
+
+        " Git
+            augroup git
+                au!
+                au BufRead,BufNewFile .gitconfig setfiletype sh
+
+                " Don't remember the last cursor position for git commit msgs
+                " autocmd filetype gitcommit call setpos('.', [0, 1, 1, 0])
+            augroup end
+
+        " Javascript
+            augroup javascript
+                au!
+                " Overwrites default vim behavior
+                autocmd BufRead,BufNewFile *.json.html set filetype=javascript
+            augroup end
+
+        " PHP
+            augroup php
+                au!
+                autocmd FileType php setlocal shiftwidth=4 tabstop=4 softtabstop=4 " noexpandtab
+            augroup end
+
+        " Python
+            augroup python
+                au!
+                autocmd FileType python let python_highlight_all = 1
+                autocmd FileType python setlocal textwidth=80
+            augroup end
+
+        " Text/txt
+            augroup txt
+                au!
+                autocmd BufRead,BufNewFile *.txt setfiletype text
+                autocmd FileType text setlocal ai spell textwidth=80 foldlevelstart=99
+            augroup end
+
+        " vimrc
+            augroup vimrc
+                au!
+                autocmd BufWritePost $MYVIMRC source $MYVIMRC
+                autocmd BufWritePost $MYVIMRC AirlineRefresh
+                autocmd BufWritePost $MYVIMRC IndentLinesReset
+            augroup end
+    endif  " has("autocmd")
+
+" Typing
+    " Abbreviations
+        abbreviate teh the
+        abbreviate fro for
+        abbreviate lorem Lorem ipsum dolor sit amet
+        abbreviate llorem Lorem ipsum dolor sit amet, in nam iusto appellantur, an meis consequat voluptaria pro. Eos aeque indoctum gloriatur ad. Ut mei veritus suavitate, nulla congue nominavi sea ei. Possim repudiandae per ea.
+        abbreviate lllorem Lorem ipsum dolor sit amet, est rebum molestie ad, cu novum disputando mei. Ancillae similique deterruisset cu per. Oratio disputationi cum cu, eos eu pericula accusamus disputationi, facilis philosophia eu nec. Ne eos diceret consequuntur.
+                    \
+                    \Ei insolens interpretaris eum, ne facilisis adipiscing eum, stet posse eu vis. Quo libris dicunt no, no menandri persequeris ius, quaerendum scriptorem has in. Duis officiis aliquando in per, facete contentiones ad his. Fuisset assentior eu ius, mel ea prompta tacimates, ne summo dicunt platonem mea.
+                    \
+                    \Modo volumus pertinacia at has. No vim wisi graece liberavisse, qui no omnium volumus. Vix harum mundi prodesset ea, pri solum eripuit iracundia et. Choro tempor maluisset no his, has ad cibo alterum, usu amet mollis ne. Animal quaeque ex pro, mei modus malis petentium ut. Vel in vero choro labores, possim pericula no sea, simul electram ut eam.
+                    \
+                    \Ad vix commune ullamcorper consequuntur, error honestatis an duo. Petentium deseruisse in vim, sit ne sonet partem neglegentur. Choro cetero dolorem an qui, ea porro legimus duo. Per ut case munere, wisi perpetua maiestatis at vix. Vocent delectus ocurreret duo ad, magna fuisset no quo. Ad cum lucilius qualisque, duis dicta nemore ei vim, alia saperet appellantur id mel. Nam illud nostro suscipiantur ex, ne nominati rationibus cum.
+                    \
+                    \Vix tantas corrumpit in, est legere doctus accumsan no, ad pri sumo idque interesset. Ei eam impedit reprimique, vim ad case prima option. Idque choro mucius sed et, error scaevola atomorum quo ex. Cum homero admodum expetenda ut. Eos eu tation tritani appellantur, dolor libris vis et.
+
+    " Common command typos
+        command! -bang -nargs=* -complete=file E e<bang> <args>
+        command! -bang -nargs=* -complete=file W w<bang> <args>
+        command! -bang -nargs=* -complete=file Wq wq<bang> <args>
+        command! -bang -nargs=* -complete=file WQ wq<bang> <args>
+        command! -bang Wa wa<bang>
+        command! -bang WA wa<bang>
+        command! -bang Q q<bang>
+        command! -bang QA qa<bang>
+        command! -bang Qa qa<bang>
+
+" Testing
+" Turns off swap files if the file is unmodified
+" https://github.com/tpope/tpope/blob/338a4e89494bfe4928d3a0221c3ea1a7f09937cb/.vimrc#L328-L329
+"autocmd CursorHold,BufWritePost,BufReadPost,BufLeave *
+"  \ if isdirectory(expand("<amatch>:h")) | let &swapfile = &modified | endif
+
+augroup ANGULAR
+    autocmd!
+    autocmd BufLeave *.component.js     normal! mC
+    autocmd BufLeave filetype html       normal! mH
+    autocmd BufLeave filetype javascript normal! mJ
+    autocmd BufLeave *.css,*.less        normal! mL
+    autocmd BufLeave *.module.js         normal! mM
+    autocmd BufLeave *service.js        normal! mS
+    autocmd BufLeave *service.js        normal! mF
+
+    autocmd BufLeave filetype php        normal! mP
+augroup end
+
+if WINDOWS()
+    nnoremap <C-a> <C-a>
+    vnoremap <C-a> <C-a>
+    nnoremap <C-y> <C-y>
+    vnoremap <C-y> <C-y>
+    nnoremap <C-f> <C-f>
+    vnoremap <C-f> <C-f>
+    nnoremap <C-h> <C-h>
+    vnoremap <C-h> <C-h>
+endif
+
+command! JSDiffthis windo diffthis
+
+map - <nop>
+nmap <F1> <nop>
